@@ -1,0 +1,13 @@
+# File yang tidak perlu di-upload ke GitHub publik
+
+# Dokumentasi pribadi
+DOKUMENTASI.md
+RECOVERY.md
+
+# File CV dan portfolio PDF (host di Google Drive saja)
+*.pdf
+
+# File sistem
+.DS_Store
+Thumbs.db
+desktop.ini

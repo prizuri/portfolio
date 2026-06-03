@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel – Prizuri Hartadi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════ LOGIN SCREEN ═══════════ -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="login-logo">PH</div>
+      <h1 class="login-title">Admin Panel</h1>
+      <p class="login-sub" id="loginSub">Portfolio Prizuri Hartadi</p>
+      <form id="loginForm" class="login-form">
+        <div class="field-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required />
+        </div>
+        <div id="loginError" class="login-error"></div>
+        <button type="submit" class="btn-login" id="loginBtn">Masuk</button>
+        <button type="button" class="btn-forgot" id="forgotBtn" onclick="toggleForgot()">Lupa password?</button>
+      </form>
+
+      <!-- Forgot password panel -->
+      <div id="forgotPanel" style="display:none; margin-top:16px; padding:14px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.25); border-radius:8px; font-size:0.8rem; color:var(--a-sub); line-height:1.7">
+        <strong style="color:#f59e0b">Cara reset password:</strong><br><br>
+        <strong>Cara 1 — Via GitHub (paling mudah):</strong><br>
+        1. Buka repository GitHub Anda<br>
+        2. Klik file <code>admin/script.js</code> → klik ikon pensil<br>
+        3. Ganti nilai <code>MASTER_HASH</code> menjadi <code>'GANTI_DENGAN_HASH_ANDA'</code><br>
+        4. Klik <strong>Commit changes</strong> → tunggu 1–2 menit<br>
+        5. Refresh halaman ini → section setup muncul → set password baru<br><br>
+        <strong>Cara 2 — Via Browser Console (tanpa edit kode):</strong><br>
+        1. Tekan <strong>F12</strong> → tab <strong>Console</strong><br>
+        2. Ketik perintah ini dan tekan Enter:<br>
+        <code style="display:block;margin:6px 0;padding:6px 8px;background:rgba(0,0,0,0.3);border-radius:4px;font-size:0.75rem">generateHashFor('password_baru_anda').then(h => console.log('Hash:', h))</code>
+        3. Copy hash yang muncul di Console<br>
+        4. Buka <code>admin/script.js</code> di GitHub → ganti <code>MASTER_HASH</code> → Commit
+      </div>
+
+      <!-- Setup banner: hanya muncul jika MASTER_HASH belum diisi di script -->
+      <div id="setupBanner" class="setup-section" style="display:none">
+        <div class="setup-divider">Setup Pertama Kali</div>
+        <p class="setup-desc">
+          <strong>Langkah 1:</strong> Masukkan password yang ingin Anda gunakan → klik <em>Generate Hash</em>.<br>
+          <strong>Langkah 2:</strong> Copy hash yang muncul.<br>
+          <strong>Langkah 3:</strong> Buka file <code>admin/script.js</code> di GitHub → ganti <code>GANTI_DENGAN_HASH_ANDA</code> dengan hash tersebut → Commit.<br>
+          <strong>Langkah 4:</strong> Tunggu 1–2 menit → refresh halaman ini → login dengan password tadi.
+        </p>
+        <div class="field-group">
+          <label>Password baru (min 8 karakter)</label>
+          <input type="password" id="hashGenInput" placeholder="Ketik password Anda" />
+          <span id="hashGenError" class="login-error"></span>
+        </div>
+        <button type="button" class="btn-login" style="margin-top:4px" onclick="generateHash()">Generate Hash</button>
+        <div id="hashGenWrap" style="display:none; margin-top:12px">
+          <label class="field-group" style="margin-bottom:6px">
+            <span style="font-size:0.78rem;color:var(--a-sub)">Hash SHA-256 (copy ini ke admin/script.js)</span>
+          </label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="text" id="hashGenResult" readonly
+              style="flex:1;font-family:monospace;font-size:0.72rem;background:var(--a-bg);border:1px solid var(--a-border);border-radius:6px;padding:8px 10px;color:var(--a-text)" />
+            <button type="button" id="copyHashBtn" class="btn-action btn-action-sec"
+              style="padding:8px 14px;font-size:0.82rem;white-space:nowrap" onclick="copyHash()">Copy</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ MAIN ADMIN LAYOUT ═══════════ -->
+  <div id="adminApp" class="admin-app hidden">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+        <span class="topbar-brand">PH Admin</span>
+      </div>
+      <div class="topbar-right">
+        <a href="../index.html" target="_blank" class="btn-preview">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Lihat Portfolio
+        </a>
+        <button class="btn-logout" id="logoutBtn">Keluar</button>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-section="dashboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="#" class="nav-item" data-section="about">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Tentang Saya
+        </a>
+        <a href="#" class="nav-item" data-section="projects">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Proyek
+        </a>
+        <a href="#" class="nav-item" data-section="experience">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          Pengalaman
+        </a>
+        <a href="#" class="nav-item" data-section="skills">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Keahlian
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+
+      <!-- Dashboard Section -->
+      <section id="sectionDashboard" class="section-content">
+        <div class="page-header">
+          <h2>Dashboard</h2>
+          <p>Selamat datang di admin panel portfolio-mu.</p>
+        </div>
+        <div class="stats-row" id="dashboardStats">
+          <div class="stat-box">
+            <span class="stat-val" id="statProjects">–</span>
+            <span class="stat-lbl">Proyek</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val" id="statExperience">–</span>
+            <span class="stat-lbl">Pengalaman</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val" id="statSkills">–</span>
+            <span class="stat-lbl">Kelompok Skill</span>
+          </div>
+        </div>
+        <!-- Init banner — hidden once data exists -->
+        <div id="initBanner" class="init-banner">
+          <div class="init-banner-icon">⚡</div>
+          <div class="init-banner-text">
+            <strong>Belum ada data.</strong> Klik tombol di bawah untuk mengisi admin dengan semua data dari portfolio statis. Setelah itu, tambahkan foto dan gambar proyek dari menu <strong>Edit</strong>.
+          </div>
+          <button id="initDefaultBtn" class="btn-action btn-action-init" onclick="initDefaultData()">
+            Inisialisasi Data Default
+          </button>
+        </div>
+        <div class="quick-actions">
+          <h3>Aksi Cepat</h3>
+          <div class="action-btns">
+            <button class="btn-action" onclick="navigate('projects'); setTimeout(openProjectModal, 100)">+ Tambah Proyek</button>
+            <button class="btn-action btn-action-sec" onclick="navigate('about')">Edit Tentang Saya</button>
+            <button class="btn-action btn-action-sec" onclick="navigate('experience'); setTimeout(openExpModal, 100)">+ Tambah Pengalaman</button>
+          </div>
+        </div>
+        <div class="quick-actions" style="margin-top:16px">
+          <h3>Storage Browser</h3>
+          <div class="storage-bar-wrap">
+            <div class="storage-bar-track"><div class="storage-bar-fill" id="storageBar"></div></div>
+            <span id="storageText" style="font-size:0.78rem;color:var(--a-muted)"></span>
+          </div>
+          <div class="action-btns" style="margin-top:12px">
+            <button class="btn-action btn-action-sec" id="exportBtn">⬇ Export Backup JSON</button>
+            <label class="btn-action btn-action-sec" style="cursor:pointer">
+              ⬆ Import Backup JSON
+              <input type="file" id="importFile" accept=".json" style="display:none" />
+            </label>
+          </div>
+          <p style="font-size:0.78rem;color:var(--a-muted);margin-top:8px">
+            Untuk ganti password: generate hash baru di halaman <strong>Login</strong> (logout dulu) → update <code>MASTER_HASH</code> di <code>admin/script.js</code> → commit ke GitHub.
+          </p>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section id="sectionAbout" class="section-content hidden">
+        <div class="page-header">
+          <h2>Tentang Saya</h2>
+          <button class="btn-save" id="saveAboutBtn">Simpan Perubahan</button>
+        </div>
+        <div class="form-card">
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label>Bio (Bahasa Inggris)</label>
+              <textarea id="aboutBioEN" rows="5" placeholder="Write your bio in English..."></textarea>
+            </div>
+            <div class="field-group">
+              <label>Bio (Bahasa Indonesia)</label>
+              <textarea id="aboutBioID" rows="5" placeholder="Tulis bio dalam Bahasa Indonesia..."></textarea>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label>Lokasi</label>
+              <input type="text" id="aboutLocation" placeholder="Medan, Indonesia" />
+            </div>
+            <div class="field-group">
+              <label>Email</label>
+              <input type="email" id="aboutEmail" placeholder="your@email.com" />
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label>LinkedIn URL</label>
+              <input type="url" id="aboutLinkedin" placeholder="https://linkedin.com/in/..." />
+            </div>
+            <div class="field-group">
+              <label>GitHub URL (opsional)</label>
+              <input type="url" id="aboutGithub" placeholder="https://github.com/..." />
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Foto Profil</label>
+            <div class="upload-zone" id="photoUploadZone">
+              <div class="upload-preview" id="photoPreview">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div class="upload-info">
+                <input type="file" id="photoFile" accept="image/*" style="display:none" />
+                <button class="btn-upload" onclick="document.getElementById('photoFile').click()">Pilih Foto</button>
+                <p>atau masukkan URL gambar</p>
+                <input type="url" id="aboutPhotoUrl" placeholder="https://..." />
+              </div>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Link Download CV (URL file CV)</label>
+            <input type="url" id="aboutCvUrl" placeholder="https://drive.google.com/... atau path file lokal" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <section id="sectionProjects" class="section-content hidden">
+        <div class="page-header">
+          <h2>Proyek</h2>
+          <button class="btn-save" onclick="openProjectModal()">+ Tambah Proyek</button>
+        </div>
+        <div id="projectsList" class="items-list">
+          <div class="loading-text">Memuat proyek...</div>
+        </div>
+      </section>
+
+      <!-- Experience Section -->
+      <section id="sectionExperience" class="section-content hidden">
+        <div class="page-header">
+          <h2>Pengalaman Kerja</h2>
+          <button class="btn-save" onclick="openExpModal()">+ Tambah Pengalaman</button>
+        </div>
+        <div id="experienceList" class="items-list">
+          <div class="loading-text">Memuat pengalaman...</div>
+        </div>
+      </section>
+
+      <!-- Skills Section -->
+      <section id="sectionSkills" class="section-content hidden">
+        <div class="page-header">
+          <h2>Keahlian</h2>
+          <button class="btn-save" onclick="openSkillModal()">+ Tambah Kelompok</button>
+        </div>
+        <div id="skillsList" class="items-list">
+          <div class="loading-text">Memuat keahlian...</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ═══════════ PROJECT MODAL ═══════════ -->
+  <div id="projectModal" class="modal-overlay hidden">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3 id="projectModalTitle">Tambah Proyek</h3>
+        <button class="modal-close" onclick="closeModal('projectModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="projectId" />
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label>Judul (EN) <span class="req">*</span></label>
+            <input type="text" id="pTitleEN" placeholder="Project title in English" />
+          </div>
+          <div class="field-group">
+            <label>Judul (ID) <span class="req">*</span></label>
+            <input type="text" id="pTitleID" placeholder="Judul proyek dalam Bahasa Indonesia" />
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label>Deskripsi (EN)</label>
+            <textarea id="pDescEN" rows="4" placeholder="Description in English..."></textarea>
+          </div>
+          <div class="field-group">
+            <label>Deskripsi (ID)</label>
+            <textarea id="pDescID" rows="4" placeholder="Deskripsi dalam Bahasa Indonesia..."></textarea>
+          </div>
+        </div>
+        <div class="form-grid-3">
+          <div class="field-group">
+            <label>Perusahaan / Institusi</label>
+            <input type="text" id="pCompany" placeholder="LKFT UGM" />
+          </div>
+          <div class="field-group">
+            <label>Tanggal</label>
+            <input type="text" id="pDate" placeholder="Nov 2025 – Apr 2026" />
+          </div>
+          <div class="field-group">
+            <label>Kategori</label>
+            <select id="pCategory">
+              <option value="steel">Steel Structure</option>
+              <option value="assessment">Assessment</option>
+              <option value="lab">Laboratory</option>
+              <option value="design">RC Design</option>
+              <option value="research">Research / FEM</option>
+              <option value="web">Web Development</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label>Tools (pisahkan dengan koma)</label>
+            <input type="text" id="pTools" placeholder="SAP2000, Python, ETABS" />
+          </div>
+          <div class="field-group field-inline">
+            <label>
+              <input type="checkbox" id="pFeatured" />
+              Proyek Unggulan (Featured)
+            </label>
+            <div class="field-group">
+              <label>Urutan tampil</label>
+              <input type="number" id="pOrder" value="0" min="0" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Multi-image upload -->
+        <div class="field-group">
+          <label>
+            Gambar Proyek
+            <span class="field-hint">Bisa lebih dari 1 gambar. Gambar pertama = thumbnail utama. Klik ★ untuk jadikan utama.</span>
+          </label>
+          <div class="multi-img-grid" id="projectImagesGrid">
+            <div class="img-empty">Belum ada gambar</div>
+          </div>
+          <div class="multi-img-add">
+            <input type="file" id="multiImgFile" accept="image/*" multiple style="display:none" onchange="addImagesFromFile()" />
+            <button class="btn-upload" onclick="document.getElementById('multiImgFile').click()">+ Upload Gambar</button>
+            <span class="upload-or">atau URL:</span>
+            <input type="url" id="multiImgUrl" placeholder="https://..." style="flex:1;min-width:0" />
+            <button class="btn-sm-outline" onclick="addImageFromUrl()">Tambahkan</button>
+          </div>
+        </div>
+
+        <!-- Thumbnail Animated -->
+        <div class="field-group">
+          <label>
+            Thumbnail Bergerak (hover effect)
+            <span class="field-hint">GIF atau video pendek MP4 – dimainkan saat mouse di atas kartu</span>
+          </label>
+          <div class="upload-row">
+            <div class="thumb-preview" id="thumbAnimPreview">
+              <span>Belum ada animasi</span>
+            </div>
+            <div class="upload-col">
+              <input type="file" id="thumbAnimFile" accept="image/gif,video/mp4,video/*" style="display:none" onchange="previewThumb('anim')" />
+              <button class="btn-upload" onclick="document.getElementById('thumbAnimFile').click()">Upload GIF / Video</button>
+              <span class="upload-or">atau URL:</span>
+              <input type="url" id="pImageAnimUrl" placeholder="https://... (.gif atau .mp4)" oninput="previewThumbUrl('anim')" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Embed -->
+        <div class="field-group">
+          <label>Embed Video (opsional)</label>
+          <div class="radio-row">
+            <label><input type="radio" name="videoType" value="" checked /> Tidak ada video</label>
+            <label><input type="radio" name="videoType" value="gdrive" /> Google Drive</label>
+            <label><input type="radio" name="videoType" value="youtube" /> YouTube</label>
+          </div>
+          <input type="url" id="pVideoUrl" placeholder="Paste link Google Drive atau YouTube di sini..." class="mt-8" />
+          <div id="videoPreviewWrap" class="video-preview-wrap hidden">
+            <iframe id="videoPreviewFrame" src="" frameborder="0" allowfullscreen></iframe>
+          </div>
+          <button class="btn-sm-outline mt-8" onclick="previewVideo()">Preview Video</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('projectModal')">Batal</button>
+        <button class="btn-save" id="saveProjectBtn" onclick="saveProject()">
+          <span id="saveProjectBtnText">Simpan Proyek</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ EXPERIENCE MODAL ═══════════ -->
+  <div id="expModal" class="modal-overlay hidden">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3 id="expModalTitle">Tambah Pengalaman</h3>
+        <button class="modal-close" onclick="closeModal('expModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="expId" />
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label>Judul Posisi (EN)</label>
+            <input type="text" id="eTitleEN" placeholder="Structural Engineer – Project Name" />
+          </div>
+          <div class="field-group">
+            <label>Judul Posisi (ID)</label>
+            <input type="text" id="eTitleID" placeholder="Structural Engineer – Nama Proyek" />
+          </div>
+        </div>
+        <div class="form-grid-3">
+          <div class="field-group">
+            <label>Perusahaan</label>
+            <input type="text" id="eCompany" placeholder="LKFT UGM" />
+          </div>
+          <div class="field-group">
+            <label>Tanggal Mulai</label>
+            <input type="text" id="eDateStart" placeholder="Nov 2025" />
+          </div>
+          <div class="field-group">
+            <label>Tanggal Selesai</label>
+            <input type="text" id="eDateEnd" placeholder="Apr 2026 (atau kosong jika sekarang)" />
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label>Poin-poin (EN) – satu per baris</label>
+            <textarea id="eBulletsEN" rows="5" placeholder="Designed and analyzed...&#10;Evaluated global stability..."></textarea>
+          </div>
+          <div class="field-group">
+            <label>Poin-poin (ID) – satu per baris</label>
+            <textarea id="eBulletsID" rows="5" placeholder="Merancang dan menganalisis...&#10;Mengevaluasi stabilitas global..."></textarea>
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label>Tools (pisahkan koma)</label>
+            <input type="text" id="eTools" placeholder="SAP2000, Python" />
+          </div>
+          <div class="field-group">
+            <label>Kategori</label>
+            <select id="eCategory">
+              <option value="steel">Steel Structure</option>
+              <option value="assessment">Assessment</option>
+              <option value="lab">Laboratory</option>
+              <option value="design">RC Design</option>
+              <option value="research">Research / FEM</option>
+              <option value="web">Web Development</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Urutan tampil (0 = paling atas)</label>
+          <input type="number" id="eOrder" value="0" min="0" style="max-width:100px" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('expModal')">Batal</button>
+        <button class="btn-save" onclick="saveExperience()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SKILL GROUP MODAL ═══════════ -->
+  <div id="skillModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="skillModalTitle">Tambah Kelompok Skill</h3>
+        <button class="modal-close" onclick="closeModal('skillModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="skillId" />
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label>Nama Kelompok (EN)</label>
+            <input type="text" id="sGroupEN" placeholder="Structural Analysis Software" />
+          </div>
+          <div class="field-group">
+            <label>Nama Kelompok (ID)</label>
+            <input type="text" id="sGroupID" placeholder="Software Analisis Struktur" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Item skill (pisahkan koma)</label>
+          <input type="text" id="sItems" placeholder="SAP2000, ETABS, Abaqus, SAFE" />
+        </div>
+        <div class="field-group">
+          <label>Tipe tampilan</label>
+          <select id="sType">
+            <option value="primary">Primary (biru – software utama)</option>
+            <option value="standard">Standard (abu)</option>
+            <option value="code">Code (ungu – programming)</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Urutan tampil</label>
+          <input type="number" id="sOrder" value="0" min="0" style="max-width:100px" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('skillModal')">Batal</button>
+        <button class="btn-save" onclick="saveSkill()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ CONFIRM DELETE MODAL ═══════════ -->
+  <div id="confirmModal" class="modal-overlay hidden">
+    <div class="modal-box modal-sm">
+      <div class="modal-header">
+        <h3>Konfirmasi Hapus</h3>
+      </div>
+      <div class="modal-body">
+        <p id="confirmText">Yakin ingin menghapus item ini? Tindakan tidak bisa dibatalkan.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('confirmModal')">Batal</button>
+        <button class="btn-danger" id="confirmDeleteBtn">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ TOAST NOTIFICATION ═══════════ -->
+  <div id="toast" class="toast hidden">
+    <span id="toastMsg"></span>
+  </div>
+
+  <!-- Admin Logic (no Firebase needed) -->
+  <script src="script.js"></script>
+</body>
+</html>
