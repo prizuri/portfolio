@@ -4,7 +4,7 @@
 
 'use strict';
 
-const MASTER_HASH = 'GANTI_DENGAN_HASH_ANDA';
+const MASTER_HASH = '44224633aacd52c42bc187876985b0fbcbea3efd00c2d8f7deb975672344541e';
 
 // ─── STORAGE HELPERS ───────────────────────
 const KEYS = {
