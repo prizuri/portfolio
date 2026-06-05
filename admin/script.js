@@ -184,11 +184,17 @@ function loadDashboard() {
 
 // ─── IMAGE HELPERS ─────────────────────────
 function convertGDriveUrl(url) {
-  if (!url || !url.includes('drive.google.com')) return url;
-  const m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-  if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+  if (!url) return url;
+  // Already converted old lh3 format → switch to thumbnail
+  const m0 = url.match(/lh3\.googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/);
+  if (m0) return `https://drive.google.com/thumbnail?id=${m0[1]}&sz=w1600`;
+  if (!url.includes('drive.google.com')) return url;
+  // /file/d/FILE_ID format
+  const m1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (m1) return `https://drive.google.com/thumbnail?id=${m1[1]}&sz=w1600`;
+  // ?id= or &id= format
   const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (m2) return `https://lh3.googleusercontent.com/d/${m2[1]}`;
+  if (m2) return `https://drive.google.com/thumbnail?id=${m2[1]}&sz=w1600`;
   return url;
 }
 
@@ -274,7 +280,7 @@ function renderImageGrid() {
   }
   grid.innerHTML = projectImages.map((url, i) => `
     <div class="multi-img-item${i === 0 ? ' is-primary' : ''}">
-      <img src="${url}" alt="gambar ${i+1}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22/>'"/>
+      <img src="${convertGDriveUrl(url)}" alt="gambar ${i+1}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22/>'"/>
       ${i === 0 ? '<span class="primary-badge">Utama</span>' : `<button class="img-set-primary" onclick="setPrimaryImage(${i})">★ Utama</button>`}
       <button class="img-remove" onclick="removeImage(${i})" title="Hapus gambar ini">×</button>
     </div>
@@ -385,8 +391,8 @@ function editProject(id) {
     const r = document.querySelector(`input[name="videoType"][value="${p.video_type}"]`);
     if (r) r.checked = true;
   }
-  // Load existing images array (or fallback to single image_url)
-  projectImages = p.images?.length ? [...p.images] : (p.image_url ? [p.image_url] : []);
+  // Load existing images array, converting any legacy GDrive URLs
+  projectImages = (p.images?.length ? [...p.images] : (p.image_url ? [p.image_url] : [])).map(convertGDriveUrl);
   renderImageGrid();
   if (p.image_animated_url) {
     const isVid = /\.(mp4|webm|ogg)$/i.test(p.image_animated_url);

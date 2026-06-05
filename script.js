@@ -171,6 +171,18 @@ function readLocal(key) {
   try { return JSON.parse(localStorage.getItem(key)) || null; } catch { return null; }
 }
 
+function fixGDriveUrl(url) {
+  if (!url) return url;
+  const m0 = url.match(/lh3\.googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/);
+  if (m0) return `https://drive.google.com/thumbnail?id=${m0[1]}&sz=w1600`;
+  if (!url.includes('drive.google.com')) return url;
+  const m1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (m1) return `https://drive.google.com/thumbnail?id=${m1[1]}&sz=w1600`;
+  const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (m2) return `https://drive.google.com/thumbnail?id=${m2[1]}&sz=w1600`;
+  return url;
+}
+
 function renderFeaturedProject(el, p, lang) {
   const title  = lang === 'id' ? p.title_id : p.title_en;
   const desc   = lang === 'id' ? p.desc_id  : p.desc_en;
@@ -179,7 +191,8 @@ function renderFeaturedProject(el, p, lang) {
   const tagClass  = `tag-${p.category || 'steel'}`;
   const imgClass  = imgClassMap[p.category] || 'project-img-dome';
   const hasVideo  = p.video_url && p.video_type;
-  const images    = p.images?.length ? p.images : (p.image_url ? [p.image_url] : []);
+  const rawImages = p.images?.length ? p.images : (p.image_url ? [p.image_url] : []);
+  const images    = rawImages.map(fixGDriveUrl);
   const imagesJson = JSON.stringify(images).replace(/"/g, '&quot;');
   const hasMulti  = images.length > 1;
   const noImgOverlay = !images.length ? `
@@ -224,7 +237,7 @@ function renderProjectCard(p, lang) {
   const tagClass = `tag-${p.category || 'steel'}`;
   const hasVideo = p.video_url && p.video_type;
   const imgClass = { steel:'project-img-dome', lab:'project-img-lab', research:'project-img-fem', assessment:'project-img-slf', web:'project-img-web', personal:'project-img-web' }[p.category] || 'project-img-lab';
-  const images    = p.images?.length ? p.images : (p.image_url ? [p.image_url] : []);
+  const images    = (p.images?.length ? p.images : (p.image_url ? [p.image_url] : [])).map(fixGDriveUrl);
   const imagesJson = JSON.stringify(images).replace(/"/g, '&quot;');
   const hasMulti  = images.length > 1;
   const noImgOverlay = !images.length ? `
