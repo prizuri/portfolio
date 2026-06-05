@@ -12,6 +12,7 @@ const KEYS = {
   projects:   'ph_projects',
   experience: 'ph_experience',
   skills:     'ph_skills',
+  education:  'ph_education',
   session:    'ph_session'
 };
 
@@ -56,6 +57,7 @@ function showApp() {
   loadExperience();
   loadSkills();
   loadAbout();
+  loadEducation();
   checkInitButton();
 }
 
@@ -181,6 +183,15 @@ function loadDashboard() {
 }
 
 // ─── IMAGE HELPERS ─────────────────────────
+function convertGDriveUrl(url) {
+  if (!url || !url.includes('drive.google.com')) return url;
+  const m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+  const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (m2) return `https://lh3.googleusercontent.com/d/${m2[1]}`;
+  return url;
+}
+
 async function fileToBase64(file, maxKB = 2048) {
   if (file.size > maxKB * 1024) {
     toast(`File terlalu besar (maks ${maxKB}KB). Gunakan URL saja.`, 'error');
@@ -239,8 +250,13 @@ document.getElementById('photoFile').addEventListener('change', async e => {
   if (!file) return;
   showPhotoPreview(URL.createObjectURL(file));
 });
-document.getElementById('aboutPhotoUrl').addEventListener('input', e => {
-  if (e.target.value) showPhotoPreview(e.target.value);
+document.getElementById('aboutPhotoUrl').addEventListener('change', e => {
+  const converted = convertGDriveUrl(e.target.value);
+  if (converted !== e.target.value) {
+    e.target.value = converted;
+    toast('Link Google Drive dikonversi otomatis.', 'success');
+  }
+  if (converted) showPhotoPreview(converted);
 });
 function showPhotoPreview(url) {
   document.getElementById('photoPreview').innerHTML =
@@ -276,8 +292,10 @@ async function addImagesFromFile() {
 }
 
 function addImageFromUrl() {
-  const url = document.getElementById('multiImgUrl').value.trim();
-  if (!url) { toast('Masukkan URL gambar', 'error'); return; }
+  const raw = document.getElementById('multiImgUrl').value.trim();
+  if (!raw) { toast('Masukkan URL gambar', 'error'); return; }
+  const url = convertGDriveUrl(raw);
+  if (url !== raw) toast('Link Google Drive dikonversi otomatis ke URL gambar langsung.', 'success');
   projectImages.push(url);
   renderImageGrid();
   document.getElementById('multiImgUrl').value = '';
@@ -616,6 +634,86 @@ function saveSkill() {
   } catch (err) { toast('Gagal: ' + err.message, 'error'); }
 }
 
+// ─── EDUCATION ─────────────────────────────
+function loadEducation() {
+  const list = document.getElementById('educationList');
+  if (!list) return;
+  const education = readData(KEYS.education) || [];
+  if (!education.length) {
+    list.innerHTML = '<div class="empty-text">Belum ada pendidikan. Klik "+ Tambah Pendidikan".</div>';
+    return;
+  }
+  const sorted = [...education].sort((a, b) => (a.order || 0) - (b.order || 0));
+  list.innerHTML = sorted.map(e => `
+    <div class="item-card">
+      <div class="item-card-main">
+        <div class="item-card-title">${e.degree_en || '(tanpa judul)'}</div>
+        <div class="item-card-sub">${e.university || ''}${e.year_start ? ' · ' + e.year_start + (e.year_end ? '–' + e.year_end : '') : ''}${e.gpa ? ' · GPA ' + e.gpa : ''}</div>
+      </div>
+      <div class="item-actions">
+        <button class="btn-edit" onclick="editEducation('${e.id}')">Edit</button>
+        <button class="btn-del"  onclick="deleteItem('education','${e.id}','pendidikan ini')">Hapus</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openEduModal() {
+  clearEduForm();
+  document.getElementById('educationModalTitle').textContent = 'Tambah Pendidikan';
+  openModal('educationModal');
+}
+function clearEduForm() {
+  ['eduId','eduDegreeEN','eduDegreeID','eduUniversity','eduGpa','eduYearStart','eduYearEnd','eduIcon'].forEach(id => setValue(id, ''));
+  setValue('eduOrder', '0');
+}
+function editEducation(id) {
+  const education = readData(KEYS.education) || [];
+  const e = education.find(x => x.id === id);
+  if (!e) return;
+  clearEduForm();
+  document.getElementById('educationModalTitle').textContent = 'Edit Pendidikan';
+  setValue('eduId',         id);
+  setValue('eduDegreeEN',   e.degree_en);
+  setValue('eduDegreeID',   e.degree_id);
+  setValue('eduUniversity', e.university);
+  setValue('eduGpa',        e.gpa);
+  setValue('eduYearStart',  e.year_start);
+  setValue('eduYearEnd',    e.year_end);
+  setValue('eduIcon',       e.icon);
+  setValue('eduOrder',      e.order || 0);
+  openModal('educationModal');
+}
+function saveEducation() {
+  try {
+    const data = {
+      degree_en:  getValue('eduDegreeEN'),
+      degree_id:  getValue('eduDegreeID'),
+      university: getValue('eduUniversity'),
+      gpa:        getValue('eduGpa'),
+      year_start: getValue('eduYearStart'),
+      year_end:   getValue('eduYearEnd'),
+      icon:       getValue('eduIcon'),
+      order:      parseInt(getValue('eduOrder')) || 0,
+      updated_at: Date.now()
+    };
+    const education = readData(KEYS.education) || [];
+    const id = getValue('eduId');
+    if (id) {
+      const idx = education.findIndex(e => e.id === id);
+      if (idx !== -1) education[idx] = { ...education[idx], ...data };
+      toast('Pendidikan berhasil diperbarui!');
+    } else {
+      data.id = genId(); data.created_at = Date.now();
+      education.push(data);
+      toast('Pendidikan berhasil ditambahkan!');
+    }
+    writeData(KEYS.education, education);
+    closeModal('educationModal');
+    loadEducation();
+  } catch (err) { toast('Gagal: ' + err.message, 'error'); }
+}
+
 // ─── DELETE ────────────────────────────────
 function deleteItem(collection, id, label) {
   document.getElementById('confirmText').textContent =
@@ -629,6 +727,7 @@ function deleteItem(collection, id, label) {
     if (collection === 'projects')   { loadProjects();   loadDashboard(); }
     if (collection === 'experience') { loadExperience(); loadDashboard(); }
     if (collection === 'skills')     { loadSkills();     loadDashboard(); }
+    if (collection === 'education')  { loadEducation(); }
   };
 }
 
@@ -663,6 +762,7 @@ document.getElementById('exportBtn').addEventListener('click', () => {
     projects:   readData(KEYS.projects),
     experience: readData(KEYS.experience),
     skills:     readData(KEYS.skills),
+    education:  readData(KEYS.education),
     exported_at: new Date().toISOString()
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
@@ -684,7 +784,8 @@ document.getElementById('importFile').addEventListener('change', e => {
       if (data.experience) writeData(KEYS.experience, data.experience);
       if (data.skills)     writeData(KEYS.skills, data.skills);
       if (data.about)      writeData(KEYS.about, data.about);
-      loadDashboard(); loadProjects(); loadExperience(); loadSkills(); loadAbout();
+      if (data.education)  writeData(KEYS.education, data.education);
+      loadDashboard(); loadProjects(); loadExperience(); loadSkills(); loadAbout(); loadEducation();
       toast('Backup berhasil diimpor!');
     } catch { toast('File tidak valid.', 'error'); }
     e.target.value = '';
@@ -841,18 +942,27 @@ function getDefaultData() {
         items:['Python','AutoCAD','MS Excel','MS Word','MS PowerPoint','DewesoftX'], type:'code', order:2, created_at:now, updated_at:now },
       { id:'def_s4', group_en:'Engineering Expertise', group_id:'Keahlian Teknik',
         items:['Structural Design','FEM Modeling','Experimental Testing','Structural Assessment','Retrofit Design','Technical Reporting'], type:'standard', order:3, created_at:now, updated_at:now }
+    ],
+    education: [
+      { id:'def_ed1', degree_en:'Master of Civil Engineering', degree_id:'Magister Teknik Sipil',
+        university:'Universitas Gadjah Mada', gpa:'3.80/4.00', year_start:'2023', year_end:'2025',
+        icon:'M', order:0, created_at:now, updated_at:now },
+      { id:'def_ed2', degree_en:'Bachelor of Civil Engineering', degree_id:'Sarjana Teknik Sipil',
+        university:'Universitas Sumatera Utara', gpa:'3.53/4.00', year_start:'2018', year_end:'2022',
+        icon:'B', order:1, created_at:now, updated_at:now }
     ]
   };
 }
 
 function initDefaultData() {
   const hasData = (readData(KEYS.projects)||[]).length + (readData(KEYS.experience)||[]).length + (readData(KEYS.skills)||[]).length;
-  if (hasData && !confirm('Data sudah ada. Inisialisasi akan MENGGANTI semua data proyek, pengalaman, dan skill. Lanjutkan?')) return;
+  if (hasData && !confirm('Data sudah ada. Inisialisasi akan MENGGANTI semua data proyek, pengalaman, skill, dan pendidikan. Lanjutkan?')) return;
   const d = getDefaultData();
   writeData(KEYS.projects,   d.projects);
   writeData(KEYS.experience, d.experience);
   writeData(KEYS.skills,     d.skills);
-  loadDashboard(); loadProjects(); loadExperience(); loadSkills();
+  writeData(KEYS.education,  d.education);
+  loadDashboard(); loadProjects(); loadExperience(); loadSkills(); loadEducation();
   toast('Data berhasil diinisialisasi! Sekarang tambahkan foto dan gambar proyek dari menu Edit.');
   checkInitButton();
 }

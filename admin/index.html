@@ -115,6 +115,10 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           Keahlian
         </a>
+        <a href="#" class="nav-item" data-section="education">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          Pendidikan
+        </a>
       </nav>
     </aside>
 
@@ -258,6 +262,17 @@
         </div>
       </section>
 
+      <!-- Education Section -->
+      <section id="sectionEducation" class="section-content hidden">
+        <div class="page-header">
+          <h2>Pendidikan</h2>
+          <button class="btn-save" onclick="openEduModal()">+ Tambah Pendidikan</button>
+        </div>
+        <div id="educationList" class="items-list">
+          <div class="loading-text">Memuat pendidikan...</div>
+        </div>
+      </section>
+
       <!-- Skills Section -->
       <section id="sectionSkills" class="section-content hidden">
         <div class="page-header">
@@ -319,6 +334,7 @@
               <option value="design">RC Design</option>
               <option value="research">Research / FEM</option>
               <option value="web">Web Development</option>
+              <option value="personal">Personal / Hobby</option>
             </select>
           </div>
         </div>
@@ -457,6 +473,7 @@
               <option value="design">RC Design</option>
               <option value="research">Research / FEM</option>
               <option value="web">Web Development</option>
+              <option value="personal">Personal / Hobby</option>
             </select>
           </div>
         </div>
@@ -511,6 +528,59 @@
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeModal('skillModal')">Batal</button>
         <button class="btn-save" onclick="saveSkill()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ EDUCATION MODAL ═══════════ -->
+  <div id="educationModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="educationModalTitle">Tambah Pendidikan</h3>
+        <button class="modal-close" onclick="closeModal('educationModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="eduId" />
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label>Gelar / Program (EN)</label>
+            <input type="text" id="eduDegreeEN" placeholder="Master of Civil Engineering" />
+          </div>
+          <div class="field-group">
+            <label>Gelar / Program (ID)</label>
+            <input type="text" id="eduDegreeID" placeholder="Magister Teknik Sipil" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Universitas / Institusi</label>
+          <input type="text" id="eduUniversity" placeholder="Universitas Gadjah Mada" />
+        </div>
+        <div class="form-grid-3">
+          <div class="field-group">
+            <label>IPK / GPA</label>
+            <input type="text" id="eduGpa" placeholder="3.80/4.00" />
+          </div>
+          <div class="field-group">
+            <label>Tahun Mulai</label>
+            <input type="text" id="eduYearStart" placeholder="2023" />
+          </div>
+          <div class="field-group">
+            <label>Tahun Selesai</label>
+            <input type="text" id="eduYearEnd" placeholder="2025" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Ikon (1–2 huruf, mis. M = Master, B = Bachelor)</label>
+          <input type="text" id="eduIcon" placeholder="M" maxlength="2" style="max-width:80px" />
+        </div>
+        <div class="field-group">
+          <label>Urutan tampil (0 = paling atas)</label>
+          <input type="number" id="eduOrder" value="0" min="0" style="max-width:100px" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('educationModal')">Batal</button>
+        <button class="btn-save" onclick="saveEducation()">Simpan</button>
       </div>
     </div>
   </div>

@@ -12,6 +12,7 @@ function loadFirebaseContent() {
     loadLocalProjects();
     loadLocalExperience();
     loadLocalSkills();
+    loadLocalEducation();
   } catch (e) { /* static fallback */ }
 }
 
@@ -57,7 +58,8 @@ function loadLocalExperience() {
     lab:        { en: 'Laboratory',         id: 'Laboratorium',         cls: 'tag-lab' },
     design:     { en: 'RC Design',          id: 'Desain Beton',         cls: 'tag-design' },
     research:   { en: 'FEM Research',       id: 'Riset FEM',            cls: 'tag-research' },
-    web:        { en: 'Web Development',    id: 'Pengembangan Web',     cls: 'tag-web' }
+    web:        { en: 'Web Development',    id: 'Pengembangan Web',     cls: 'tag-web' },
+    personal:   { en: 'Personal / Hobby',  id: 'Personal / Hobi',      cls: 'tag-personal' }
   };
 
   const sorted = [...raw].sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -121,6 +123,31 @@ function loadLocalSkills() {
   }).join('');
 }
 
+function loadLocalEducation() {
+  const raw = readLocal('ph_education');
+  if (!raw || !raw.length) return;
+  const block = document.getElementById('educationBlock');
+  if (!block) return;
+  const sorted = [...raw].sort((a, b) => (a.order || 0) - (b.order || 0));
+  block.innerHTML = `
+    <h3 class="block-title">
+      <span class="en">Education</span>
+      <span class="id">Pendidikan</span>
+    </h3>
+    ${sorted.map(e => `
+      <div class="edu-item">
+        <div class="edu-icon">${e.icon || (e.degree_en || 'E')[0]}</div>
+        <div class="edu-info">
+          <strong>
+            <span class="en">${e.degree_en || ''}</span>
+            <span class="id">${e.degree_id || e.degree_en || ''}</span>
+          </strong>
+          <span>${e.university || ''}${e.gpa ? ' · GPA ' + e.gpa : ''}${e.year_start ? ' · ' + e.year_start + (e.year_end ? '–' + e.year_end : '') : ''}</span>
+        </div>
+      </div>`).join('')}
+  `;
+}
+
 function loadLocalProjects() {
   const raw = readLocal('ph_projects');
   if (!raw || !raw.length) return;
@@ -147,8 +174,8 @@ function readLocal(key) {
 function renderFeaturedProject(el, p, lang) {
   const title  = lang === 'id' ? p.title_id : p.title_en;
   const desc   = lang === 'id' ? p.desc_id  : p.desc_en;
-  const tagMap = { steel:'Steel Structure', assessment:'Assessment', lab:'Lab Testing', design:'RC Design', research:'FEM Research', web:'Web Development' };
-  const imgClassMap = { steel:'project-img-dome', lab:'project-img-lab', research:'project-img-fem', assessment:'project-img-slf', web:'project-img-web' };
+  const tagMap = { steel:'Steel Structure', assessment:'Assessment', lab:'Lab Testing', design:'RC Design', research:'FEM Research', web:'Web Development', personal:'Personal / Hobby' };
+  const imgClassMap = { steel:'project-img-dome', lab:'project-img-lab', research:'project-img-fem', assessment:'project-img-slf', web:'project-img-web', personal:'project-img-web' };
   const tagClass  = `tag-${p.category || 'steel'}`;
   const imgClass  = imgClassMap[p.category] || 'project-img-dome';
   const hasVideo  = p.video_url && p.video_type;
@@ -196,7 +223,7 @@ function renderProjectCard(p, lang) {
   const desc     = lang === 'id' ? p.desc_id  : p.desc_en;
   const tagClass = `tag-${p.category || 'steel'}`;
   const hasVideo = p.video_url && p.video_type;
-  const imgClass = { steel:'project-img-dome', lab:'project-img-lab', research:'project-img-fem', assessment:'project-img-slf', web:'project-img-web' }[p.category] || 'project-img-lab';
+  const imgClass = { steel:'project-img-dome', lab:'project-img-lab', research:'project-img-fem', assessment:'project-img-slf', web:'project-img-web', personal:'project-img-web' }[p.category] || 'project-img-lab';
   const images    = p.images?.length ? p.images : (p.image_url ? [p.image_url] : []);
   const imagesJson = JSON.stringify(images).replace(/"/g, '&quot;');
   const hasMulti  = images.length > 1;
