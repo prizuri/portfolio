@@ -213,6 +213,17 @@ async function fileToBase64(file, maxKB = 2048) {
 }
 
 // ─── ABOUT ─────────────────────────────────
+const DEFAULT_BIO = {
+  en: '<p class="about-bio">I am a Junior Structural Engineer with a Master\'s degree in Civil Engineering from <strong>Universitas Gadjah Mada</strong> (GPA 3.80/4.00). My background spans structural design, numerical analysis, and experimental testing — covering steel and reinforced concrete systems, structural assessment, and FEM simulation.</p><p class="about-bio">I have contributed to large-scale industrial projects — including a <strong>188 m and 192 m span arc dome steel structure worth IDR 229 billion</strong> — as well as building assessments, laboratory cyclic testing, and finite element modeling using Abaqus. I approach engineering problems by integrating what standards require, what structures actually do, and what practical response makes sense.</p>',
+  id: '<p class="about-bio">Saya adalah Junior Structural Engineer dengan gelar Master di bidang Teknik Sipil dari <strong>Universitas Gadjah Mada</strong> (IPK 3,80/4,00). Latar belakang saya meliputi desain struktur, analisis numerik, dan pengujian eksperimental — mencakup sistem baja dan beton bertulang, penilaian struktural, dan simulasi FEM.</p><p class="about-bio">Saya telah berkontribusi pada proyek industri skala besar — termasuk <strong>struktur kubah baja bentang 188 m dan 192 m senilai Rp 229 miliar</strong> — serta penilaian bangunan, pengujian siklik laboratorium, dan pemodelan elemen hingga menggunakan Abaqus. Saya mendekati masalah teknik dengan mengintegrasikan apa yang disyaratkan standar, apa yang sebenarnya dilakukan struktur, dan respons praktis yang paling masuk akal.</p>'
+};
+
+function resetBio(lang) {
+  const id = lang === 'en' ? 'aboutBioEN' : 'aboutBioID';
+  setValue(id, DEFAULT_BIO[lang]);
+  showToast('Teks default dimuat — klik Simpan Perubahan untuk menyimpan.', 'success');
+}
+
 function loadAbout() {
   const d = readData(KEYS.about);
   if (!d) return;
