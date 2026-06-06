@@ -173,12 +173,14 @@
             <div class="storage-bar-track"><div class="storage-bar-fill" id="storageBar"></div></div>
             <span id="storageText" style="font-size:0.78rem;color:var(--a-muted)"></span>
           </div>
+          <div id="storageBreakdown" style="font-size:0.75rem;color:var(--a-muted);margin-top:6px;line-height:1.8"></div>
           <div class="action-btns" style="margin-top:12px">
             <button class="btn-action btn-action-sec" id="exportBtn">⬇ Export Backup JSON</button>
             <label class="btn-action btn-action-sec" style="cursor:pointer">
               ⬆ Import Backup JSON
               <input type="file" id="importFile" accept=".json" style="display:none" />
             </label>
+            <button class="btn-action btn-danger" onclick="cleanBase64()">🗑 Bersihkan Gambar Base64</button>
           </div>
           <p style="font-size:0.78rem;color:var(--a-muted);margin-top:8px">
             Untuk ganti password: generate hash baru di halaman <strong>Login</strong> (logout dulu) → update <code>MASTER_HASH</code> di <code>admin/script.js</code> → commit ke GitHub.

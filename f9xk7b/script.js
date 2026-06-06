@@ -167,21 +167,68 @@ function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 function openModal(id)  { document.getElementById(id).classList.remove('hidden'); }
 
 // ─── DASHBOARD ─────────────────────────────
+function storageBytes() {
+  let total = 0;
+  for (const k in localStorage) {
+    if (Object.prototype.hasOwnProperty.call(localStorage, k))
+      total += (k.length + (localStorage[k] || '').length) * 2;
+  }
+  return total;
+}
+
 function loadDashboard() {
   const projects   = readData(KEYS.projects)   || [];
   const experience = readData(KEYS.experience) || [];
   const skills     = readData(KEYS.skills)     || [];
-  document.getElementById('statProjects').textContent    = projects.length;
-  document.getElementById('statExperience').textContent  = experience.length;
-  document.getElementById('statSkills').textContent      = skills.length;
-  // Storage usage estimate
-  let used = 0;
-  Object.values(KEYS).forEach(k => { used += (localStorage.getItem(k) || '').length; });
-  const kb = (used / 1024).toFixed(1);
-  const pct = Math.min(100, (used / (5 * 1024 * 1024)) * 100).toFixed(1);
-  document.getElementById('storageBar').style.width = pct + '%';
-  document.getElementById('storageText').textContent = `${kb} KB digunakan (~5 MB limit)`;
-  if (pct > 80) document.getElementById('storageBar').style.background = '#ef4444';
+  document.getElementById('statProjects').textContent   = projects.length;
+  document.getElementById('statExperience').textContent = experience.length;
+  document.getElementById('statSkills').textContent     = skills.length;
+
+  const LIMIT = 5 * 1024 * 1024;
+  const used  = storageBytes();
+  const pct   = Math.min(100, (used / LIMIT) * 100).toFixed(1);
+  const usedKB = (used / 1024).toFixed(0);
+  document.getElementById('storageBar').style.width      = pct + '%';
+  document.getElementById('storageBar').style.background = pct > 80 ? '#ef4444' : '';
+  document.getElementById('storageText').textContent     = `${usedKB} KB / 5120 KB (${pct}%)`;
+
+  const labels = { ph_projects:'Proyek', ph_experience:'Pengalaman', ph_skills:'Skill',
+                   ph_about:'Tentang', ph_education:'Pendidikan', ph_lang_settings:'Pengaturan' };
+  const rows = Object.entries(labels).map(([k, label]) => {
+    const bytes = ((localStorage.getItem(k) || '').length) * 2;
+    const kb = (bytes / 1024).toFixed(1);
+    const hasB64 = (localStorage.getItem(k) || '').includes('"data:');
+    return `<span>${label}: <strong>${kb} KB</strong>${hasB64 ? ' ⚠ ada gambar base64' : ''}</span>`;
+  });
+  document.getElementById('storageBreakdown').innerHTML = rows.join(' &nbsp;·&nbsp; ');
+}
+
+function cleanBase64() {
+  if (!confirm('Semua gambar yang di-upload langsung (bukan URL) akan dihapus dari data. Lanjutkan?')) return;
+  let freedBytes = 0;
+
+  const projects = readData(KEYS.projects) || [];
+  const cleanedProjects = projects.map(p => {
+    const before = JSON.stringify(p).length;
+    if ((p.image_url || '').startsWith('data:'))           p.image_url = '';
+    if ((p.image_animated_url || '').startsWith('data:'))  p.image_animated_url = '';
+    if (Array.isArray(p.images)) p.images = p.images.filter(u => !u.startsWith('data:'));
+    freedBytes += (before - JSON.stringify(p).length) * 2;
+    return p;
+  });
+  writeData(KEYS.projects, cleanedProjects);
+
+  const about = readData(KEYS.about);
+  if (about && (about.photo_url || '').startsWith('data:')) {
+    freedBytes += about.photo_url.length * 2;
+    about.photo_url = '';
+    writeData(KEYS.about, about);
+  }
+
+  const freedKB = (freedBytes / 1024).toFixed(0);
+  toast(`Selesai! ~${freedKB} KB dibebaskan. Isi ulang gambar dengan URL Imgur di masing-masing proyek.`);
+  loadDashboard();
+  loadProjects();
 }
 
 // ─── IMAGE HELPERS ─────────────────────────
