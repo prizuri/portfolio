@@ -47,8 +47,8 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 
 /* ── LAYOUT ────────────────────────────────────── */
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-.section { padding: 80px 0; }
-.section-header { text-align: center; margin-bottom: 48px; }
+.section { padding: 56px 0; }
+.section-header { text-align: center; margin-bottom: 32px; }
 .section-title {
   font-size: clamp(1.6rem, 3vw, 2.2rem);
   font-weight: 800;
@@ -120,7 +120,7 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 /* ── HERO ───────────────────────────────────────── */
 .hero {
   min-height: 100vh; display: flex; align-items: center;
-  padding: 120px 0 80px;
+  padding: 100px 0 56px;
   position: relative; overflow: hidden;
 }
 .hero::before {
@@ -168,7 +168,7 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 .hero-desc { max-width: 540px; color: var(--text-2); margin-bottom: 40px; line-height: 1.9; font-size: .97rem; letter-spacing: .01em; }
 .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
 .hero-stats {
-  display: flex; gap: 0; margin-top: 56px;
+  display: flex; gap: 0; margin-top: 40px;
   border: 1px solid var(--border); border-radius: var(--radius);
   background: var(--bg-card); overflow: hidden; max-width: 480px;
 }
@@ -246,7 +246,7 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   width: 2px; background: linear-gradient(to bottom, var(--accent) 0%, rgba(59,130,246,.3) 60%, transparent 100%);
   border-radius: 2px;
 }
-.timeline-item { position: relative; padding: 0 0 36px 28px; }
+.timeline-item { position: relative; padding: 0 0 22px 28px; }
 .timeline-dot {
   position: absolute; left: -28px; top: 6px;
   width: 20px; height: 20px; border-radius: 50%;

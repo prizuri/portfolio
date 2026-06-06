@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLang, T } from '../../contexts/LangContext';
 import { useToast } from '../../contexts/ToastContext';
+import { useContent } from '../../contexts/ContentContext';
 
 export default function Contact() {
   const { lang } = useLang();
+  const { about } = useContent();
   const toast = useToast();
   const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
+
+  const email    = about?.email    || 'prizurihartadi10@gmail.com';
+  const linkedin = about?.linkedin || 'linkedin.com/in/prizurih/';
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -18,7 +22,6 @@ export default function Contact() {
         method: 'POST', body: data, headers: { Accept: 'application/json' },
       });
       if (res.ok) {
-        setSent(true);
         toast(lang === 'id' ? 'Pesan terkirim! Terima kasih.' : 'Message sent! Thank you.');
         e.target.reset();
       } else {
@@ -59,14 +62,21 @@ export default function Contact() {
               <div className="contact-icon">✉</div>
               <div>
                 <div className="contact-label">Email</div>
-                <div className="contact-value">justforapp2122@gmail.com</div>
+                <div className="contact-value">{email}</div>
               </div>
             </div>
             <div className="contact-item">
-              <div className="contact-icon">🌐</div>
+              <div className="contact-icon">in</div>
               <div>
                 <div className="contact-label">LinkedIn</div>
-                <div className="contact-value">linkedin.com/in/prizuri</div>
+                <div className="contact-value">{linkedin}</div>
+              </div>
+            </div>
+            <div className="contact-item">
+              <div className="contact-icon">📍</div>
+              <div>
+                <div className="contact-label"><T en="Location" id="Lokasi" /></div>
+                <div className="contact-value">Medan, Indonesia</div>
               </div>
             </div>
           </div>
@@ -97,10 +107,7 @@ export default function Contact() {
               <textarea name="message" required rows={5} placeholder={lang === 'id' ? 'Tulis pesan Anda...' : 'Write your message...'} />
             </div>
             <button type="submit" className="form-submit" disabled={sending}>
-              {sending
-                ? (lang === 'id' ? 'Mengirim...' : 'Sending...')
-                : (lang === 'id' ? 'Kirim Pesan' : 'Send Message')
-              }
+              {sending ? (lang === 'id' ? 'Mengirim...' : 'Sending...') : (lang === 'id' ? 'Kirim Pesan' : 'Send Message')}
             </button>
           </form>
         </motion.div>
