@@ -485,8 +485,8 @@ async function saveProject() {
       company:            getValue('pCompany'),
       date:               getValue('pDate'),
       tools:              getValue('pTools').split(',').map(s => s.trim()).filter(Boolean),
-      demo_url:           getValue('pDemoUrl'),
-      github_url:         getValue('pGithubUrl'),
+      demo_url:           ensureUrl(getValue('pDemoUrl')),
+      github_url:         ensureUrl(getValue('pGithubUrl')),
       category:           document.getElementById('pCategory').value,
       featured:           document.getElementById('pFeatured').checked,
       order:              parseInt(getValue('pOrder')) || 0,
@@ -914,6 +914,7 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
 // ─── DOM HELPERS ───────────────────────────
 function getValue(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
 function setValue(id, val) { const el = document.getElementById(id); if (el) el.value = val || ''; }
+function ensureUrl(url) { if (!url) return ''; return /^https?:\/\//i.test(url) ? url : 'https://' + url; }
 
 // ─── DEFAULT DATA INITIALIZER ──────────────
 function getDefaultData() {
@@ -1091,10 +1092,6 @@ function checkInitButton() {
   const banner = document.getElementById('initBanner');
   if (banner) banner.style.display = hasData ? 'none' : '';
 }
-
-// ─── DOM HELPERS ───────────────────────────
-function getValue(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
-function setValue(id, val) { const el = document.getElementById(id); if (el) el.value = val || ''; }
 
 // ─── INIT ──────────────────────────────────
 checkAuth();
