@@ -3,8 +3,6 @@
    ═══════════════════════════════════════════ */
 
 // ─── LOCAL CONTENT LOADER ──────────────────
-// Reads content from localStorage (saved by admin panel).
-// Falls back to existing static HTML if no data found.
 
 function loadFirebaseContent() {
   try {
@@ -628,3 +626,7 @@ if (contactForm) {
     }
   });
 }
+
+// ─── Content protection ────────────────────
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('dragstart',   e => e.preventDefault());

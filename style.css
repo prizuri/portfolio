@@ -42,9 +42,12 @@ body {
   color: var(--text-primary);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
 }
+input, textarea { user-select: text; -webkit-user-select: text; }
 a { color: var(--accent); text-decoration: none; }
-img { max-width: 100%; display: block; }
+img { max-width: 100%; display: block; pointer-events: none; }
 ul { list-style: none; }
 
 /* ─── LANGUAGE SYSTEM ─── */
