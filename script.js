@@ -26,8 +26,14 @@ function loadLocalAbout() {
   }
   if (d.bio_en) { const el = document.querySelector('.about-bio .en'); if (el) el.innerHTML = d.bio_en; }
   if (d.bio_id) { const el = document.querySelector('.about-bio .id'); if (el) el.innerHTML = d.bio_id; }
-  if (d.cv_url) document.querySelectorAll('a[download]').forEach(a => a.href = d.cv_url);
-  if (d.linkedin) document.querySelectorAll('a[href*="linkedin"]').forEach(a => a.href = d.linkedin);
+  document.querySelectorAll('a[download]').forEach(a => {
+    if (d.cv_url) { a.href = d.cv_url; a.style.display = ''; }
+    else a.style.display = 'none';
+  });
+  document.querySelectorAll('a[href*="linkedin"]').forEach(a => {
+    if (d.linkedin) { a.href = d.linkedin; a.style.display = ''; }
+    else a.style.display = 'none';
+  });
 
   if (d.email) {
     document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
@@ -143,6 +149,10 @@ function loadLocalEducation() {
             <span class="id">${e.degree_id || e.degree_en || ''}</span>
           </strong>
           <span>${e.university || ''}${e.gpa ? ' · GPA ' + e.gpa : ''}${e.year_start ? ' · ' + e.year_start + (e.year_end ? '–' + e.year_end : '') : ''}</span>
+          ${(e.thesis_en || e.thesis_id) ? `<span class="edu-thesis">
+            <span class="en">${e.thesis_en ? '📄 ' + e.thesis_en : ''}</span>
+            <span class="id">${e.thesis_id ? '📄 ' + e.thesis_id : (e.thesis_en ? '📄 ' + e.thesis_en : '')}</span>
+          </span>` : ''}
         </div>
       </div>`).join('')}
   `;
@@ -154,15 +164,14 @@ function loadLocalProjects() {
   const projects = [...raw].sort((a, b) => (a.order || 0) - (b.order || 0));
   const featured = projects.filter(p => p.featured);
   const regular  = projects.filter(p => !p.featured);
-  const lang     = document.documentElement.lang || 'en';
 
   if (featured.length) {
     const wrap = document.querySelector('.project-featured');
-    if (wrap) renderFeaturedProject(wrap, featured[0], lang);
+    if (wrap) renderFeaturedProject(wrap, featured[0]);
   }
   const grid = document.querySelector('.project-grid');
   if (grid && regular.length) {
-    grid.innerHTML = regular.slice(0, 3).map(p => renderProjectCard(p, lang)).join('');
+    grid.innerHTML = regular.slice(0, 3).map(p => renderProjectCard(p)).join('');
     attachHoverAnimations();
   }
 }
@@ -183,10 +192,9 @@ function fixGDriveUrl(url) {
   return url;
 }
 
-function renderFeaturedProject(el, p, lang) {
-  const title  = lang === 'id' ? p.title_id : p.title_en;
-  const desc   = lang === 'id' ? p.desc_id  : p.desc_en;
-  const tagMap = { steel:'Steel Structure', assessment:'Assessment', lab:'Lab Testing', design:'RC Design', research:'FEM Research', web:'Web Development', personal:'Personal / Hobby' };
+function renderFeaturedProject(el, p) {
+  const tagEN = { steel:'Steel Structure', assessment:'Assessment', lab:'Lab Testing', design:'RC Design', research:'FEM Research', web:'Web Development', personal:'Personal / Hobby' };
+  const tagID = { steel:'Struktur Baja', assessment:'Penilaian', lab:'Pengujian Lab', design:'Desain RC', research:'Riset FEM', web:'Pengembangan Web', personal:'Personal / Hobi' };
   const imgClassMap = { steel:'project-img-dome', lab:'project-img-lab', research:'project-img-fem', assessment:'project-img-slf', web:'project-img-web', personal:'project-img-web' };
   const tagClass  = `tag-${p.category || 'steel'}`;
   const imgClass  = imgClassMap[p.category] || 'project-img-dome';
@@ -195,10 +203,14 @@ function renderFeaturedProject(el, p, lang) {
   const images    = rawImages.map(fixGDriveUrl);
   const imagesJson = JSON.stringify(images).replace(/"/g, '&quot;');
   const hasMulti  = images.length > 1;
+  const titleEN   = p.title_en || '';
+  const titleID   = p.title_id || titleEN;
   const noImgOverlay = !images.length ? `
     <div class="no-img-overlay">
       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      <div class="no-img-overlay-title">${title || ''}</div>
+      <div class="no-img-overlay-title">
+        <span class="en">${titleEN}</span><span class="id">${titleID}</span>
+      </div>
     </div>` : '';
 
   el.innerHTML = `
@@ -207,43 +219,56 @@ function renderFeaturedProject(el, p, lang) {
            onclick="${images.length ? `openLightbox(JSON.parse(this.dataset.images),0)` : ''}"
            data-images="${imagesJson}">
         ${noImgOverlay}
-        ${images[0] ? `<img class="thumb-static" src="${images[0]}" alt="${title}" />` : ''}
+        ${images[0] ? `<img class="thumb-static" src="${images[0]}" alt="${titleEN}" />` : ''}
         ${p.image_animated_url ? (p.image_animated_url.match(/\.(mp4|webm)$/i)
           ? `<video class="thumb-anim" src="${p.image_animated_url}" muted loop playsinline></video>`
-          : `<img class="thumb-anim" src="${p.image_animated_url}" alt="${title} animated" />`) : ''}
+          : `<img class="thumb-anim" src="${p.image_animated_url}" alt="${titleEN} animated" />`) : ''}
         ${p.image_animated_url ? '<span class="play-badge">▶ Preview</span>' : ''}
         ${hasMulti ? `<span class="gallery-count">${images.length} foto</span>` : ''}
         ${images.length ? `<div class="img-overlay-text">${p.date || ''} · ${(p.tools || []).slice(0,3).join(', ')}</div>` : ''}
       </div>
     </div>
     <div class="project-info">
-      <span class="project-tag ${tagClass}">${lang==='id'?'Unggulan':'Featured'} · ${tagMap[p.category]||''}</span>
-      <h3>${title || ''}</h3>
-      <p>${desc || ''}</p>
+      <span class="project-tag ${tagClass}">
+        <span class="en">Featured · ${tagEN[p.category]||''}</span>
+        <span class="id">Unggulan · ${tagID[p.category]||''}</span>
+      </span>
+      <h3>
+        <span class="en">${titleEN}</span>
+        <span class="id">${titleID}</span>
+      </h3>
+      <p>
+        <span class="en">${p.desc_en || ''}</span>
+        <span class="id">${p.desc_id || p.desc_en || ''}</span>
+      </p>
       <div class="project-meta-row">
         <span class="meta-chip">${p.company || ''} ${p.date ? '· ' + p.date : ''}</span>
       </div>
       <div class="exp-tools">${(p.tools||[]).map(t=>`<span class="tool-tag">${t}</span>`).join('')}</div>
-      ${hasVideo ? `<button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="openVideoModal('${p.video_url}','${p.video_type}','${(title||'').replace(/'/g,"\\'")}')">
+      ${hasVideo ? `<button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="openVideoModal('${p.video_url}','${p.video_type}','${titleEN.replace(/'/g,"\\'")}')">
         ▶ <span class="en">Watch Video</span><span class="id">Tonton Video</span>
       </button>` : ''}
     </div>
   `;
 }
 
-function renderProjectCard(p, lang) {
-  const title    = lang === 'id' ? p.title_id : p.title_en;
-  const desc     = lang === 'id' ? p.desc_id  : p.desc_en;
+function renderProjectCard(p) {
+  const tagEN = { steel:'Steel Structure', assessment:'Assessment', lab:'Lab Testing', design:'RC Design', research:'FEM Research', web:'Web Development', personal:'Personal / Hobby' };
+  const tagID = { steel:'Struktur Baja', assessment:'Penilaian', lab:'Pengujian Lab', design:'Desain RC', research:'Riset FEM', web:'Pengembangan Web', personal:'Personal / Hobi' };
   const tagClass = `tag-${p.category || 'steel'}`;
   const hasVideo = p.video_url && p.video_type;
   const imgClass = { steel:'project-img-dome', lab:'project-img-lab', research:'project-img-fem', assessment:'project-img-slf', web:'project-img-web', personal:'project-img-web' }[p.category] || 'project-img-lab';
   const images    = (p.images?.length ? p.images : (p.image_url ? [p.image_url] : [])).map(fixGDriveUrl);
   const imagesJson = JSON.stringify(images).replace(/"/g, '&quot;');
   const hasMulti  = images.length > 1;
+  const titleEN   = p.title_en || '';
+  const titleID   = p.title_id || titleEN;
   const noImgOverlay = !images.length ? `
     <div class="no-img-overlay">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      <div class="no-img-overlay-title">${title || ''}</div>
+      <div class="no-img-overlay-title">
+        <span class="en">${titleEN}</span><span class="id">${titleID}</span>
+      </div>
     </div>` : '';
 
   const dots = hasMulti
@@ -259,21 +284,30 @@ function renderProjectCard(p, lang) {
            data-images="${imagesJson}"
            onclick="${images.length ? `openLightbox(JSON.parse(this.dataset.images),0)` : ''}">
         ${noImgOverlay}
-        ${images[0] ? `<img class="thumb-static" src="${images[0]}" alt="${title}" />` : ''}
+        ${images[0] ? `<img class="thumb-static" src="${images[0]}" alt="${titleEN}" />` : ''}
         ${p.image_animated_url ? (p.image_animated_url.match(/\.(mp4|webm)$/i)
           ? `<video class="thumb-anim" src="${p.image_animated_url}" muted loop playsinline></video>`
-          : `<img class="thumb-anim" src="${p.image_animated_url}" alt="${title} animated" />`) : ''}
+          : `<img class="thumb-anim" src="${p.image_animated_url}" alt="${titleEN} animated" />`) : ''}
         ${p.image_animated_url ? '<span class="play-badge">▶</span>' : ''}
         ${hasMulti ? `<span class="gallery-count">${images.length}</span>` : ''}
         ${dots}
       </div>
       <div class="project-card-body">
-        <span class="project-tag ${tagClass}">${p.category || ''}</span>
-        <h3>${title || ''}</h3>
-        <p>${desc || ''}</p>
+        <span class="project-tag ${tagClass}">
+          <span class="en">${tagEN[p.category] || p.category}</span>
+          <span class="id">${tagID[p.category] || p.category}</span>
+        </span>
+        <h3>
+          <span class="en">${titleEN}</span>
+          <span class="id">${titleID}</span>
+        </h3>
+        <p>
+          <span class="en">${p.desc_en || ''}</span>
+          <span class="id">${p.desc_id || p.desc_en || ''}</span>
+        </p>
         <div class="exp-tools">${(p.tools||[]).map(t=>`<span class="tool-tag">${t}</span>`).join('')}</div>
         ${hasVideo ? `<button class="project-link" style="background:none;border:none;cursor:pointer;padding:0;text-align:left"
-          onclick="openVideoModal('${p.video_url}','${p.video_type}','${(title||'').replace(/'/g,"\\'")}')">
+          onclick="openVideoModal('${p.video_url}','${p.video_type}','${titleEN.replace(/'/g,"\\'")}')">
           ▶ <span class="en">Watch Video</span><span class="id">Tonton Video</span>
         </button>` : ''}
       </div>

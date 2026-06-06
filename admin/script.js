@@ -681,7 +681,7 @@ function openEduModal() {
   openModal('educationModal');
 }
 function clearEduForm() {
-  ['eduId','eduDegreeEN','eduDegreeID','eduUniversity','eduGpa','eduYearStart','eduYearEnd','eduIcon'].forEach(id => setValue(id, ''));
+  ['eduId','eduDegreeEN','eduDegreeID','eduUniversity','eduGpa','eduYearStart','eduYearEnd','eduIcon','eduThesisEN','eduThesisID'].forEach(id => setValue(id, ''));
   setValue('eduOrder', '0');
 }
 function editEducation(id) {
@@ -698,6 +698,8 @@ function editEducation(id) {
   setValue('eduYearStart',  e.year_start);
   setValue('eduYearEnd',    e.year_end);
   setValue('eduIcon',       e.icon);
+  setValue('eduThesisEN',   e.thesis_en);
+  setValue('eduThesisID',   e.thesis_id);
   setValue('eduOrder',      e.order || 0);
   openModal('educationModal');
 }
@@ -711,6 +713,8 @@ function saveEducation() {
       year_start: getValue('eduYearStart'),
       year_end:   getValue('eduYearEnd'),
       icon:       getValue('eduIcon'),
+      thesis_en:  getValue('eduThesisEN'),
+      thesis_id:  getValue('eduThesisID'),
       order:      parseInt(getValue('eduOrder')) || 0,
       updated_at: Date.now()
     };
@@ -828,6 +832,16 @@ function setValue(id, val) { const el = document.getElementById(id); if (el) el.
 function getDefaultData() {
   const now = Date.now();
   return {
+    about: {
+      bio_en: "I am a Junior Structural Engineer with a Master’s degree in Civil Engineering from <strong>Universitas Gadjah Mada</strong> (GPA 3.80/4.00). My background spans structural design, numerical analysis, and experimental testing — covering steel and reinforced concrete systems, structural assessment, and FEM simulation.",
+      bio_id: "Saya adalah Junior Structural Engineer dengan gelar Master di bidang Teknik Sipil dari <strong>Universitas Gadjah Mada</strong> (IPK 3,80/4,00). Latar belakang saya meliputi desain struktur, analisis numerik, dan pengujian eksperimental — mencakup sistem baja dan beton bertulang, penilaian struktural, dan simulasi FEM.",
+      location: "Medan, Indonesia",
+      email: "prizurihartadi10@gmail.com",
+      linkedin: "https://linkedin.com/in/prizurih/",
+      github: "",
+      photo_url: "",
+      cv_url: ""
+    },
     projects: [
       { id:'def_p1', title_en:'Coal Shed Arc Dome Structure', title_id:'Struktur Kubah Arc Dome Coal Shed',
         desc_en:'Design and analysis of 188 m and 192 m span arc dome steel structure. Analyzed global stability, load paths, member capacities, and soil-structure interaction (SSI) effects using SAP2000 with both fixed-support and SSI models.',
@@ -963,10 +977,10 @@ function getDefaultData() {
     education: [
       { id:'def_ed1', degree_en:'Master of Civil Engineering', degree_id:'Magister Teknik Sipil',
         university:'Universitas Gadjah Mada', gpa:'3.80/4.00', year_start:'2023', year_end:'2025',
-        icon:'M', order:0, created_at:now, updated_at:now },
+        icon:'M', thesis_en:'', thesis_id:'', order:0, created_at:now, updated_at:now },
       { id:'def_ed2', degree_en:'Bachelor of Civil Engineering', degree_id:'Sarjana Teknik Sipil',
         university:'Universitas Sumatera Utara', gpa:'3.53/4.00', year_start:'2018', year_end:'2022',
-        icon:'B', order:1, created_at:now, updated_at:now }
+        icon:'B', thesis_en:'', thesis_id:'', order:1, created_at:now, updated_at:now }
     ]
   };
 }
@@ -979,6 +993,7 @@ function initDefaultData() {
   writeData(KEYS.experience, d.experience);
   writeData(KEYS.skills,     d.skills);
   writeData(KEYS.education,  d.education);
+  if (!readData(KEYS.about)) { writeData(KEYS.about, d.about); loadAbout(); }
   loadDashboard(); loadProjects(); loadExperience(); loadSkills(); loadEducation();
   toast('Data berhasil diinisialisasi! Sekarang tambahkan foto dan gambar proyek dari menu Edit.');
   checkInitButton();

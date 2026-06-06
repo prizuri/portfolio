@@ -506,6 +506,12 @@ html[lang="id"] .en { display: none; }
   color: var(--text-primary);
   font-weight: 600;
 }
+.edu-thesis {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.4;
+}
 .edu-info span {
   font-size: 0.82rem;
   color: var(--text-muted);
