@@ -4,14 +4,28 @@
 
 // ─── LOCAL CONTENT LOADER ──────────────────
 
-function loadFirebaseContent() {
+async function loadFirebaseContent() {
   try {
-    loadLocalAbout();
-    loadLocalProjects();
-    loadLocalExperience();
-    loadLocalSkills();
-    loadLocalEducation();
-  } catch (e) { /* static fallback */ }
+    const res = await fetch('./data/content.json', { cache: 'no-cache' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && Object.keys(data).length) {
+        try {
+          if (data.about)      localStorage.setItem('ph_about',      JSON.stringify(data.about));
+          if (data.projects)   localStorage.setItem('ph_projects',   JSON.stringify(data.projects));
+          if (data.experience) localStorage.setItem('ph_experience', JSON.stringify(data.experience));
+          if (data.skills)     localStorage.setItem('ph_skills',     JSON.stringify(data.skills));
+          if (data.education)  localStorage.setItem('ph_education',  JSON.stringify(data.education));
+          if (data.lang_settings) localStorage.setItem('ph_lang_settings', JSON.stringify(data.lang_settings));
+        } catch {}
+      }
+    }
+  } catch {}
+  loadLocalAbout();
+  loadLocalProjects();
+  loadLocalExperience();
+  loadLocalSkills();
+  loadLocalEducation();
 }
 
 function loadLocalAbout() {

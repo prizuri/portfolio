@@ -175,13 +175,19 @@
           </div>
           <div id="storageBreakdown" style="font-size:0.75rem;color:var(--a-muted);margin-top:6px;line-height:1.8"></div>
           <div class="action-btns" style="margin-top:12px">
-            <button class="btn-action btn-action-sec" id="exportBtn">⬇ Export Backup JSON</button>
+            <button class="btn-action btn-action-init" onclick="publishContent()">🚀 Publish ke Website</button>
+            <button class="btn-action btn-action-sec" id="exportBtn">⬇ Export Backup</button>
             <label class="btn-action btn-action-sec" style="cursor:pointer">
-              ⬆ Import Backup JSON
+              ⬆ Import Backup
               <input type="file" id="importFile" accept=".json" style="display:none" />
             </label>
-            <button class="btn-action btn-danger" onclick="cleanBase64()">🗑 Bersihkan Gambar Base64</button>
+            <button class="btn-action btn-danger" onclick="cleanBase64()">🗑 Bersihkan Base64</button>
           </div>
+          <p style="font-size:0.76rem;color:var(--a-muted);margin-top:8px;line-height:1.6">
+            <strong>Publish:</strong> download <code>content.json</code> → upload ke folder <code>data/</code> di
+            <a href="https://github.com/prizuri/portfolio/upload/main/data" target="_blank" rel="noopener" style="color:var(--a-accent)">github.com/prizuri/portfolio</a>
+            → tunggu 1–2 menit → semua browser &amp; HP melihat perubahan.
+          </p>
           <p style="font-size:0.78rem;color:var(--a-muted);margin-top:8px">
             Untuk ganti password: generate hash baru di halaman <strong>Login</strong> (logout dulu) → update <code>MASTER_HASH</code> di <code>admin/script.js</code> → commit ke GitHub.
           </p>

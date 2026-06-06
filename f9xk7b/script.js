@@ -844,6 +844,25 @@ function saveSettings() {
   toast(val ? 'Bahasa Indonesia diaktifkan.' : 'Bahasa Indonesia dinonaktifkan — website hanya tampil dalam Bahasa Inggris.');
 }
 
+// ─── PUBLISH ───────────────────────────────
+function publishContent() {
+  const content = {
+    about:         readData(KEYS.about),
+    projects:      readData(KEYS.projects),
+    experience:    readData(KEYS.experience),
+    skills:        readData(KEYS.skills),
+    education:     readData(KEYS.education),
+    lang_settings: readData(KEYS.settings)
+  };
+  const blob = new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'content.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('content.json didownload. Upload ke folder data/ di GitHub repo kamu.');
+}
+
 // ─── EXPORT / IMPORT BACKUP ────────────────
 document.getElementById('exportBtn').addEventListener('click', () => {
   const backup = {
