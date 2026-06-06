@@ -1001,6 +1001,29 @@ html[lang="id"] .en { display: none; }
 }
 
 /* ═══════════════════════════════════════════
+   HOBBIES
+   ═══════════════════════════════════════════ */
+.hobby-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+.hobby-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  transition: border-color var(--transition), transform var(--transition);
+}
+.hobby-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.hobby-icon { font-size: 1.3rem; line-height: 1; }
+.hobby-name { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+
+/* ═══════════════════════════════════════════
    CONTACT
    ═══════════════════════════════════════════ */
 .contact-grid {

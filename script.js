@@ -17,6 +17,7 @@ async function loadFirebaseContent() {
           if (data.skills)     localStorage.setItem('ph_skills',     JSON.stringify(data.skills));
           if (data.education)  localStorage.setItem('ph_education',  JSON.stringify(data.education));
           if (data.lang_settings) localStorage.setItem('ph_lang_settings', JSON.stringify(data.lang_settings));
+          if (data.hobbies)       localStorage.setItem('ph_hobbies',       JSON.stringify(data.hobbies));
         } catch {}
       }
     }
@@ -26,6 +27,7 @@ async function loadFirebaseContent() {
   loadLocalExperience();
   loadLocalSkills();
   loadLocalEducation();
+  loadLocalHobbies();
 }
 
 function loadLocalAbout() {
@@ -168,6 +170,23 @@ function loadLocalEducation() {
         </div>
       </div>`).join('')}
   `;
+}
+
+function loadLocalHobbies() {
+  const raw = readLocal('ph_hobbies');
+  const grid = document.getElementById('hobbyGrid');
+  if (!grid) return;
+  if (!raw || !raw.length) { grid.style.display = 'none'; return; }
+  const sorted = [...raw].sort((a, b) => (a.order || 0) - (b.order || 0));
+  grid.style.display = '';
+  grid.innerHTML = sorted.map(h => `
+    <div class="hobby-card">
+      <span class="hobby-icon">${h.icon || '⭐'}</span>
+      <span class="hobby-name">
+        <span class="en">${h.name_en || ''}</span>
+        <span class="id">${h.name_id || h.name_en || ''}</span>
+      </span>
+    </div>`).join('');
 }
 
 function loadLocalProjects() {

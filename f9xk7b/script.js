@@ -14,6 +14,7 @@ const KEYS = {
   skills:     'ph_skills',
   education:  'ph_education',
   settings:   'ph_lang_settings',
+  hobbies:    'ph_hobbies',
   session:    'ph_session'
 };
 
@@ -59,6 +60,7 @@ function showApp() {
   loadSkills();
   loadAbout();
   loadEducation();
+  loadHobbies();
   loadSettings();
   checkInitButton();
 }
@@ -798,6 +800,7 @@ function deleteItem(collection, id, label) {
     if (collection === 'experience') { loadExperience(); loadDashboard(); }
     if (collection === 'skills')     { loadSkills();     loadDashboard(); }
     if (collection === 'education')  { loadEducation(); }
+    if (collection === 'hobbies')    { loadHobbies(); }
   };
 }
 
@@ -823,6 +826,78 @@ function getEmbedUrl(url, type) {
     if (m) return `https://www.youtube.com/embed/${m[1]}`;
   }
   return null;
+}
+
+// ─── HOBBIES ───────────────────────────────
+function loadHobbies() {
+  const items = readData(KEYS.hobbies) || [];
+  const list = document.getElementById('hobbiesList');
+  if (!list) return;
+  if (!items.length) { list.innerHTML = '<div class="empty-text">Belum ada hobi.</div>'; return; }
+  const sorted = [...items].sort((a, b) => (a.order || 0) - (b.order || 0));
+  list.innerHTML = sorted.map(h => `
+    <div class="item-card">
+      <div class="item-info">
+        <span style="font-size:1.4rem">${h.icon || '⭐'}</span>
+        <div>
+          <strong>${h.name_en || ''}</strong>
+          ${h.name_id && h.name_id !== h.name_en ? `<span style="color:var(--a-muted)"> / ${h.name_id}</span>` : ''}
+        </div>
+      </div>
+      <div class="item-actions">
+        <button class="btn-edit" onclick="editHobby('${h.id}')">Edit</button>
+        <button class="btn-del" onclick="deleteItem('hobbies','${h.id}','${(h.name_en||'').replace(/'/g,"\\'")}')">Hapus</button>
+      </div>
+    </div>`).join('');
+}
+
+function openHobbyModal(id) {
+  clearHobbyForm();
+  document.getElementById('hobbyModalTitle').textContent = id ? 'Edit Hobi' : 'Tambah Hobi';
+  if (id) {
+    const h = (readData(KEYS.hobbies) || []).find(x => x.id === id);
+    if (h) {
+      setValue('hobbyId', h.id);
+      setValue('hobbyIcon', h.icon);
+      setValue('hobbyNameEN', h.name_en);
+      setValue('hobbyNameID', h.name_id);
+      setValue('hobbyOrder', h.order || 0);
+    }
+  }
+  openModal('hobbyModal');
+}
+
+function clearHobbyForm() {
+  ['hobbyId','hobbyIcon','hobbyNameEN','hobbyNameID'].forEach(id => setValue(id, ''));
+  setValue('hobbyOrder', '0');
+}
+
+function editHobby(id) { openHobbyModal(id); }
+
+function saveHobby() {
+  const nameEN = getValue('hobbyNameEN');
+  if (!nameEN) { toast('Nama hobi (EN) wajib diisi.', 'error'); return; }
+  const hobbies = readData(KEYS.hobbies) || [];
+  const id = getValue('hobbyId');
+  const data = {
+    id:      id || genId(),
+    icon:    getValue('hobbyIcon') || '⭐',
+    name_en: nameEN,
+    name_id: getValue('hobbyNameID') || nameEN,
+    order:   parseInt(getValue('hobbyOrder')) || 0,
+    updated_at: Date.now()
+  };
+  if (id) {
+    const i = hobbies.findIndex(x => x.id === id);
+    if (i >= 0) hobbies[i] = data; else hobbies.push(data);
+  } else {
+    data.created_at = Date.now();
+    hobbies.push(data);
+  }
+  writeData(KEYS.hobbies, hobbies);
+  closeModal('hobbyModal');
+  loadHobbies();
+  toast('Hobi berhasil disimpan!');
 }
 
 // ─── SETTINGS ──────────────────────────────
@@ -852,6 +927,7 @@ function publishContent() {
     experience:    readData(KEYS.experience),
     skills:        readData(KEYS.skills),
     education:     readData(KEYS.education),
+    hobbies:       readData(KEYS.hobbies),
     lang_settings: readData(KEYS.settings)
   };
   const blob = new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
@@ -871,6 +947,7 @@ document.getElementById('exportBtn').addEventListener('click', () => {
     experience: readData(KEYS.experience),
     skills:     readData(KEYS.skills),
     education:  readData(KEYS.education),
+    hobbies:    readData(KEYS.hobbies),
     exported_at: new Date().toISOString()
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
@@ -893,7 +970,8 @@ document.getElementById('importFile').addEventListener('change', e => {
       if (data.skills)     writeData(KEYS.skills, data.skills);
       if (data.about)      writeData(KEYS.about, data.about);
       if (data.education)  writeData(KEYS.education, data.education);
-      loadDashboard(); loadProjects(); loadExperience(); loadSkills(); loadAbout(); loadEducation();
+      if (data.hobbies)    writeData(KEYS.hobbies, data.hobbies);
+      loadDashboard(); loadProjects(); loadExperience(); loadSkills(); loadAbout(); loadEducation(); loadHobbies();
       toast('Backup berhasil diimpor!');
     } catch { toast('File tidak valid.', 'error'); }
     e.target.value = '';
@@ -1069,6 +1147,11 @@ function getDefaultData() {
       { id:'def_ed2', degree_en:'Bachelor of Civil Engineering', degree_id:'Sarjana Teknik Sipil',
         university:'Universitas Sumatera Utara', gpa:'3.53/4.00', year_start:'2018', year_end:'2022',
         icon:'B', thesis_en:'', thesis_id:'', order:1, created_at:now, updated_at:now }
+    ],
+    hobbies: [
+      { id:'def_h1', icon:'🏃', name_en:'Running', name_id:'Lari', order:0, created_at:now, updated_at:now },
+      { id:'def_h2', icon:'📚', name_en:'Reading', name_id:'Membaca', order:1, created_at:now, updated_at:now },
+      { id:'def_h3', icon:'💻', name_en:'Coding', name_id:'Coding', order:2, created_at:now, updated_at:now }
     ]
   };
 }
@@ -1081,8 +1164,9 @@ function initDefaultData() {
   writeData(KEYS.experience, d.experience);
   writeData(KEYS.skills,     d.skills);
   writeData(KEYS.education,  d.education);
+  writeData(KEYS.hobbies,    d.hobbies);
   if (!readData(KEYS.about)) { writeData(KEYS.about, d.about); loadAbout(); }
-  loadDashboard(); loadProjects(); loadExperience(); loadSkills(); loadEducation();
+  loadDashboard(); loadProjects(); loadExperience(); loadSkills(); loadEducation(); loadHobbies();
   toast('Data berhasil diinisialisasi! Sekarang tambahkan foto dan gambar proyek dari menu Edit.');
   checkInitButton();
 }
