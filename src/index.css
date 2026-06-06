@@ -8,10 +8,10 @@
   --text-1:       #dcdcef;
   --text-2:       #8f8fae;
   --text-3:       #5a5a80;
-  --accent:       #4f8ef7;
-  --accent-l:     #7aabf9;
-  --accent-dim:   rgba(79,142,247,.13);
-  --accent-dim2:  rgba(79,142,247,.06);
+  --accent:       #a78bfa;
+  --accent-l:     #c4b5fd;
+  --accent-dim:   rgba(167,139,250,.13);
+  --accent-dim2:  rgba(167,139,250,.06);
   --success:      #4ade80;
   --danger:       #f87171;
   --warning:      #fbbf24;
@@ -19,7 +19,7 @@
   --radius-sm:    8px;
   --radius-pill:  50px;
   --t:            .2s ease;
-  --glow:         0 0 40px rgba(79,142,247,.15);
+  --glow:         0 0 40px rgba(167,139,250,.15);
 }
 
 /* ── RESET ─────────────────────────────────────── */
@@ -69,10 +69,10 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 }
 .btn-primary {
   background: var(--accent); color: #fff;
-  box-shadow: 0 4px 20px rgba(79,142,247,.35);
+  box-shadow: 0 4px 20px rgba(167,139,250,.35);
   font-weight: 600; letter-spacing: .01em;
 }
-.btn-primary:hover { background: var(--accent-l); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(79,142,247,.45); }
+.btn-primary:hover { background: var(--accent-l); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(167,139,250,.45); }
 .btn-outline {
   border: 1.5px solid var(--border-h); color: var(--text-2);
   background: transparent;
@@ -127,14 +127,14 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   content: '';
   position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
   width: 900px; height: 500px;
-  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,.22) 0%, rgba(59,130,246,.08) 40%, transparent 70%);
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139,92,246,.22) 0%, rgba(139,92,246,.08) 40%, transparent 70%);
   pointer-events: none; border-radius: 0 0 50% 50%;
 }
 .hero::after {
   content: '';
   position: absolute; top: 0; left: 50%; transform: translateX(-50%);
   width: 600px; height: 1px;
-  box-shadow: 0 0 120px 80px rgba(59,130,246,.12);
+  box-shadow: 0 0 120px 80px rgba(139,92,246,.12);
   pointer-events: none;
 }
 .hero-badge {
@@ -243,7 +243,7 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 .timeline { position: relative; padding-left: 28px; }
 .timeline::before {
   content: ''; position: absolute; left: 10px; top: 8px; bottom: 8px;
-  width: 2px; background: linear-gradient(to bottom, var(--accent) 0%, rgba(59,130,246,.3) 60%, transparent 100%);
+  width: 2px; background: linear-gradient(to bottom, var(--accent) 0%, rgba(167,139,250,.3) 60%, transparent 100%);
   border-radius: 2px;
 }
 .timeline-item { position: relative; padding: 0 0 22px 28px; }
@@ -288,7 +288,7 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   font-size: .85rem; font-weight: 600; color: var(--text-2);
   transition: all var(--t);
 }
-.skill-chip:hover { border-color: var(--accent); color: var(--accent-l); background: var(--accent-dim); box-shadow: 0 4px 16px rgba(59,130,246,.15); }
+.skill-chip:hover { border-color: var(--accent); color: var(--accent-l); background: var(--accent-dim); box-shadow: 0 4px 16px rgba(167,139,250,.15); }
 
 /* ── HOBBIES ─────────────────────────────────────── */
 .hobby-chips { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
@@ -363,7 +363,7 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   padding: 12px 28px; border-radius: var(--radius-pill);
   font-weight: 600; font-size: .9rem;
   transition: all var(--t); border: none; cursor: pointer;
-  box-shadow: 0 4px 20px rgba(124,111,247,.35);
+  box-shadow: 0 4px 20px rgba(167,139,250,.35);
   align-self: flex-start;
 }
 .form-submit:hover { background: var(--accent-l); transform: translateY(-1px); }
