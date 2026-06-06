@@ -13,6 +13,7 @@ const KEYS = {
   experience: 'ph_experience',
   skills:     'ph_skills',
   education:  'ph_education',
+  settings:   'ph_lang_settings',
   session:    'ph_session'
 };
 
@@ -58,6 +59,7 @@ function showApp() {
   loadSkills();
   loadAbout();
   loadEducation();
+  loadSettings();
   checkInitButton();
 }
 
@@ -774,6 +776,25 @@ function getEmbedUrl(url, type) {
     if (m) return `https://www.youtube.com/embed/${m[1]}`;
   }
   return null;
+}
+
+// ─── SETTINGS ──────────────────────────────
+function loadSettings() {
+  const s = readData(KEYS.settings) || { id_enabled: false };
+  const cb = document.getElementById('settingIdEnabled');
+  const st = document.getElementById('settingIdStatus');
+  if (!cb) return;
+  cb.checked = !!s.id_enabled;
+  st.textContent = s.id_enabled ? 'Aktif' : 'Nonaktif';
+}
+
+function saveSettings() {
+  const cb = document.getElementById('settingIdEnabled');
+  const st = document.getElementById('settingIdStatus');
+  const val = cb.checked;
+  writeData(KEYS.settings, { id_enabled: val });
+  st.textContent = val ? 'Aktif' : 'Nonaktif';
+  showToast(val ? 'Bahasa Indonesia diaktifkan.' : 'Bahasa Indonesia dinonaktifkan — website hanya tampil dalam Bahasa Inggris.', 'success');
 }
 
 // ─── EXPORT / IMPORT BACKUP ────────────────

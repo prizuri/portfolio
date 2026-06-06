@@ -419,13 +419,26 @@ const btnEN   = document.getElementById('btnEN');
 const btnID   = document.getElementById('btnID');
 const toggle  = document.getElementById('langToggle');
 
-const savedLang = localStorage.getItem('ph_lang') || 'en';
-setLang(savedLang);
+(function initLang() {
+  let settings = null;
+  try { settings = JSON.parse(localStorage.getItem('ph_lang_settings')); } catch {}
+  const idEnabled = settings && settings.id_enabled === true;
 
-toggle.addEventListener('click', () => {
-  const next = html.lang === 'en' ? 'id' : 'en';
-  setLang(next);
-});
+  if (!idEnabled) {
+    toggle.style.display = 'none';
+    setLang('en');
+    return;
+  }
+
+  toggle.style.display = '';
+  const savedLang = localStorage.getItem('ph_lang') || 'en';
+  setLang(savedLang);
+
+  toggle.addEventListener('click', () => {
+    const next = html.lang === 'en' ? 'id' : 'en';
+    setLang(next);
+  });
+})();
 
 function setLang(lang) {
   html.lang = lang;
