@@ -353,26 +353,6 @@ function renderImageGrid() {
   `).join('');
 }
 
-async function addImagesFromFile() {
-  const files = Array.from(document.getElementById('multiImgFile').files);
-  const used = Object.values(KEYS).reduce((s, k) => s + (localStorage.getItem(k)||'').length, 0);
-  const remaining = 5 * 1024 * 1024 - used;
-  for (const file of files) {
-    if (file.size > 200 * 1024) {
-      toast(`"${file.name}" terlalu besar (${(file.size/1024).toFixed(0)}KB). Compress dulu di tinypng.com lalu upload ulang, atau gunakan URL Imgur.`, 'error');
-      continue;
-    }
-    const b64Size = file.size * 1.37;
-    if (b64Size > remaining) {
-      toast('localStorage hampir penuh. Hapus gambar lama atau gunakan URL Imgur saja.', 'error');
-      break;
-    }
-    const b64 = await fileToBase64(file, 200);
-    if (b64) projectImages.push(b64);
-  }
-  renderImageGrid();
-  document.getElementById('multiImgFile').value = '';
-}
 
 function addImageFromUrl() {
   const raw = document.getElementById('multiImgUrl').value.trim();
@@ -439,7 +419,6 @@ function clearProjectForm() {
   document.getElementById('thumbAnimPreview').innerHTML = '<span>Belum ada animasi</span>';
   document.getElementById('videoPreviewWrap').classList.add('hidden');
   document.getElementById('thumbAnimFile').value = '';
-  document.getElementById('multiImgFile').value = '';
   projectImages = [];
   renderImageGrid();
 }

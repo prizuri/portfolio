@@ -417,15 +417,11 @@
             <div class="img-empty">Belum ada gambar</div>
           </div>
           <div class="multi-img-add">
-            <input type="file" id="multiImgFile" accept="image/*" multiple style="display:none" onchange="addImagesFromFile()" />
-            <button class="btn-upload" onclick="document.getElementById('multiImgFile').click()">+ Upload Gambar</button>
-            <span class="upload-or">atau URL:</span>
-            <input type="url" id="multiImgUrl" placeholder="https://i.imgur.com/... atau URL gambar publik" style="flex:1;min-width:0" />
+            <input type="url" id="multiImgUrl" placeholder="https://i.imgur.com/xxxxx.jpg" style="flex:1;min-width:0" />
             <button class="btn-sm-outline" onclick="addImageFromUrl()">Tambahkan</button>
           </div>
           <p style="font-size:0.76rem;color:var(--a-muted);margin-top:6px;line-height:1.5">
-            ⚠ URL harus berupa <strong>link gambar langsung</strong> (berakhiran .jpg/.png atau dari Imgur). Google Drive &amp; GitHub attachment tidak bisa dipakai.
-            Upload file = disimpan lokal (maks 500KB — compress dulu di <strong>tinypng.com</strong>).
+            Gunakan <strong>URL gambar langsung</strong> dari Imgur (imgur.com → upload → klik kanan gambar → "Copy image address"). Google Drive &amp; GitHub attachment tidak bisa dipakai.
           </p>
         </div>
 
