@@ -22,8 +22,8 @@ function loadLocalAbout() {
     const frame = document.querySelector('.photo-frame');
     if (frame) frame.innerHTML = `<img src="${d.photo_url}" alt="Prizuri Hartadi" style="width:100%;height:100%;object-fit:cover;border-radius:inherit" />`;
   }
-  if (d.bio_en) { const el = document.querySelector('.about-bio .en'); if (el) el.innerHTML = d.bio_en; }
-  if (d.bio_id) { const el = document.querySelector('.about-bio .id'); if (el) el.innerHTML = d.bio_id; }
+  if (d.bio_en) { const el = document.getElementById('aboutBioEN'); if (el) el.innerHTML = d.bio_en; }
+  if (d.bio_id) { const el = document.getElementById('aboutBioID'); if (el) el.innerHTML = d.bio_id; }
   document.querySelectorAll('a[download]').forEach(a => {
     if (d.cv_url) { a.href = d.cv_url; a.style.display = ''; }
     else a.style.display = 'none';
