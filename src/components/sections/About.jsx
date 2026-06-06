@@ -7,6 +7,7 @@ export default function About() {
   const { about } = useContent();
 
   const bio = lang === 'id' ? about?.bio_id : about?.bio_en;
+  const hasPhoto = !!about?.photo_url;
 
   return (
     <section id="about" className="section">
@@ -21,29 +22,31 @@ export default function About() {
           <h2 className="section-title"><T en="About Me" id="Tentang Saya" /></h2>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: about?.photo_url ? '1fr 1.8fr' : '1fr', gap: '48px', alignItems: 'center', maxWidth: 860, margin: '0 auto' }}>
-          {about?.photo_url && (
+        <div className={`about-layout${hasPhoto ? ' about-with-photo' : ''}`}>
+          {hasPhoto && (
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              className="about-photo-wrap"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.45 }}
             >
               <img
                 src={about.photo_url}
                 alt="Prizuri Hartadi"
-                style={{ borderRadius: 16, width: '100%', aspectRatio: '3/4', objectFit: 'cover', border: '1px solid var(--border)' }}
+                className="about-photo"
               />
             </motion.div>
           )}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            className="about-bio"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.45, delay: 0.1 }}
+            transition={{ duration: 0.45, delay: hasPhoto ? 0.1 : 0 }}
           >
             {bio
-              ? <div style={{ color: 'var(--text-2)', lineHeight: 1.85, fontSize: '.95rem' }} dangerouslySetInnerHTML={{ __html: bio }} />
+              ? <div className="about-bio-content" dangerouslySetInnerHTML={{ __html: bio }} />
               : <p style={{ color: 'var(--text-3)' }}><T en="Bio coming soon." id="Bio segera hadir." /></p>
             }
           </motion.div>
