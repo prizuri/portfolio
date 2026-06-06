@@ -221,7 +221,7 @@ const DEFAULT_BIO = {
 function resetBio(lang) {
   const id = lang === 'en' ? 'aboutBioEN' : 'aboutBioID';
   setValue(id, DEFAULT_BIO[lang]);
-  showToast('Teks default dimuat — klik Simpan Perubahan untuk menyimpan.', 'success');
+  toast('Teks default dimuat — klik Simpan Perubahan untuk menyimpan.');
 }
 
 function loadAbout() {
@@ -805,7 +805,7 @@ function saveSettings() {
   const val = cb.checked;
   writeData(KEYS.settings, { id_enabled: val });
   st.textContent = val ? 'Aktif' : 'Nonaktif';
-  showToast(val ? 'Bahasa Indonesia diaktifkan.' : 'Bahasa Indonesia dinonaktifkan — website hanya tampil dalam Bahasa Inggris.', 'success');
+  toast(val ? 'Bahasa Indonesia diaktifkan.' : 'Bahasa Indonesia dinonaktifkan — website hanya tampil dalam Bahasa Inggris.');
 }
 
 // ─── EXPORT / IMPORT BACKUP ────────────────
