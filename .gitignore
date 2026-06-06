@@ -11,3 +11,7 @@ RECOVERY.md
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Node
+node_modules/
+dist/
