@@ -411,7 +411,7 @@ function openProjectModal() {
 
 function clearProjectForm() {
   ['projectId','pTitleEN','pTitleID','pDescEN','pDescID','pCompany','pDate','pTools',
-   'pImageAnimUrl','pVideoUrl','multiImgUrl'].forEach(id => setValue(id, ''));
+   'pDemoUrl','pGithubUrl','pImageAnimUrl','pVideoUrl','multiImgUrl'].forEach(id => setValue(id, ''));
   setValue('pOrder', '0');
   document.getElementById('pFeatured').checked = false;
   document.getElementById('pCategory').value = 'steel';
@@ -438,6 +438,8 @@ function editProject(id) {
   setValue('pCompany',      p.company);
   setValue('pDate',         p.date);
   setValue('pTools',        (p.tools || []).join(', '));
+  setValue('pDemoUrl',      p.demo_url   || '');
+  setValue('pGithubUrl',    p.github_url || '');
   setValue('pImageAnimUrl', !p.image_animated_url?.startsWith('data:') ? p.image_animated_url : '');
   setValue('pVideoUrl',     p.video_url);
   setValue('pOrder',        p.order || 0);
@@ -483,6 +485,8 @@ async function saveProject() {
       company:            getValue('pCompany'),
       date:               getValue('pDate'),
       tools:              getValue('pTools').split(',').map(s => s.trim()).filter(Boolean),
+      demo_url:           getValue('pDemoUrl'),
+      github_url:         getValue('pGithubUrl'),
       category:           document.getElementById('pCategory').value,
       featured:           document.getElementById('pFeatured').checked,
       order:              parseInt(getValue('pOrder')) || 0,

@@ -243,9 +243,15 @@ function renderFeaturedProject(el, p) {
         <span class="meta-chip">${p.company || ''} ${p.date ? '· ' + p.date : ''}</span>
       </div>
       <div class="exp-tools">${(p.tools||[]).map(t=>`<span class="tool-tag">${t}</span>`).join('')}</div>
-      ${hasVideo ? `<button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="openVideoModal('${p.video_url}','${p.video_type}','${titleEN.replace(/'/g,"\\'")}')">
-        ▶ <span class="en">Watch Video</span><span class="id">Tonton Video</span>
-      </button>` : ''}
+      <div class="project-cta-row">
+        ${hasVideo ? `<button class="btn btn-outline btn-sm" onclick="openVideoModal('${p.video_url}','${p.video_type}','${titleEN.replace(/'/g,"\\'")}')">
+          ▶ <span class="en">Watch Video</span><span class="id">Tonton Video</span>
+        </button>` : ''}
+        ${p.demo_url ? `<a class="btn btn-primary btn-sm" href="${p.demo_url}" target="_blank" rel="noopener">
+          <span class="en">Live Demo</span><span class="id">Demo Langsung</span>
+        </a>` : ''}
+        ${p.github_url ? `<a class="btn btn-outline btn-sm" href="${p.github_url}" target="_blank" rel="noopener">GitHub</a>` : ''}
+      </div>
     </div>
   `;
 }
@@ -304,10 +310,16 @@ function renderProjectCard(p) {
           <span class="id">${p.desc_id || p.desc_en || ''}</span>
         </p>
         <div class="exp-tools">${(p.tools||[]).map(t=>`<span class="tool-tag">${t}</span>`).join('')}</div>
-        ${hasVideo ? `<button class="project-link" style="background:none;border:none;cursor:pointer;padding:0;text-align:left"
-          onclick="openVideoModal('${p.video_url}','${p.video_type}','${titleEN.replace(/'/g,"\\'")}')">
-          ▶ <span class="en">Watch Video</span><span class="id">Tonton Video</span>
-        </button>` : ''}
+        <div class="project-cta-row">
+          ${hasVideo ? `<button class="project-link" style="background:none;border:none;cursor:pointer;padding:0;text-align:left"
+            onclick="openVideoModal('${p.video_url}','${p.video_type}','${titleEN.replace(/'/g,"\\'")}')">
+            ▶ <span class="en">Watch Video</span><span class="id">Tonton Video</span>
+          </button>` : ''}
+          ${p.demo_url ? `<a class="project-link" href="${p.demo_url}" target="_blank" rel="noopener">
+            ↗ <span class="en">Live Demo</span><span class="id">Demo Langsung</span>
+          </a>` : ''}
+          ${p.github_url ? `<a class="project-link" href="${p.github_url}" target="_blank" rel="noopener">GitHub ↗</a>` : ''}
+        </div>
       </div>
     </div>
   `;

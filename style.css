@@ -830,6 +830,13 @@ html[lang="id"] .en { display: none; }
   transition: color var(--transition);
 }
 .project-link:hover { color: var(--accent-light); }
+.project-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+  align-items: center;
+}
 
 /* Small project cards */
 .project-grid-2 {
