@@ -166,8 +166,8 @@
       "degree_id": "Magister Teknik Sipil",
       "university": "Universitas Gadjah Mada",
       "gpa": "3.80/4.00", "year_start": "2023", "year_end": "2025", "icon": "M",
-      "thesis_en": "Numerical Analysis of Shear Behavior of Blind Rivet Connections in Modular Steel Housing",
-      "thesis_id": "Analisis Numerik Perilaku Geser Sambungan Blind Rivet pada Rumah Baja Modular"
+      "thesis_en": "Assessment of Shear Resistance of Rivet Connectors in Tensile Testing of Beam-Column Connections with Sleeve Restraint Mechanism (MKS) for RISBA Steel Structures",
+      "thesis_id": "Kajian Tahanan Geser Alat Sambung Rivet pada Pengujian Tarik Sambungan Balok-Kolom Mekanisme Kekangan Selongsong (MKS) untuk Struktur Baja RISBA"
     },
     {
       "id": "edu2", "order": 1, "created_at": 1700000021000, "updated_at": 1700000021000,
@@ -179,7 +179,17 @@
     }
   ],
   "hobbies": [],
-  "publications": [],
+  "publications": [
+    {
+      "id": "pub1", "order": 0,
+      "title": "Simulasi Numerik Pengujian Geser Sambungan Blind Rivet terhadap Bentuk Penampang L dan U",
+      "title_id": "Simulasi Numerik Pengujian Geser Sambungan Blind Rivet terhadap Bentuk Penampang L dan U",
+      "authors": "Prizuri Hartadi, Ashar Saputra, Akhmad Aminullah",
+      "journal": "", "year": "2025",
+      "doi": "",
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=gUkk3Z8AAAAJ&citation_for_view=gUkk3Z8AAAAJ:u-x6o8ySG0sC"
+    }
+  ],
   "sections": [
     { "id": "about",        "visible": true  },
     { "id": "projects",     "visible": true  },
@@ -187,7 +197,7 @@
     { "id": "skills",       "visible": true  },
     { "id": "education",    "visible": true  },
     { "id": "hobbies",      "visible": false, "layout": "chip" },
-    { "id": "publications", "visible": false, "layout": "list" },
+    { "id": "publications", "visible": true, "layout": "list" },
     { "id": "contact",      "visible": true  }
   ],
   "lang_settings": { "id_enabled": false }
