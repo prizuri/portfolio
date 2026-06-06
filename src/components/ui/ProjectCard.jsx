@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useLang } from '../../contexts/LangContext';
+import { imageUrl } from '../../utils/url';
 
 export default function ProjectCard({ project: p, index = 0, featured = false }) {
   const { lang } = useLang();
@@ -15,7 +16,7 @@ export default function ProjectCard({ project: p, index = 0, featured = false })
       transition={{ duration: 0.4, delay: index * 0.08 }}
     >
       {p.image_url && (
-        <img className="project-img" src={p.image_url} alt={title} loading="lazy" />
+        <img className="project-img" src={imageUrl(p.image_url)} alt={title} loading="lazy" />
       )}
       <div className="project-body">
         <div className="project-meta">
