@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { useContent } from '../../contexts/ContentContext';
 import { useToast } from '../../contexts/ToastContext';
-import { readData, KEYS } from '../../utils/storage';
+import { readData, KEYS, DEFAULT_SECTION_CONFIG } from '../../utils/storage';
 
 function collectAllData() {
   return {
-    about:         readData(KEYS.about),
+    about:         readData(KEYS.about) || {},
     projects:      readData(KEYS.projects) || [],
     experience:    readData(KEYS.experience) || [],
     skills:        readData(KEYS.skills) || [],
     education:     readData(KEYS.education) || [],
     hobbies:       readData(KEYS.hobbies) || [],
     publications:  readData(KEYS.publications) || [],
-    sections:      readData(KEYS.sections),
-    lang_settings: readData(KEYS.lang),
+    sections:      readData(KEYS.sections) || DEFAULT_SECTION_CONFIG,
+    lang_settings: readData(KEYS.lang) || { id_enabled: true },
   };
 }
 

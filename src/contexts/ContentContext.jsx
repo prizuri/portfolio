@@ -7,10 +7,27 @@ function make(key, initial = null) {
   return [readData(key) ?? initial, key];
 }
 
+const HASH_KEY = 'ph_content_hash';
+
+function simpleHash(obj) {
+  let s = JSON.stringify(obj);
+  let h = 0;
+  for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h |= 0; }
+  return h.toString(36);
+}
+
 function syncOnce(key, data, setter) {
   if (readData(key) !== null) return;
   writeData(key, data);
   setter(data);
+}
+
+function syncIfChanged(key, data, setter, newHash) {
+  const oldHash = readData(HASH_KEY);
+  if (oldHash !== newHash) {
+    writeData(key, data);
+    setter(data);
+  }
 }
 
 export function ContentProvider({ children }) {
@@ -44,15 +61,30 @@ export function ContentProvider({ children }) {
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (!data || !Object.keys(data).length) return;
-        if (data.about)        syncOnce(KEYS.about,        data.about,        setAboutRaw);
-        if (data.projects)     syncOnce(KEYS.projects,     data.projects,     setProjectsRaw);
-        if (data.experience)   syncOnce(KEYS.experience,   data.experience,   setExpRaw);
-        if (data.skills)       syncOnce(KEYS.skills,       data.skills,       setSkillsRaw);
-        if (data.education)    syncOnce(KEYS.education,    data.education,    setEduRaw);
-        if (data.hobbies)      syncOnce(KEYS.hobbies,      data.hobbies,      setHobbiesRaw);
-        if (data.publications) syncOnce(KEYS.publications, data.publications, setPubsRaw);
-        if (data.sections)     syncOnce(KEYS.sections,     data.sections,     setSectionsRaw);
-        if (data.lang_settings){ writeData(KEYS.lang,         data.lang_settings);setLangRaw(data.lang_settings); }
+        const newHash = simpleHash(data);
+        const oldHash = readData(HASH_KEY);
+        if (oldHash === null) {
+          if (data.about)        syncOnce(KEYS.about,        data.about,        setAboutRaw);
+          if (data.projects)     syncOnce(KEYS.projects,     data.projects,     setProjectsRaw);
+          if (data.experience)   syncOnce(KEYS.experience,   data.experience,   setExpRaw);
+          if (data.skills)       syncOnce(KEYS.skills,       data.skills,       setSkillsRaw);
+          if (data.education)    syncOnce(KEYS.education,    data.education,    setEduRaw);
+          if (data.hobbies)      syncOnce(KEYS.hobbies,      data.hobbies,      setHobbiesRaw);
+          if (data.publications) syncOnce(KEYS.publications, data.publications, setPubsRaw);
+          if (data.sections)     syncOnce(KEYS.sections,     data.sections,     setSectionsRaw);
+          if (data.lang_settings){ writeData(KEYS.lang,         data.lang_settings);setLangRaw(data.lang_settings); }
+        } else if (oldHash !== newHash) {
+          if (data.about)        { writeData(KEYS.about,        data.about);        setAboutRaw(data.about); }
+          if (data.projects)     { writeData(KEYS.projects,     data.projects);     setProjectsRaw(data.projects); }
+          if (data.experience)   { writeData(KEYS.experience,   data.experience);   setExpRaw(data.experience); }
+          if (data.skills)       { writeData(KEYS.skills,       data.skills);       setSkillsRaw(data.skills); }
+          if (data.education)    { writeData(KEYS.education,    data.education);    setEduRaw(data.education); }
+          if (data.hobbies)      { writeData(KEYS.hobbies,      data.hobbies);      setHobbiesRaw(data.hobbies); }
+          if (data.publications) { writeData(KEYS.publications, data.publications); setPubsRaw(data.publications); }
+          if (data.sections)     { writeData(KEYS.sections,     data.sections);     setSectionsRaw(data.sections); }
+          if (data.lang_settings){ writeData(KEYS.lang,         data.lang_settings);setLangRaw(data.lang_settings); }
+        }
+        writeData(HASH_KEY, newHash);
       })
       .catch(() => {});
   }, []);
