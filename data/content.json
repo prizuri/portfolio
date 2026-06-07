@@ -1,26 +1,22 @@
 {
   "about": {
-    "bio_en": "<p>I am a Junior Structural Engineer with a Master of Civil Engineering from Universitas Gadjah Mada (GPA 3.80/4.00) and a Bachelor of Civil Engineering from Universitas Sumatera Utara (GPA 3.53/4.00). I specialize in structural analysis, assessment, and design of steel and reinforced concrete structures, applying international standards including SNI, AISC, and ASCE.</p><p>With over a year of professional experience and ten months of laboratory research, I have contributed to projects ranging from a 229-billion-rupiah coal shed arc dome steel structure to building occupancy permit assessments and experimental cyclic testing of steel connections. I complement my engineering background with Python programming to enable data-driven approaches to structural problems.</p>",
-    "bio_id": "<p>Saya adalah Insinyur Struktur Junior dengan gelar Magister Teknik Sipil dari Universitas Gadjah Mada (IPK 3,80/4,00) dan Sarjana Teknik Sipil dari Universitas Sumatera Utara (IPK 3,53/4,00). Saya mengkhususkan diri dalam analisis, penilaian, dan perencanaan struktur baja serta beton bertulang, dengan penerapan standar SNI, AISC, dan ASCE.</p><p>Dengan lebih dari satu tahun pengalaman profesional dan sepuluh bulan penelitian laboratorium, saya telah berkontribusi pada proyek mulai dari struktur kubah baja senilai 229 miliar rupiah, penilaian SLF bangunan bertingkat, hingga pengujian siklik sambungan baja secara eksperimental. Saya melengkapi latar belakang teknik dengan pemrograman Python untuk analisis struktural berbasis data.</p>",
-    "photo_url": "",
-    "email": "prizurihartadi10@gmail.com",
-    "linkedin": "linkedin.com/in/prizurih/"
+    "bio_en": "<p>I am a Junior Structural Engineer with a Master of Civil Engineering from Universitas Gadjah Mada and a Bachelor of Civil Engineering from Universitas Sumatera Utara. My work focuses on structural analysis, assessment, and design of steel and reinforced concrete structures, with practical application of SNI, AISC, and ASCE standards.</p><p>I have been involved in structural engineering projects ranging from large-scale industrial steel structures to building occupancy permit assessments and experimental research on cyclic behavior of steel connections. Alongside my engineering background, I use Python to support data-driven analysis and improve the efficiency of structural problem-solving.</p>",
+    "bio_id": "<p>Saya adalah Junior Structural Engineer yang tertarik pada bagaimana sebuah struktur dirancang, dianalisis, dan dievaluasi agar dapat bekerja secara aman, efisien, dan sesuai kebutuhan. Dengan latar belakang Magister Teknik Sipil dari Universitas Gadjah Mada dan Sarjana Teknik Sipil dari Universitas Sumatera Utara, saya berfokus pada analisis, asesmen, dan desain struktur baja serta beton bertulang.</p><p>Dalam perjalanan profesional dan riset, saya telah terlibat dalam berbagai pekerjaan struktur, mulai dari proyek struktur baja industri berskala besar, asesmen bangunan untuk kebutuhan Persetujuan Bangunan Gedung, hingga pengujian eksperimental sambungan baja terhadap beban siklik. Saya juga memanfaatkan Python sebagai alat bantu untuk mengolah data, mempercepat analisis, dan menemukan pendekatan yang lebih efektif dalam menyelesaikan permasalahan teknik struktur.</p>",
+    "photo_url": ""
   },
   "projects": [
     {
       "id": "proj1",
       "order": 0,
       "created_at": 1700000001000,
-      "updated_at": 1700000001000,
+      "updated_at": 1780827384510,
       "title": "Coal Shed Arc Dome Steel Structure",
       "title_id": "Struktur Baja Arc Dome Gudang Batubara",
       "category": "Professional",
       "status": "Completed",
-      "desc": "Designed and analyzed a 188 m and 192 m span arc dome steel structure worth IDR 229 billion. Performed structural verification including slenderness checks, deflection control, and capacity ratio in accordance with SNI 1727:2020, SNI 1726:2019, AISC 360-16, and AISC 341-16.",
-      "desc_id": "Merancang dan menganalisis struktur baja arc dome bentang 188 m dan 192 m senilai IDR 229 miliar. Melakukan verifikasi anggota struktur termasuk pemeriksaan kelangsingan, kontrol lendutan, dan rasio kapasitas sesuai SNI 1727:2020, SNI 1726:2019, AISC 360-16, dan AISC 341-16.",
-      "images": [
-        "https://drive.google.com/file/d/1yx8A-ABL676gz9kwG-zQuS0uXEH3KY7N/view?usp=drive_link"
-      ],
+      "desc": "Designed and analyzed large-span arc dome steel structures with spans of 188 m and 192 m. The work included structural verification such as slenderness checks, deflection control, capacity ratio evaluation, and connection detailing calculations in accordance with SNI 1727:2020, SNI 1726:2019, AISC 360-16, and AISC 341-16.",
+      "desc_id": "Merancang dan menganalisis struktur baja kubah lengkung dengan bentang 188 m dan 192 m. Pekerjaan ini mencakup verifikasi struktur, termasuk pemeriksaan kelangsingan elemen, kontrol lendutan, evaluasi rasio kapasitas, serta perhitungan detailing sambungan sesuai dengan SNI 1727:2020, SNI 1726:2019, AISC 360-16, dan AISC 341-16.",
+      "image_url": "https://drive.google.com/file/d/19wqVr_Ufn6jG7dAeoAGpjqGmABb9gJSh/view?usp=drive_link",
       "tags": [
         "SAP2000",
         "Steel Structure",
@@ -29,20 +25,53 @@
         "Arc Dome"
       ],
       "demo_url": "",
-      "github_url": ""
+      "github_url": "",
+      "images": [
+        "https://drive.google.com/file/d/19wqVr_Ufn6jG7dAeoAGpjqGmABb9gJSh/view?usp=drive_link",
+        "https://drive.google.com/file/d/1FEa4nc6cOBtbg-p2byECRLPVu0WUC0VW/view?usp=drive_link",
+        "https://drive.google.com/file/d/1acFrBgZkyeN4nk-l3-00WuN9_Fus0fZl/view?usp=drive_link"
+      ],
+      "featured": false
+    },
+    {
+      "id": "proj3",
+      "order": 1,
+      "created_at": 1700000003000,
+      "updated_at": 1780827465618,
+      "title": "SLF Assessment – 29-Story Building",
+      "title_id": "Penilaian SLF – Gedung 29 Lantai",
+      "category": "Assessment",
+      "status": "Completed",
+      "desc": "Conducted structural evaluation supporting SLF certification of a 29-story building. Performed structural surveys, element measurements, and condition assessments to evaluate structural feasibility and prepare technical safety recommendations.",
+      "desc_id": "Melakukan evaluasi struktur untuk mendukung sertifikasi SLF gedung 29 lantai. Melaksanakan survei struktur, pengukuran elemen, dan penilaian kondisi untuk mengevaluasi kelayakan struktural dan menyiapkan rekomendasi teknis.",
+      "image_url": "https://drive.google.com/file/d/181YbU6P2wP_yskasZXA15m_ePZpGbCGH/view?usp=drive_link",
+      "tags": [
+        "Structural Assessment",
+        "SLF",
+        "Building Evaluation"
+      ],
+      "demo_url": "",
+      "github_url": "",
+      "images": [
+        "https://drive.google.com/file/d/181YbU6P2wP_yskasZXA15m_ePZpGbCGH/view?usp=drive_link",
+        "https://drive.google.com/file/d/1X14y8uo-KDpIqklyORit5eRhrU1fOAiZ/view?usp=drive_link",
+        "https://drive.google.com/file/d/1JRQQFfe0GIhm5mMUqcY8y-SnfBmKWvNa/view?usp=drive_link",
+        "https://drive.google.com/file/d/1wCcl78kqzqAZyAIVB5CA3WxD16NMx36i/view?usp=drive_link"
+      ],
+      "featured": false
     },
     {
       "id": "proj2",
-      "order": 1,
+      "order": 2,
       "created_at": 1700000002000,
-      "updated_at": 1700000002000,
+      "updated_at": 1780827424770,
       "title": "RISBA Beam-Column Connection Research",
       "title_id": "Penelitian Sambungan Balok-Kolom RISBA",
       "category": "Research",
       "status": "Completed",
       "desc": "Developed riveted beam-column connection designs for modular steel housing. Conducted cyclic testing on four beam-column specimens per AISC 341-22, and built finite element models in Abaqus to simulate behavior under cyclic loading.",
       "desc_id": "Mengembangkan desain sambungan balok-kolom rivet untuk rumah baja modular. Melakukan pengujian siklik pada empat spesimen sambungan sesuai AISC 341-22, serta membangun model elemen hingga di Abaqus untuk mensimulasikan perilaku beban siklik.",
-      "images": [],
+      "image_url": "https://drive.google.com/file/d/1VJK59GWzueUsy7tzzSTMMsK3GntR8ysP/view?usp=drive_link",
       "tags": [
         "Abaqus",
         "Cyclic Testing",
@@ -51,40 +80,25 @@
         "FEM"
       ],
       "demo_url": "",
-      "github_url": ""
-    },
-    {
-      "id": "proj3",
-      "order": 2,
-      "created_at": 1700000003000,
-      "updated_at": 1700000003000,
-      "title": "SLF Assessment – 29-Story Building",
-      "title_id": "Penilaian SLF – Gedung 29 Lantai",
-      "category": "Assessment",
-      "status": "Completed",
-      "desc": "Conducted structural evaluation supporting SLF certification of a 29-story building. Performed structural surveys, element measurements, and condition assessments to evaluate structural feasibility and prepare technical safety recommendations.",
-      "desc_id": "Melakukan evaluasi struktur untuk mendukung sertifikasi SLF gedung 29 lantai. Melaksanakan survei struktur, pengukuran elemen, dan penilaian kondisi untuk mengevaluasi kelayakan struktural dan menyiapkan rekomendasi teknis.",
-      "images": [],
-      "tags": [
-        "Structural Assessment",
-        "SLF",
-        "Building Evaluation"
+      "github_url": "",
+      "images": [
+        "https://drive.google.com/file/d/1VJK59GWzueUsy7tzzSTMMsK3GntR8ysP/view?usp=drive_link",
+        "https://drive.google.com/file/d/1vSXGcyXo_uba0SRcoUqSHCbWHnpyWxvh/view?usp=drive_link"
       ],
-      "demo_url": "",
-      "github_url": ""
+      "featured": false
     },
     {
       "id": "proj4",
       "order": 3,
       "created_at": 1700000004000,
-      "updated_at": 1700000004000,
+      "updated_at": 1780828893319,
       "title": "Office Building Assessment – PT PLN",
       "title_id": "Penilaian Struktural Gedung Kantor – PT PLN",
       "category": "Assessment",
       "status": "Completed",
       "desc": "Evaluated performance of a 36-year-old office building per ASCE 41-17. Identified foundation settlement causing cracks in more than 50% of structural elements, and recommended steel bracing retrofits.",
       "desc_id": "Mengevaluasi kinerja gedung kantor berusia 36 tahun sesuai ASCE 41-17. Mengidentifikasi penurunan pondasi yang menyebabkan retak pada lebih dari 50% elemen struktural, dan merekomendasikan strategi perkuatan dengan bresing baja.",
-      "images": [],
+      "image_url": "https://drive.google.com/file/d/1BSSqOFY6TLUOKf2RlT5B-T2vcmj-n8Hr/view?usp=drive_link",
       "tags": [
         "ASCE 41-17",
         "Structural Assessment",
@@ -92,7 +106,14 @@
         "Foundation"
       ],
       "demo_url": "",
-      "github_url": ""
+      "github_url": "",
+      "images": [
+        "https://drive.google.com/file/d/1BSSqOFY6TLUOKf2RlT5B-T2vcmj-n8Hr/view?usp=drive_link",
+        "https://drive.google.com/file/d/18idtV_Fjj5ODwtVE7qUC92AoJbkc7L9T/view?usp=drive_link",
+        "https://drive.google.com/file/d/1MVgpY7N3CtLafzWKj7H2hLZ6nzNvDGS5/view?usp=drive_link",
+        "https://drive.google.com/file/d/1V7F9yDwv7POWzhsKHrGRnqMOkG3YoO4l/view?usp=drive_link"
+      ],
+      "featured": false
     },
     {
       "id": "proj5",
@@ -105,7 +126,7 @@
       "status": "Live",
       "desc": "A personal finance web application built with modern web technologies for tracking income, expenses, and financial goals.",
       "desc_id": "Aplikasi web keuangan pribadi yang dibangun dengan teknologi web modern untuk melacak pemasukan, pengeluaran, dan tujuan keuangan.",
-      "images": [],
+      "image_url": "",
       "tags": [
         "Web App",
         "Finance",
@@ -128,10 +149,7 @@
       "year_end": "2026",
       "icon": "▲",
       "desc": "Designed and analyzed a 188 m & 192 m span arc dome steel structure worth IDR 229 billion. Evaluated global stability, conducted member verification (slenderness, deflection, capacity ratio), and coordinated with geotechnical and project management teams per SNI & AISC standards.",
-      "desc_id": "Merancang dan menganalisis struktur baja arc dome bentang 188 m & 192 m senilai IDR 229 miliar. Mengevaluasi stabilitas global, melakukan verifikasi anggota (kelangsingan, lendutan, rasio kapasitas), dan berkoordinasi dengan tim geoteknik dan manajemen proyek sesuai standar SNI & AISC.",
-      "images": [
-        "https://drive.google.com/file/d/1yx8A-ABL676gz9kwG-zQuS0uXEH3KY7N/view?usp=drive_link"
-      ]
+      "desc_id": "Merancang dan menganalisis struktur baja arc dome bentang 188 m & 192 m senilai IDR 229 miliar. Mengevaluasi stabilitas global, melakukan verifikasi anggota (kelangsingan, lendutan, rasio kapasitas), dan berkoordinasi dengan tim geoteknik dan manajemen proyek sesuai standar SNI & AISC."
     },
     {
       "id": "exp2",
