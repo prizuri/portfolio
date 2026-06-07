@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useLang, T } from '../../contexts/LangContext';
 import { useToast } from '../../contexts/ToastContext';
 import { useContent } from '../../contexts/ContentContext';
+import { ensureUrl } from '../../utils/url';
 
 export default function Contact() {
   const { lang } = useLang();
@@ -12,6 +13,7 @@ export default function Contact() {
 
   const email    = about?.email    || 'prizurihartadi10@gmail.com';
   const linkedin = about?.linkedin || 'linkedin.com/in/prizurih/';
+  const linkedinUrl = ensureUrl(linkedin);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -62,14 +64,14 @@ export default function Contact() {
               <div className="contact-icon">✉</div>
               <div>
                 <div className="contact-label">Email</div>
-                <div className="contact-value">{email}</div>
+                <a className="contact-value contact-link" href={`mailto:${email}`}>{email}</a>
               </div>
             </div>
             <div className="contact-item">
               <div className="contact-icon">in</div>
               <div>
                 <div className="contact-label">LinkedIn</div>
-                <div className="contact-value">{linkedin}</div>
+                <a className="contact-value contact-link" href={linkedinUrl} target="_blank" rel="noopener noreferrer">{linkedin}</a>
               </div>
             </div>
             <div className="contact-item">
