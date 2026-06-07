@@ -1,14 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLang, T } from '../../contexts/LangContext';
 import { useContent } from '../../contexts/ContentContext';
 
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
 const LINKS = [
-  { href: '#about',        en: 'About',       id: 'Tentang' },
-  { href: '#projects',     en: 'Projects',    id: 'Proyek' },
-  { href: '#experience',   en: 'Experience',  id: 'Pengalaman' },
-  { href: '#skills',       en: 'Skills',      id: 'Keahlian' },
-  { href: '#education',    en: 'Education',   id: 'Pendidikan' },
-  { href: '#contact',      en: 'Contact',     id: 'Kontak' },
+  { section: 'about',      en: 'About',       id: 'Tentang' },
+  { section: 'projects',   en: 'Projects',    id: 'Proyek' },
+  { section: 'experience', en: 'Experience',  id: 'Pengalaman' },
+  { section: 'skills',     en: 'Skills',      id: 'Keahlian' },
+  { section: 'education',  en: 'Education',   id: 'Pendidikan' },
+  { section: 'contact',    en: 'Contact',     id: 'Kontak' },
 ];
 
 export default function Navbar() {
@@ -16,6 +21,11 @@ export default function Navbar() {
   const { isSectionVisible } = useContent();
   const [active, setActive] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleNav = useCallback(id => {
+    scrollTo(id);
+    setMenuOpen(false);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -29,21 +39,25 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const visibleLinks = LINKS.filter(l => {
-    const id = l.href.slice(1);
-    return isSectionVisible(id);
-  });
+  const visibleLinks = LINKS.filter(l => isSectionVisible(l.section));
 
   return (
     <>
       <nav className="navbar">
         <div className="container">
-          <a href="#hero" className="nav-logo">PH<span className="accent">.</span></a>
+          <button className="nav-logo" onClick={() => scrollTo('hero')} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+            PH<span className="accent">.</span>
+          </button>
           <div className="nav-links">
             {visibleLinks.map(l => (
-              <a key={l.href} href={l.href} className={`nav-link${active === l.href.slice(1) ? ' active' : ''}`}>
+              <button
+                key={l.section}
+                className={`nav-link${active === l.section ? ' active' : ''}`}
+                onClick={() => handleNav(l.section)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+              >
                 {lang === 'id' ? l.id : l.en}
-              </a>
+              </button>
             ))}
             {idEnabled && (
               <button className="lang-toggle" onClick={toggle}>
@@ -64,7 +78,14 @@ export default function Navbar() {
       {menuOpen && (
         <div className="nav-mobile-menu" onClick={() => setMenuOpen(false)}>
           {visibleLinks.map(l => (
-            <a key={l.href} href={l.href} className="nav-link">{lang === 'id' ? l.id : l.en}</a>
+            <button
+              key={l.section}
+              className="nav-link"
+              onClick={() => handleNav(l.section)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+            >
+              {lang === 'id' ? l.id : l.en}
+            </button>
           ))}
           {idEnabled && (
             <button className="lang-toggle" onClick={e => { e.stopPropagation(); toggle(); }}>

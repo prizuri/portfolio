@@ -44,12 +44,12 @@ export default function Hero() {
         </motion.p>
 
         <motion.div className="hero-cta" {...fadeUp(0.28)}>
-          <a href="#projects" className="btn btn-primary">
+          <button className="btn btn-primary" onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
             <T en="View Projects" id="Lihat Proyek" />
-          </a>
-          <a href="#contact" className="btn btn-outline">
+          </button>
+          <button className="btn btn-outline" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
             <T en="Get in Touch" id="Hubungi Saya" />
-          </a>
+          </button>
         </motion.div>
 
         <motion.div
