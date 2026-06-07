@@ -18,7 +18,9 @@
       "status": "Completed",
       "desc": "Designed and analyzed a 188 m and 192 m span arc dome steel structure worth IDR 229 billion. Performed structural verification including slenderness checks, deflection control, and capacity ratio in accordance with SNI 1727:2020, SNI 1726:2019, AISC 360-16, and AISC 341-16.",
       "desc_id": "Merancang dan menganalisis struktur baja arc dome bentang 188 m dan 192 m senilai IDR 229 miliar. Melakukan verifikasi anggota struktur termasuk pemeriksaan kelangsingan, kontrol lendutan, dan rasio kapasitas sesuai SNI 1727:2020, SNI 1726:2019, AISC 360-16, dan AISC 341-16.",
-      "image_url": "",
+      "images": [
+        "https://drive.google.com/file/d/1yx8A-ABL676gz9kwG-zQuS0uXEH3KY7N/view?usp=drive_link"
+      ],
       "tags": [
         "SAP2000",
         "Steel Structure",
@@ -40,7 +42,7 @@
       "status": "Completed",
       "desc": "Developed riveted beam-column connection designs for modular steel housing. Conducted cyclic testing on four beam-column specimens per AISC 341-22, and built finite element models in Abaqus to simulate behavior under cyclic loading.",
       "desc_id": "Mengembangkan desain sambungan balok-kolom rivet untuk rumah baja modular. Melakukan pengujian siklik pada empat spesimen sambungan sesuai AISC 341-22, serta membangun model elemen hingga di Abaqus untuk mensimulasikan perilaku beban siklik.",
-      "image_url": "",
+      "images": [],
       "tags": [
         "Abaqus",
         "Cyclic Testing",
@@ -62,7 +64,7 @@
       "status": "Completed",
       "desc": "Conducted structural evaluation supporting SLF certification of a 29-story building. Performed structural surveys, element measurements, and condition assessments to evaluate structural feasibility and prepare technical safety recommendations.",
       "desc_id": "Melakukan evaluasi struktur untuk mendukung sertifikasi SLF gedung 29 lantai. Melaksanakan survei struktur, pengukuran elemen, dan penilaian kondisi untuk mengevaluasi kelayakan struktural dan menyiapkan rekomendasi teknis.",
-      "image_url": "",
+      "images": [],
       "tags": [
         "Structural Assessment",
         "SLF",
@@ -82,7 +84,7 @@
       "status": "Completed",
       "desc": "Evaluated performance of a 36-year-old office building per ASCE 41-17. Identified foundation settlement causing cracks in more than 50% of structural elements, and recommended steel bracing retrofits.",
       "desc_id": "Mengevaluasi kinerja gedung kantor berusia 36 tahun sesuai ASCE 41-17. Mengidentifikasi penurunan pondasi yang menyebabkan retak pada lebih dari 50% elemen struktural, dan merekomendasikan strategi perkuatan dengan bresing baja.",
-      "image_url": "",
+      "images": [],
       "tags": [
         "ASCE 41-17",
         "Structural Assessment",
@@ -103,7 +105,7 @@
       "status": "Live",
       "desc": "A personal finance web application built with modern web technologies for tracking income, expenses, and financial goals.",
       "desc_id": "Aplikasi web keuangan pribadi yang dibangun dengan teknologi web modern untuk melacak pemasukan, pengeluaran, dan tujuan keuangan.",
-      "image_url": "",
+      "images": [],
       "tags": [
         "Web App",
         "Finance",
@@ -126,7 +128,10 @@
       "year_end": "2026",
       "icon": "▲",
       "desc": "Designed and analyzed a 188 m & 192 m span arc dome steel structure worth IDR 229 billion. Evaluated global stability, conducted member verification (slenderness, deflection, capacity ratio), and coordinated with geotechnical and project management teams per SNI & AISC standards.",
-      "desc_id": "Merancang dan menganalisis struktur baja arc dome bentang 188 m & 192 m senilai IDR 229 miliar. Mengevaluasi stabilitas global, melakukan verifikasi anggota (kelangsingan, lendutan, rasio kapasitas), dan berkoordinasi dengan tim geoteknik dan manajemen proyek sesuai standar SNI & AISC."
+      "desc_id": "Merancang dan menganalisis struktur baja arc dome bentang 188 m & 192 m senilai IDR 229 miliar. Mengevaluasi stabilitas global, melakukan verifikasi anggota (kelangsingan, lendutan, rasio kapasitas), dan berkoordinasi dengan tim geoteknik dan manajemen proyek sesuai standar SNI & AISC.",
+      "images": [
+        "https://drive.google.com/file/d/1yx8A-ABL676gz9kwG-zQuS0uXEH3KY7N/view?usp=drive_link"
+      ]
     },
     {
       "id": "exp2",
