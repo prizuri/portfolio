@@ -7,7 +7,7 @@ import Modal from '../ui/Modal';
 
 const EMPTY = {
   title: '', title_id: '', category: 'Professional', status: '',
-  desc: '', desc_id: '', image_url: '', tags: '',
+  desc: '', desc_id: '', images: [], tags: '',
   demo_url: '', github_url: '', order: 0, featured: false,
 };
 
@@ -16,20 +16,34 @@ export default function SectionProjects() {
   const toast = useToast();
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState(EMPTY);
+  const [imgInput, setImgInput] = useState('');
   const [confirm, setConfirm] = useState(null);
 
   const sorted = [...projects].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 
   function openAdd() { setForm({ ...EMPTY, order: projects.length }); setModal('add'); }
   function openEdit(p) {
-    setForm({ ...EMPTY, ...p, tags: (p.tags || []).join(', ') });
+    setForm({ ...EMPTY, ...p, images: p.images || (p.image_url ? [p.image_url] : []), tags: (p.tags || []).join(', ') });
     setModal('edit');
+  }
+
+  function addImg() {
+    const url = imgInput.trim();
+    if (!url) return;
+    setForm(f => ({ ...f, images: [...(f.images || []), url] }));
+    setImgInput('');
+  }
+
+  function removeImg(i) {
+    setForm(f => ({ ...f, images: f.images.filter((_, idx) => idx !== i) }));
   }
 
   function save() {
     if (!form.title.trim()) { toast('Judul wajib diisi.', 'error'); return; }
     const item = {
       ...form,
+      image_url: (form.images?.[0]) || '',
+      images: form.images || [],
       tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
       demo_url: ensureUrl(form.demo_url),
       github_url: ensureUrl(form.github_url),
@@ -80,7 +94,7 @@ export default function SectionProjects() {
                 </div>
                 <div className="item-info">
                   <div className="item-title">{p.title}</div>
-                  <div className="item-sub">{p.category} {p.status ? `· ${p.status}` : ''}</div>
+                  <div className="item-sub">{p.category} {p.status ? `· ${p.status}` : ''}{p.images?.length > 0 ? ` · ${p.images.length} gambar` : ''}</div>
                 </div>
                 <div className="item-actions">
                   <button className="btn-edit" onClick={() => openEdit(p)}>Edit</button>
@@ -137,9 +151,21 @@ export default function SectionProjects() {
           <textarea rows={3} value={form.desc_id} onChange={set('desc_id')} />
         </div>
         <div className="field-group">
-          <label>URL Gambar</label>
-          <input value={form.image_url} onChange={set('image_url')} placeholder="https://prizuri.github.io/portfolio/img/project.jpg" />
-          <span className="hint">Upload ke public/img/ di GitHub repo</span>
+          <label>Gambar</label>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input value={imgInput} onChange={e => setImgInput(e.target.value)} placeholder="https://..." style={{ flex: 1 }} />
+            <button className="btn-save" onClick={addImg} style={{ padding: '9px 14px', fontSize: '.8rem' }}>Tambah</button>
+          </div>
+          {(form.images?.length || 0) > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 8 }}>
+              {form.images.map((url, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '.82rem' }}>
+                  <span style={{ color: 'var(--text-3)', fontFamily: 'monospace', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{url}</span>
+                  <button className="btn-del" onClick={() => removeImg(i)} style={{ padding: '3px 8px', fontSize: '.72rem' }}>Hapus</button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div className="field-group">
           <label>Tags (pisah koma)</label>

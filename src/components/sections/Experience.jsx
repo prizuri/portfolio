@@ -1,6 +1,94 @@
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLang, T } from '../../contexts/LangContext';
 import { useContent } from '../../contexts/ContentContext';
+import { imageUrl } from '../../utils/url';
+import Lightbox from '../ui/Lightbox';
+
+function TimelineItem({ exp, index, lang }) {
+  const title = lang === 'id' && exp.title_id ? exp.title_id : exp.title;
+  const desc  = lang === 'id' && exp.desc_id  ? exp.desc_id  : exp.desc;
+  const images = exp.images?.filter(Boolean) || [];
+  const [imgIdx, setImgIdx] = useState(0);
+  const [lightbox, setLightbox] = useState(null);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    if (images.length < 2) return;
+    timerRef.current = setInterval(() => {
+      setImgIdx(i => (i + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(timerRef.current);
+  }, [images.length]);
+
+  function openLightbox() {
+    if (!images.length) return;
+    setLightbox(imgIdx);
+  }
+
+  return (
+    <>
+      <motion.div
+        className="timeline-item"
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4, delay: index * 0.1 }}
+      >
+        <div className="timeline-dot">{exp.icon || '●'}</div>
+        <div className="timeline-card">
+          <div className="timeline-header">
+            <div>
+              <div className="timeline-title">{title}</div>
+              <div className="timeline-sub">{exp.company}</div>
+            </div>
+            <div className="timeline-date">
+              {exp.year_start}–{exp.year_end || (lang === 'id' ? 'Skrg' : 'Now')}
+            </div>
+          </div>
+          {images.length > 0 && (
+            <div className="timeline-img-wrap clickable" onClick={openLightbox}>
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={imgIdx}
+                  className="timeline-img"
+                  src={imageUrl(images[imgIdx])}
+                  alt={title}
+                  loading="lazy"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </AnimatePresence>
+              {images.length > 1 && (
+                <span className="timeline-img-counter">{imgIdx + 1}/{images.length}</span>
+              )}
+            </div>
+          )}
+          {desc && <p className="timeline-desc" style={{ marginTop: images.length ? 12 : 10 }}>{desc}</p>}
+        </div>
+      </motion.div>
+
+      <AnimatePresence>
+        {lightbox !== null && (
+          <Lightbox
+            images={images}
+            index={lightbox}
+            onClose={(next, cycle) => {
+              if (cycle) {
+                const n = ((next % images.length) + images.length) % images.length;
+                setLightbox(n);
+              } else {
+                setLightbox(null);
+              }
+            }}
+          />
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
 
 export default function Experience() {
   const { lang } = useLang();
@@ -23,34 +111,9 @@ export default function Experience() {
         </motion.div>
 
         <div className="timeline">
-          {sorted.map((exp, i) => {
-            const title = lang === 'id' && exp.title_id ? exp.title_id : exp.title;
-            const desc  = lang === 'id' && exp.desc_id  ? exp.desc_id  : exp.desc;
-            return (
-              <motion.div
-                key={exp.id}
-                className="timeline-item"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-              >
-                <div className="timeline-dot">{exp.icon || '●'}</div>
-                <div className="timeline-card">
-                  <div className="timeline-header">
-                    <div>
-                      <div className="timeline-title">{title}</div>
-                      <div className="timeline-sub">{exp.company}</div>
-                    </div>
-                    <div className="timeline-date">
-                      {exp.year_start}–{exp.year_end || (lang === 'id' ? 'Skrg' : 'Now')}
-                    </div>
-                  </div>
-                  {desc && <p className="timeline-desc" style={{ marginTop: 10 }}>{desc}</p>}
-                </div>
-              </motion.div>
-            );
-          })}
+          {sorted.map((exp, i) => (
+            <TimelineItem key={exp.id} exp={exp} index={i} lang={lang} />
+          ))}
         </div>
       </div>
     </section>

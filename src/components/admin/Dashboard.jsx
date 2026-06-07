@@ -1,6 +1,7 @@
 import { useContent } from '../../contexts/ContentContext';
 import { useToast } from '../../contexts/ToastContext';
 import { KEYS, readData } from '../../utils/storage';
+import { imageUrl } from '../../utils/url';
 
 export default function Dashboard() {
   const { projects, experience, skills, education, hobbies, publications,
@@ -79,6 +80,8 @@ export default function Dashboard() {
     return `${(total / 1024).toFixed(1)} KB / 5120 KB`;
   }
 
+  const totalExpImages = experience.reduce((acc, x) => acc + (x.images?.length || 0), 0);
+
   return (
     <div>
       <div className="page-header">
@@ -93,6 +96,7 @@ export default function Dashboard() {
           ['Pendidikan', education.length],
           ['Hobi',       hobbies.length],
           ['Publikasi',  publications.length],
+          ['Gambar Pengalaman', totalExpImages],
         ].map(([label, val]) => (
           <div key={label} className="stat-card">
             <div className="stat-val">{val}</div>
@@ -100,6 +104,19 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
+
+      {totalExpImages > 0 && (
+        <div className="info-panel" style={{ marginTop: 16 }}>
+          <h4>Galeri Pengalaman</h4>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 12 }}>
+            {experience.flatMap(x => (x.images || []).map((img, i) => (
+              <div key={`${x.id}-${i}`} title={x.title}>
+                <img src={imageUrl(img)} alt="" style={{ width: 50, height: 50, objectFit: 'cover', borderRadius: 6, border: '1px solid var(--border)' }} />
+              </div>
+            )))}
+          </div>
+        </div>
+      )}
 
       <div className="info-panel">
         <h4>Storage</h4>

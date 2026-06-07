@@ -4,24 +4,36 @@ import { useToast } from '../../contexts/ToastContext';
 import { genId } from '../../utils/storage';
 import Modal from '../ui/Modal';
 
-const EMPTY = { title: '', title_id: '', company: '', year_start: '', year_end: '', desc: '', desc_id: '', icon: '', order: 0 };
+const EMPTY = { title: '', title_id: '', company: '', year_start: '', year_end: '', desc: '', desc_id: '', icon: '', order: 0, images: [] };
 
 export default function SectionExperience() {
   const { experience, setExperience } = useContent();
   const toast = useToast();
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState(EMPTY);
+  const [imgInput, setImgInput] = useState('');
   const [confirm, setConfirm] = useState(null);
 
   const sorted = [...experience].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
 
   function openAdd() { setForm({ ...EMPTY, order: experience.length }); setModal('add'); }
-  function openEdit(x) { setForm({ ...EMPTY, ...x }); setModal('edit'); }
+  function openEdit(x) { setForm({ ...EMPTY, ...x, images: x.images || [] }); setModal('edit'); }
+
+  function addImg() {
+    const url = imgInput.trim();
+    if (!url) return;
+    setForm(f => ({ ...f, images: [...(f.images || []), url] }));
+    setImgInput('');
+  }
+
+  function removeImg(i) {
+    setForm(f => ({ ...f, images: f.images.filter((_, idx) => idx !== i) }));
+  }
 
   function save() {
     if (!form.title.trim()) { toast('Judul wajib diisi.', 'error'); return; }
-    const item = { ...form, updated_at: Date.now() };
+    const item = { ...form, images: form.images || [], updated_at: Date.now() };
     if (modal === 'add') setExperience([...experience, { id: genId(), created_at: Date.now(), ...item }]);
     else setExperience(experience.map(x => x.id === form.id ? { ...x, ...item } : x));
     setModal(null);
@@ -54,7 +66,7 @@ export default function SectionExperience() {
                 </div>
                 <div className="item-info">
                   <div className="item-title">{x.title}</div>
-                  <div className="item-sub">{x.company} · {x.year_start}–{x.year_end || 'Skrg'}</div>
+                  <div className="item-sub">{x.company} · {x.year_start}–{x.year_end || 'Skrg'} {x.images?.length > 0 ? `· ${x.images.length} gambar` : ''}</div>
                 </div>
                 <div className="item-actions">
                   <button className="btn-edit" onClick={() => openEdit(x)}>Edit</button>
@@ -75,6 +87,23 @@ export default function SectionExperience() {
           <div className="field-group"><label>Tahun Mulai</label><input value={form.year_start} onChange={set('year_start')} placeholder="2023" /></div>
           <div className="field-group"><label>Tahun Selesai</label><input value={form.year_end} onChange={set('year_end')} placeholder="Sekarang" /></div>
           <div className="field-group"><label>Ikon (1 karakter)</label><input value={form.icon} onChange={set('icon')} maxLength={2} style={{ maxWidth: 60 }} /></div>
+        </div>
+        <div className="field-group">
+          <label>Gambar</label>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input value={imgInput} onChange={e => setImgInput(e.target.value)} placeholder="https://..." style={{ flex: 1 }} />
+            <button className="btn-save" onClick={addImg} style={{ padding: '9px 14px', fontSize: '.8rem' }}>Tambah</button>
+          </div>
+          {(form.images?.length || 0) > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 8 }}>
+              {form.images.map((url, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '.82rem' }}>
+                  <span style={{ color: 'var(--text-3)', fontFamily: 'monospace', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{url}</span>
+                  <button className="btn-del" onClick={() => removeImg(i)} style={{ padding: '3px 8px', fontSize: '.72rem' }}>Hapus</button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div className="field-group"><label>Deskripsi (EN)</label><textarea rows={3} value={form.desc} onChange={set('desc')} /></div>
         <div className="field-group"><label>Deskripsi (ID)</label><textarea rows={3} value={form.desc_id} onChange={set('desc_id')} /></div>
