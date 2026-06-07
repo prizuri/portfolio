@@ -4,7 +4,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { genId } from '../../utils/storage';
 import Modal from '../ui/Modal';
 
-const EMPTY = { title: '', title_id: '', authors: '', journal: '', year: '', doi: '', url: '', order: 0 };
+const EMPTY = { title: '', title_id: '', authors: '', journal: '', year: '', doi: '', url: '', order: 0, hidden: false };
 
 export default function SectionPublications() {
   const { publications, setPublications } = useContent();
@@ -55,7 +55,7 @@ export default function SectionPublications() {
                   <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(p.id, 1)}>▼</button>
                 </div>
                 <div className="item-info">
-                  <div className="item-title">{p.title}</div>
+                  <div className="item-title">{p.title} {p.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                   <div className="item-sub">{p.journal} {p.year ? `· ${p.year}` : ''}</div>
                 </div>
                 <div className="item-actions">
@@ -79,6 +79,11 @@ export default function SectionPublications() {
           <div className="field-group"><label>DOI</label><input value={form.doi} onChange={set('doi')} placeholder="10.1234/..." /></div>
           <div className="field-group"><label>URL</label><input value={form.url} onChange={set('url')} /></div>
         </div>
+        <label className="toggle-label">
+          <input type="checkbox" checked={!form.hidden} onChange={e => setForm(f => ({ ...f, hidden: !e.target.checked }))} />
+          <span className="toggle-check" />
+          Tampilkan di halaman utama
+        </label>
       </Modal>
       <Modal open={!!confirm} onClose={() => setConfirm(null)} title="Hapus Publikasi?" size="sm"
         footer={<><button className="btn-cancel" onClick={() => setConfirm(null)}>Batal</button><button className="btn-danger" onClick={() => { setPublications(publications.filter(p => p.id !== confirm)); setConfirm(null); toast('Dihapus.'); }}>Hapus</button></>}>

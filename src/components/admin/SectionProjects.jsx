@@ -8,7 +8,7 @@ import Modal from '../ui/Modal';
 const EMPTY = {
   title: '', title_id: '', category: 'Professional', status: '',
   desc: '', desc_id: '', images: [], tags: '',
-  demo_url: '', github_url: '', order: 0, featured: false,
+  demo_url: '', github_url: '', order: 0, featured: false, hidden: false,
 };
 
 export default function SectionProjects() {
@@ -93,7 +93,7 @@ export default function SectionProjects() {
                   <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(p.id, 1)}>▼</button>
                 </div>
                 <div className="item-info">
-                  <div className="item-title">{p.title}</div>
+                  <div className="item-title">{p.title} {p.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                   <div className="item-sub">{p.category} {p.status ? `· ${p.status}` : ''}{p.images?.length > 0 ? ` · ${p.images.length} gambar` : ''}</div>
                 </div>
                 <div className="item-actions">
@@ -185,6 +185,11 @@ export default function SectionProjects() {
           <label>Urutan (0 = paling atas)</label>
           <input type="number" value={form.order} onChange={set('order')} min={0} style={{ maxWidth: 100 }} />
         </div>
+        <label className="toggle-label">
+          <input type="checkbox" checked={!form.hidden} onChange={e => setForm(f => ({ ...f, hidden: !e.target.checked }))} />
+          <span className="toggle-check" />
+          Tampilkan di halaman utama
+        </label>
       </Modal>
 
       <Modal

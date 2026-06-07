@@ -12,7 +12,7 @@
       "updated_at": 1780827384510,
       "title": "Coal Shed Arc Dome Steel Structure",
       "title_id": "Struktur Baja Arc Dome Gudang Batubara",
-      "category": "Professional",
+      "category": "Design & Analysis",
       "status": "Completed",
       "desc": "Designed and analyzed large-span arc dome steel structures with spans of 188 m and 192 m. The work included structural verification such as slenderness checks, deflection control, capacity ratio evaluation, and connection detailing calculations in accordance with SNI 1727:2020, SNI 1726:2019, AISC 360-16, and AISC 341-16.",
       "desc_id": "Merancang dan menganalisis struktur baja kubah lengkung dengan bentang 188 m dan 192 m. Pekerjaan ini mencakup verifikasi struktur, termasuk pemeriksaan kelangsingan elemen, kontrol lendutan, evaluasi rasio kapasitas, serta perhitungan detailing sambungan sesuai dengan SNI 1727:2020, SNI 1726:2019, AISC 360-16, dan AISC 341-16.",
@@ -31,15 +31,16 @@
         "https://drive.google.com/file/d/1FEa4nc6cOBtbg-p2byECRLPVu0WUC0VW/view?usp=drive_link",
         "https://drive.google.com/file/d/1acFrBgZkyeN4nk-l3-00WuN9_Fus0fZl/view?usp=drive_link"
       ],
-      "featured": false
+      "featured": false,
+      "hidden": false
     },
     {
       "id": "proj3",
       "order": 1,
       "created_at": 1700000003000,
       "updated_at": 1780827465618,
-      "title": "SLF Assessment – 29-Story Building",
-      "title_id": "Penilaian SLF – Gedung 29 Lantai",
+      "title": "SLF Assessment â€“ 29-Story Building",
+      "title_id": "Penilaian SLF â€“ Gedung 29 Lantai",
       "category": "Assessment",
       "status": "Completed",
       "desc": "Conducted structural evaluation supporting SLF certification of a 29-story building. Performed structural surveys, element measurements, and condition assessments to evaluate structural feasibility and prepare technical safety recommendations.",
@@ -58,7 +59,8 @@
         "https://drive.google.com/file/d/1JRQQFfe0GIhm5mMUqcY8y-SnfBmKWvNa/view?usp=drive_link",
         "https://drive.google.com/file/d/1wCcl78kqzqAZyAIVB5CA3WxD16NMx36i/view?usp=drive_link"
       ],
-      "featured": false
+      "featured": false,
+      "hidden": false
     },
     {
       "id": "proj2",
@@ -85,15 +87,16 @@
         "https://drive.google.com/file/d/1VJK59GWzueUsy7tzzSTMMsK3GntR8ysP/view?usp=drive_link",
         "https://drive.google.com/file/d/1vSXGcyXo_uba0SRcoUqSHCbWHnpyWxvh/view?usp=drive_link"
       ],
-      "featured": false
+      "featured": false,
+      "hidden": false
     },
     {
       "id": "proj4",
       "order": 3,
       "created_at": 1700000004000,
       "updated_at": 1780828893319,
-      "title": "Office Building Assessment – PT PLN",
-      "title_id": "Penilaian Struktural Gedung Kantor – PT PLN",
+      "title": "Office Building Assessment â€“ PT PLN",
+      "title_id": "Penilaian Struktural Gedung Kantor â€“ PT PLN",
       "category": "Assessment",
       "status": "Completed",
       "desc": "Evaluated performance of a 36-year-old office building per ASCE 41-17. Identified foundation settlement causing cracks in more than 50% of structural elements, and recommended steel bracing retrofits.",
@@ -113,15 +116,16 @@
         "https://drive.google.com/file/d/1MVgpY7N3CtLafzWKj7H2hLZ6nzNvDGS5/view?usp=drive_link",
         "https://drive.google.com/file/d/1V7F9yDwv7POWzhsKHrGRnqMOkG3YoO4l/view?usp=drive_link"
       ],
-      "featured": false
+      "featured": false,
+      "hidden": false
     },
     {
       "id": "proj5",
       "order": 4,
       "created_at": 1700000005000,
       "updated_at": 1700000005000,
-      "title": "Priz Wallet – Personal Finance App",
-      "title_id": "Priz Wallet – Aplikasi Keuangan Pribadi",
+      "title": "Priz Wallet â€“ Personal Finance App",
+      "title_id": "Priz Wallet â€“ Aplikasi Keuangan Pribadi",
       "category": "Personal",
       "status": "Live",
       "desc": "A personal finance web application built with modern web technologies for tracking income, expenses, and financial goals.",
@@ -133,7 +137,8 @@
         "React"
       ],
       "demo_url": "https://priz-wallet.vercel.app",
-      "github_url": ""
+      "github_url": "",
+      "hidden": false
     }
   ],
   "experience": [
@@ -142,112 +147,120 @@
       "order": 0,
       "created_at": 1700000010000,
       "updated_at": 1700000010000,
-      "title": "Structural Engineer – Arc Dome Structure",
-      "title_id": "Insinyur Struktur – Struktur Arc Dome",
+      "title": "Structural Engineer â€“ Arc Dome Structure",
+      "title_id": "Insinyur Struktur â€“ Struktur Arc Dome",
       "company": "LKFT Universitas Gadjah Mada | Pangkalan Susu",
       "year_start": "2025",
       "year_end": "2026",
-      "icon": "▲",
+      "icon": "â–²",
       "desc": "Designed and analyzed a 188 m & 192 m span arc dome steel structure worth IDR 229 billion. Evaluated global stability, conducted member verification (slenderness, deflection, capacity ratio), and coordinated with geotechnical and project management teams per SNI & AISC standards.",
-      "desc_id": "Merancang dan menganalisis struktur baja arc dome bentang 188 m & 192 m senilai IDR 229 miliar. Mengevaluasi stabilitas global, melakukan verifikasi anggota (kelangsingan, lendutan, rasio kapasitas), dan berkoordinasi dengan tim geoteknik dan manajemen proyek sesuai standar SNI & AISC."
+      "desc_id": "Merancang dan menganalisis struktur baja arc dome bentang 188 m & 192 m senilai IDR 229 miliar. Mengevaluasi stabilitas global, melakukan verifikasi anggota (kelangsingan, lendutan, rasio kapasitas), dan berkoordinasi dengan tim geoteknik dan manajemen proyek sesuai standar SNI & AISC.",
+      "hidden": false
     },
     {
       "id": "exp2",
       "order": 1,
       "created_at": 1700000011000,
       "updated_at": 1700000011000,
-      "title": "Assistant Structural Engineer – SLF Assessment",
-      "title_id": "Asisten Insinyur Struktur – Penilaian SLF",
+      "title": "Assistant Structural Engineer â€“ SLF Assessment",
+      "title_id": "Asisten Insinyur Struktur â€“ Penilaian SLF",
       "company": "CV Prasetyo | Medan",
       "year_start": "2025",
       "year_end": "2025",
-      "icon": "◉",
+      "icon": "â—‰",
       "desc": "Conducted structural evaluation for SLF certification of a 29-story building. Performed structural surveys, element measurements, and condition assessments; identified deficiencies and prepared technical safety recommendations.",
-      "desc_id": "Melakukan evaluasi struktural untuk sertifikasi SLF gedung 29 lantai. Melaksanakan survei, pengukuran elemen, dan penilaian kondisi; mengidentifikasi kekurangan dan menyiapkan rekomendasi teknis keselamatan."
+      "desc_id": "Melakukan evaluasi struktural untuk sertifikasi SLF gedung 29 lantai. Melaksanakan survei, pengukuran elemen, dan penilaian kondisi; mengidentifikasi kekurangan dan menyiapkan rekomendasi teknis keselamatan.",
+      "hidden": false
     },
     {
       "id": "exp3",
       "order": 2,
       "created_at": 1700000012000,
       "updated_at": 1700000012000,
-      "title": "Lab Assistant – RISBA Beam-Column Cyclic Testing",
-      "title_id": "Asisten Lab – Pengujian Siklik Sambungan Balok-Kolom RISBA",
+      "title": "Lab Assistant â€“ RISBA Beam-Column Cyclic Testing",
+      "title_id": "Asisten Lab â€“ Pengujian Siklik Sambungan Balok-Kolom RISBA",
       "company": "Universitas Gadjah Mada | Yogyakarta",
       "year_start": "2025",
       "year_end": "2025",
-      "icon": "⚗",
+      "icon": "âš—",
       "desc": "Developed riveted beam-column connection designs for modular steel housing. Conducted cyclic testing on four specimens per AISC 341-22 and built finite element models in Abaqus to simulate cyclic loading behavior.",
-      "desc_id": "Mengembangkan desain sambungan balok-kolom rivet untuk rumah baja modular. Melakukan pengujian siklik pada empat spesimen sesuai AISC 341-22 dan membangun model FEM di Abaqus untuk mensimulasikan perilaku beban siklik."
+      "desc_id": "Mengembangkan desain sambungan balok-kolom rivet untuk rumah baja modular. Melakukan pengujian siklik pada empat spesimen sesuai AISC 341-22 dan membangun model FEM di Abaqus untuk mensimulasikan perilaku beban siklik.",
+      "hidden": false
     },
     {
       "id": "exp4",
       "order": 3,
       "created_at": 1700000013000,
       "updated_at": 1700000013000,
-      "title": "Assistant Structural Engineer – Mosque Evaluation",
-      "title_id": "Asisten Insinyur Struktur – Evaluasi Struktur Masjid",
+      "title": "Assistant Structural Engineer â€“ Mosque Evaluation",
+      "title_id": "Asisten Insinyur Struktur â€“ Evaluasi Struktur Masjid",
       "company": "Independent Project | Yogyakarta",
       "year_start": "2024",
       "year_end": "2024",
-      "icon": "◉",
+      "icon": "â—‰",
       "desc": "Evaluated a mosque building under construction per SNI 1726:2019, SNI 1727:2020, and SNI 2847:2019. Identified >20% of structural columns as non-compliant and proposed RC jacketing as retrofit strategy.",
-      "desc_id": "Mengevaluasi bangunan masjid yang sedang dalam konstruksi sesuai SNI 1726:2019, SNI 1727:2020, dan SNI 2847:2019. Mengidentifikasi >20% kolom tidak memenuhi standar dan mengusulkan strategi perkuatan dengan jacketing beton bertulang."
+      "desc_id": "Mengevaluasi bangunan masjid yang sedang dalam konstruksi sesuai SNI 1726:2019, SNI 1727:2020, dan SNI 2847:2019. Mengidentifikasi >20% kolom tidak memenuhi standar dan mengusulkan strategi perkuatan dengan jacketing beton bertulang.",
+      "hidden": false
     },
     {
       "id": "exp5",
       "order": 4,
       "created_at": 1700000014000,
       "updated_at": 1700000014000,
-      "title": "Assistant Structural Engineer – Regional Health Lab Building",
-      "title_id": "Asisten Insinyur Struktur – Gedung Lab Kesehatan Daerah",
+      "title": "Assistant Structural Engineer â€“ Regional Health Lab Building",
+      "title_id": "Asisten Insinyur Struktur â€“ Gedung Lab Kesehatan Daerah",
       "company": "Independent Project | Remote",
       "year_start": "2024",
       "year_end": "2024",
-      "icon": "◉",
+      "icon": "â—‰",
       "desc": "Designed a two-story reinforced concrete laboratory building per SNI 1726:2019, SNI 1727:2020, and SNI 2847:2019. Performed structural analysis and prepared structural calculation report.",
-      "desc_id": "Merancang gedung laboratorium beton bertulang dua lantai sesuai SNI 1726:2019, SNI 1727:2020, dan SNI 2847:2019. Melakukan analisis struktur dan menyiapkan laporan perhitungan struktural."
+      "desc_id": "Merancang gedung laboratorium beton bertulang dua lantai sesuai SNI 1726:2019, SNI 1727:2020, dan SNI 2847:2019. Melakukan analisis struktur dan menyiapkan laporan perhitungan struktural.",
+      "hidden": false
     },
     {
       "id": "exp6",
       "order": 5,
       "created_at": 1700000015000,
       "updated_at": 1700000015000,
-      "title": "Lab Assistant – RISBA Portal Frame Cyclic Testing",
-      "title_id": "Asisten Lab – Pengujian Siklik Rangka Portal RISBA",
+      "title": "Lab Assistant â€“ RISBA Portal Frame Cyclic Testing",
+      "title_id": "Asisten Lab â€“ Pengujian Siklik Rangka Portal RISBA",
       "company": "Universitas Gadjah Mada | Yogyakarta",
       "year_start": "2024",
       "year_end": "2024",
-      "icon": "⚗",
+      "icon": "âš—",
       "desc": "Conducted cyclic testing on four portal frame configurations. Generated hysteresis curves and analyzed structural performance per AISC 341-22.",
-      "desc_id": "Melakukan pengujian siklik pada empat konfigurasi rangka portal. Menghasilkan kurva histeresis dan menganalisis kinerja struktural sesuai AISC 341-22."
+      "desc_id": "Melakukan pengujian siklik pada empat konfigurasi rangka portal. Menghasilkan kurva histeresis dan menganalisis kinerja struktural sesuai AISC 341-22.",
+      "hidden": false
     },
     {
       "id": "exp7",
       "order": 6,
       "created_at": 1700000016000,
       "updated_at": 1700000016000,
-      "title": "Lab Assistant – Full-Scale RISBA Modular Steel Housing Test",
-      "title_id": "Asisten Lab – Pengujian Skala Penuh Rumah Baja Modular RISBA",
+      "title": "Lab Assistant â€“ Full-Scale RISBA Modular Steel Housing Test",
+      "title_id": "Asisten Lab â€“ Pengujian Skala Penuh Rumah Baja Modular RISBA",
       "company": "Universitas Gadjah Mada | Yogyakarta",
       "year_start": "2023",
       "year_end": "2023",
-      "icon": "⚗",
+      "icon": "âš—",
       "desc": "Supported instrumentation and monitoring of a full-scale modular steel housing test under cyclic and monotonic loading per AISC 341-22. Analyzed data for three wall configurations to evaluate global structural behavior.",
-      "desc_id": "Mendukung instrumentasi dan pemantauan pengujian skala penuh rumah baja modular di bawah pembebanan siklik dan monotonic sesuai AISC 341-22. Menganalisis data untuk tiga konfigurasi dinding untuk mengevaluasi perilaku struktural global."
+      "desc_id": "Mendukung instrumentasi dan pemantauan pengujian skala penuh rumah baja modular di bawah pembebanan siklik dan monotonic sesuai AISC 341-22. Menganalisis data untuk tiga konfigurasi dinding untuk mengevaluasi perilaku struktural global.",
+      "hidden": false
     },
     {
       "id": "exp8",
       "order": 7,
       "created_at": 1700000017000,
       "updated_at": 1700000017000,
-      "title": "Assistant Structural Engineer – Office Building Assessment",
-      "title_id": "Asisten Insinyur Struktur – Penilaian Gedung Kantor",
+      "title": "Assistant Structural Engineer â€“ Office Building Assessment",
+      "title_id": "Asisten Insinyur Struktur â€“ Penilaian Gedung Kantor",
       "company": "PT PLN UPDK Pandan | Central Tapanuli",
       "year_start": "2020",
       "year_end": "2021",
-      "icon": "◉",
+      "icon": "â—‰",
       "desc": "Evaluated performance of a 36-year-old office building per ASCE 41-17. Identified foundation settlement causing cracks in >50% of structural elements; recommended steel bracing retrofit.",
-      "desc_id": "Mengevaluasi kinerja gedung kantor berusia 36 tahun sesuai ASCE 41-17. Mengidentifikasi penurunan pondasi yang menyebabkan retak pada >50% elemen struktural; merekomendasikan perkuatan bresing baja."
+      "desc_id": "Mengevaluasi kinerja gedung kantor berusia 36 tahun sesuai ASCE 41-17. Mengidentifikasi penurunan pondasi yang menyebabkan retak pada >50% elemen struktural; merekomendasikan perkuatan bresing baja.",
+      "hidden": false
     }
   ],
   "skills": [
@@ -256,105 +269,120 @@
       "order": 0,
       "name": "SAP2000",
       "name_id": "SAP2000",
-      "category": "Structural Analysis"
+      "category": "Structural Analysis",
+      "hidden": false
     },
     {
       "id": "sk2",
       "order": 1,
       "name": "ETABS",
       "name_id": "ETABS",
-      "category": "Structural Analysis"
+      "category": "Structural Analysis",
+      "hidden": false
     },
     {
       "id": "sk3",
       "order": 2,
       "name": "Abaqus",
       "name_id": "Abaqus",
-      "category": "Structural Analysis"
+      "category": "Structural Analysis",
+      "hidden": false
     },
     {
       "id": "sk4",
       "order": 3,
       "name": "SAFE",
       "name_id": "SAFE",
-      "category": "Structural Analysis"
+      "category": "Structural Analysis",
+      "hidden": false
     },
     {
       "id": "sk5",
       "order": 4,
       "name": "SpColumn",
       "name_id": "SpColumn",
-      "category": "Structural Analysis"
+      "category": "Structural Analysis",
+      "hidden": false
     },
     {
       "id": "sk6",
       "order": 5,
       "name": "Finite Element Modeling",
       "name_id": "Pemodelan Elemen Hingga",
-      "category": "Structural Analysis"
+      "category": "Structural Analysis",
+      "hidden": false
     },
     {
       "id": "sk7",
       "order": 6,
       "name": "AutoCAD",
       "name_id": "AutoCAD",
-      "category": "Design & Drafting"
+      "category": "Design & Drafting",
+      "hidden": false
     },
     {
       "id": "sk8",
       "order": 7,
       "name": "Python",
       "name_id": "Python",
-      "category": "Programming"
+      "category": "Programming",
+      "hidden": false
     },
     {
       "id": "sk9",
       "order": 8,
       "name": "Experimental Steel Connection Testing",
       "name_id": "Pengujian Sambungan Baja Eksperimental",
-      "category": "Research & Testing"
+      "category": "Research & Testing",
+      "hidden": false
     },
     {
       "id": "sk10",
       "order": 9,
       "name": "Structural Assessment",
       "name_id": "Penilaian Struktural",
-      "category": "Research & Testing"
+      "category": "Research & Testing",
+      "hidden": false
     },
     {
       "id": "sk11",
       "order": 10,
       "name": "MS Office (Word, Excel, PowerPoint)",
       "name_id": "MS Office (Word, Excel, PowerPoint)",
-      "category": "Tools"
+      "category": "Tools",
+      "hidden": false
     },
     {
       "id": "sk12",
       "order": 11,
       "name": "Problem Solving",
       "name_id": "Pemecahan Masalah",
-      "category": "Soft Skills"
+      "category": "Soft Skills",
+      "hidden": false
     },
     {
       "id": "sk13",
       "order": 12,
       "name": "Attention to Detail",
       "name_id": "Perhatian terhadap Detail",
-      "category": "Soft Skills"
+      "category": "Soft Skills",
+      "hidden": false
     },
     {
       "id": "sk14",
       "order": 13,
       "name": "Fast Learner",
       "name_id": "Cepat Belajar",
-      "category": "Soft Skills"
+      "category": "Soft Skills",
+      "hidden": false
     },
     {
       "id": "sk15",
       "order": 14,
       "name": "Teamwork",
       "name_id": "Kerja Tim",
-      "category": "Soft Skills"
+      "category": "Soft Skills",
+      "hidden": false
     }
   ],
   "education": [
@@ -371,7 +399,8 @@
       "year_end": "2025",
       "icon": "M",
       "thesis_en": "Assessment of Shear Resistance of Rivet Connectors in Tensile Testing of Beam-Column Connections with Sleeve Restraint Mechanism (MKS) for RISBA Steel Structures",
-      "thesis_id": "Kajian Tahanan Geser Alat Sambung Rivet pada Pengujian Tarik Sambungan Balok-Kolom Mekanisme Kekangan Selongsong (MKS) untuk Struktur Baja RISBA"
+      "thesis_id": "Kajian Tahanan Geser Alat Sambung Rivet pada Pengujian Tarik Sambungan Balok-Kolom Mekanisme Kekangan Selongsong (MKS) untuk Struktur Baja RISBA",
+      "hidden": false
     },
     {
       "id": "edu2",
@@ -386,7 +415,8 @@
       "year_end": "2022",
       "icon": "B",
       "thesis_en": "",
-      "thesis_id": ""
+      "thesis_id": "",
+      "hidden": false
     }
   ],
   "hobbies": [],
@@ -400,7 +430,8 @@
       "journal": "",
       "year": "2025",
       "doi": "",
-      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=gUkk3Z8AAAAJ&citation_for_view=gUkk3Z8AAAAJ:u-x6o8ySG0sC"
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=gUkk3Z8AAAAJ&citation_for_view=gUkk3Z8AAAAJ:u-x6o8ySG0sC",
+      "hidden": false
     }
   ],
   "sections": [

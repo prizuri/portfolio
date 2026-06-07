@@ -93,7 +93,7 @@ function TimelineItem({ exp, index, lang }) {
 export default function Experience() {
   const { lang } = useLang();
   const { experience } = useContent();
-  const sorted = [...experience].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  const sorted = [...experience].filter(e => !e.hidden).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 
   if (!sorted.length) return null;
 

@@ -4,7 +4,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { genId } from '../../utils/storage';
 import Modal from '../ui/Modal';
 
-const EMPTY = { name: '', name_id: '', category: '', order: 0 };
+const EMPTY = { name: '', name_id: '', category: '', order: 0, hidden: false };
 
 export default function SectionSkills() {
   const { skills, setSkills } = useContent();
@@ -50,7 +50,7 @@ export default function SectionSkills() {
                   <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(s.id, 1)}>▼</button>
                 </div>
                 <div className="item-info">
-                  <div className="item-title">{s.name}</div>
+                  <div className="item-title">{s.name} {s.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                   <div className="item-sub">{s.category || 'General'}</div>
                 </div>
                 <div className="item-actions">
@@ -67,6 +67,11 @@ export default function SectionSkills() {
         <div className="field-group"><label>Nama (ID)</label><input value={form.name_id} onChange={set('name_id')} /></div>
         <div className="field-group"><label>Kategori</label><input value={form.category} onChange={set('category')} placeholder="Structural Analysis" /></div>
         <div className="field-group"><label>Urutan</label><input type="number" value={form.order} onChange={set('order')} min={0} style={{ maxWidth: 100 }} /></div>
+        <label className="toggle-label">
+          <input type="checkbox" checked={!form.hidden} onChange={e => setForm(f => ({ ...f, hidden: !e.target.checked }))} />
+          <span className="toggle-check" />
+          Tampilkan di halaman utama
+        </label>
       </Modal>
       <Modal open={!!confirm} onClose={() => setConfirm(null)} title="Hapus Keahlian?" size="sm"
         footer={<><button className="btn-cancel" onClick={() => setConfirm(null)}>Batal</button><button className="btn-danger" onClick={() => { setSkills(skills.filter(s => s.id !== confirm)); setConfirm(null); toast('Dihapus.'); }}>Hapus</button></>}>

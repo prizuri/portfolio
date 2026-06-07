@@ -9,7 +9,7 @@ export default function Skills() {
 
   const grouped = useMemo(() => {
     const map = {};
-    [...skills].sort((a, b) => (a.order ?? 999) - (b.order ?? 999)).forEach(s => {
+    [...skills].filter(s => !s.hidden).sort((a, b) => (a.order ?? 999) - (b.order ?? 999)).forEach(s => {
       const cat = s.category || 'General';
       if (!map[cat]) map[cat] = [];
       map[cat].push(s);

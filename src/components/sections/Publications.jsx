@@ -5,7 +5,7 @@ import { useContent } from '../../contexts/ContentContext';
 export default function Publications() {
   const { lang } = useLang();
   const { publications } = useContent();
-  const sorted = [...publications].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  const sorted = [...publications].filter(p => !p.hidden).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 
   if (!sorted.length) return null;
 

@@ -5,7 +5,7 @@ import { genId } from '../../utils/storage';
 import { ensureUrl } from '../../utils/url';
 import Modal from '../ui/Modal';
 
-const EMPTY = { icon: '⭐', name_en: '', name_id: '', title: '', desc: '', image_url: '', demo_url: '', github_url: '', order: 0 };
+const EMPTY = { icon: '⭐', name_en: '', name_id: '', title: '', desc: '', image_url: '', demo_url: '', github_url: '', order: 0, hidden: false };
 
 export default function SectionHobbies() {
   const { hobbies, setHobbies, getSectionConfig } = useContent();
@@ -65,7 +65,7 @@ export default function SectionHobbies() {
                 </div>
                 <span style={{ fontSize: '1.4rem' }}>{h.icon}</span>
                 <div className="item-info">
-                  <div className="item-title">{h.name_en}</div>
+                  <div className="item-title">{h.name_en} {h.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                   {h.name_id && <div className="item-sub">{h.name_id}</div>}
                 </div>
                 <div className="item-actions">
@@ -92,6 +92,11 @@ export default function SectionHobbies() {
           </div>
         </>}
         <div className="field-group"><label>Urutan</label><input type="number" value={form.order} onChange={set('order')} min={0} style={{ maxWidth: 100 }} /></div>
+        <label className="toggle-label">
+          <input type="checkbox" checked={!form.hidden} onChange={e => setForm(f => ({ ...f, hidden: !e.target.checked }))} />
+          <span className="toggle-check" />
+          Tampilkan di halaman utama
+        </label>
       </Modal>
       <Modal open={!!confirm} onClose={() => setConfirm(null)} title="Hapus Hobi?" size="sm"
         footer={<><button className="btn-cancel" onClick={() => setConfirm(null)}>Batal</button><button className="btn-danger" onClick={() => { setHobbies(hobbies.filter(h => h.id !== confirm)); setConfirm(null); toast('Dihapus.'); }}>Hapus</button></>}>

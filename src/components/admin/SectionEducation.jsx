@@ -4,7 +4,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { genId } from '../../utils/storage';
 import Modal from '../ui/Modal';
 
-const EMPTY = { degree_en: '', degree_id: '', university: '', gpa: '', year_start: '', year_end: '', thesis_en: '', thesis_id: '', icon: 'M', order: 0 };
+const EMPTY = { degree_en: '', degree_id: '', university: '', gpa: '', year_start: '', year_end: '', thesis_en: '', thesis_id: '', icon: 'M', order: 0, hidden: false };
 
 export default function SectionEducation() {
   const { education, setEducation } = useContent();
@@ -50,7 +50,7 @@ export default function SectionEducation() {
                   <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(e.id, 1)}>▼</button>
                 </div>
                 <div className="item-info">
-                  <div className="item-title">{e.degree_en}</div>
+                  <div className="item-title">{e.degree_en} {e.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                   <div className="item-sub">{e.university} · {e.year_start}–{e.year_end}</div>
                 </div>
                 <div className="item-actions">
@@ -78,6 +78,11 @@ export default function SectionEducation() {
           <div className="field-group"><label>Tesis / Skripsi (ID)</label><textarea rows={2} value={form.thesis_id} onChange={set('thesis_id')} /></div>
         </div>
         <div className="field-group"><label>Ikon (M = Master, B = Bachelor)</label><input value={form.icon} onChange={set('icon')} maxLength={2} style={{ maxWidth: 60 }} /></div>
+        <label className="toggle-label">
+          <input type="checkbox" checked={!form.hidden} onChange={e => setForm(f => ({ ...f, hidden: !e.target.checked }))} />
+          <span className="toggle-check" />
+          Tampilkan di halaman utama
+        </label>
       </Modal>
       <Modal open={!!confirm} onClose={() => setConfirm(null)} title="Hapus Pendidikan?" size="sm"
         footer={<><button className="btn-cancel" onClick={() => setConfirm(null)}>Batal</button><button className="btn-danger" onClick={() => { setEducation(education.filter(e => e.id !== confirm)); setConfirm(null); toast('Dihapus.'); }}>Hapus</button></>}>

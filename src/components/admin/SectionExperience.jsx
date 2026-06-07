@@ -4,7 +4,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { genId } from '../../utils/storage';
 import Modal from '../ui/Modal';
 
-const EMPTY = { title: '', title_id: '', company: '', year_start: '', year_end: '', desc: '', desc_id: '', icon: '', order: 0, images: [] };
+const EMPTY = { title: '', title_id: '', company: '', year_start: '', year_end: '', desc: '', desc_id: '', icon: '', order: 0, images: [], hidden: false };
 
 export default function SectionExperience() {
   const { experience, setExperience } = useContent();
@@ -65,7 +65,7 @@ export default function SectionExperience() {
                   <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(x.id, 1)}>▼</button>
                 </div>
                 <div className="item-info">
-                  <div className="item-title">{x.title}</div>
+                  <div className="item-title">{x.title} {x.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                   <div className="item-sub">{x.company} · {x.year_start}–{x.year_end || 'Skrg'} {x.images?.length > 0 ? `· ${x.images.length} gambar` : ''}</div>
                 </div>
                 <div className="item-actions">
@@ -107,6 +107,11 @@ export default function SectionExperience() {
         </div>
         <div className="field-group"><label>Deskripsi (EN)</label><textarea rows={3} value={form.desc} onChange={set('desc')} /></div>
         <div className="field-group"><label>Deskripsi (ID)</label><textarea rows={3} value={form.desc_id} onChange={set('desc_id')} /></div>
+        <label className="toggle-label">
+          <input type="checkbox" checked={!form.hidden} onChange={e => setForm(f => ({ ...f, hidden: !e.target.checked }))} />
+          <span className="toggle-check" />
+          Tampilkan di halaman utama
+        </label>
       </Modal>
       <Modal open={!!confirm} onClose={() => setConfirm(null)} title="Hapus Pengalaman?" size="sm"
         footer={<><button className="btn-cancel" onClick={() => setConfirm(null)}>Batal</button><button className="btn-danger" onClick={() => { setExperience(experience.filter(x => x.id !== confirm)); setConfirm(null); toast('Dihapus.'); }}>Hapus</button></>}>

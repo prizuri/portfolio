@@ -10,7 +10,7 @@ export default function Projects() {
   const [filter, setFilter] = useState('All');
 
   const sorted = useMemo(() =>
-    [...projects].sort((a, b) => (a.order ?? 999) - (b.order ?? 999)),
+    [...projects].filter(p => !p.hidden).sort((a, b) => (a.order ?? 999) - (b.order ?? 999)),
   [projects]);
 
   const categories = useMemo(() => {

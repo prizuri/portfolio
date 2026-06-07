@@ -6,7 +6,7 @@ import ProjectCard from '../ui/ProjectCard';
 export default function Hobbies() {
   const { lang } = useLang();
   const { hobbies, getSectionConfig } = useContent();
-  const sorted = [...hobbies].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  const sorted = [...hobbies].filter(h => !h.hidden).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
   const layout = getSectionConfig('hobbies')?.layout || 'chip';
 
   if (!sorted.length) return null;

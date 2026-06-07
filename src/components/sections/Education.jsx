@@ -5,7 +5,7 @@ import { useContent } from '../../contexts/ContentContext';
 export default function Education() {
   const { lang } = useLang();
   const { education } = useContent();
-  const sorted = [...education].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  const sorted = [...education].filter(e => !e.hidden).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 
   if (!sorted.length) return null;
 

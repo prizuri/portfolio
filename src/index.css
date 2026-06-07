@@ -506,6 +506,27 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 .item-info { flex: 1; min-width: 0; }
 .item-title { font-size: .9rem; font-weight: 600; color: var(--text-1); }
 .item-sub   { font-size: .8rem; color: var(--text-3); margin-top: 2px; }
+.badge-hidden {
+  display: inline-block; font-size: .65rem; font-weight: 700; text-transform: uppercase;
+  background: var(--warning); color: #000; border-radius: var(--radius-pill);
+  padding: 0 8px; line-height: 1.6; vertical-align: middle; margin-left: 6px;
+}
+.toggle-label {
+  display: flex; align-items: center; gap: 10px; font-size: .85rem; color: var(--text-2);
+  cursor: pointer; padding: 6px 0; user-select: none;
+}
+.toggle-label input[type="checkbox"] { display: none; }
+.toggle-check {
+  width: 40px; height: 22px; background: var(--bg-card-2); border: 1px solid var(--border);
+  border-radius: var(--radius-pill); position: relative; transition: all var(--t); flex-shrink: 0;
+}
+.toggle-check::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; background: var(--text-3); border-radius: 50%;
+  transition: all var(--t);
+}
+.toggle-label input:checked + .toggle-check { background: var(--accent-dim); border-color: var(--accent); }
+.toggle-label input:checked + .toggle-check::after { left: 20px; background: var(--accent); }
 .item-actions { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
 .btn-edit {
   padding: 5px 12px; border-radius: var(--radius-sm);
