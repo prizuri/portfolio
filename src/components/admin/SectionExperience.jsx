@@ -90,6 +90,7 @@ export default function SectionExperience() {
         </div>
         <div className="field-group">
           <label>Gambar</label>
+          <div className="field-hint">Gunakan URL gambar langsung atau Google Drive yang sudah public. Jika Google Drive gagal sebagai gambar biasa, website akan mencoba mode preview otomatis.</div>
           <div style={{ display: 'flex', gap: 8 }}>
             <input value={imgInput} onChange={e => setImgInput(e.target.value)} placeholder="https://..." style={{ flex: 1 }} />
             <button className="btn-save" onClick={addImg} style={{ padding: '9px 14px', fontSize: '.8rem' }}>Tambah</button>

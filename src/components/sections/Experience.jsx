@@ -1,9 +1,77 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLang, T } from '../../contexts/LangContext';
 import { useContent } from '../../contexts/ContentContext';
-import { imageUrl } from '../../utils/url';
+import { googleDriveEmbedUrl, imageUrls, isGoogleDriveFileUrl } from '../../utils/url';
 import Lightbox from '../ui/Lightbox';
+
+
+function SmartTimelineImage({ src, alt }) {
+  const candidates = useMemo(() => imageUrls(src), [src]);
+  const [idx, setIdx] = useState(0);
+  const [failed, setFailed] = useState(false);
+  const driveEmbed = isGoogleDriveFileUrl(src) ? googleDriveEmbedUrl(src) : '';
+
+  useEffect(() => {
+    setIdx(0);
+    setFailed(false);
+  }, [src]);
+
+  if (!src) {
+    return (
+      <div className="timeline-img timeline-img-placeholder">
+        <span>Image not available</span>
+      </div>
+    );
+  }
+
+  if (failed) {
+    if (driveEmbed) {
+      return (
+        <iframe
+          className="timeline-img timeline-drive-frame"
+          src={driveEmbed}
+          title={alt || 'Experience image'}
+          loading="lazy"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
+        />
+      );
+    }
+
+    return (
+      <div className="timeline-img timeline-img-placeholder">
+        <span>Image could not be loaded</span>
+      </div>
+    );
+  }
+
+  if (!candidates.length) {
+    setFailed(true);
+    return null;
+  }
+
+  return (
+    <motion.img
+      key={`${src}-${idx}`}
+      className="timeline-img"
+      src={candidates[idx]}
+      alt={alt || ''}
+      loading="lazy"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      onError={() => {
+        if (idx < candidates.length - 1) {
+          setIdx(idx + 1);
+        } else {
+          setFailed(true);
+        }
+      }}
+    />
+  );
+}
 
 function TimelineItem({ exp, index, lang }) {
   const title = lang === 'id' && exp.title_id ? exp.title_id : exp.title;
@@ -49,16 +117,10 @@ function TimelineItem({ exp, index, lang }) {
           {images.length > 0 && (
             <div className="timeline-img-wrap clickable" onClick={openLightbox}>
               <AnimatePresence mode="wait">
-                <motion.img
-                  key={imgIdx}
-                  className="timeline-img"
-                  src={imageUrl(images[imgIdx])}
+                <SmartTimelineImage
+                  key={`${images[imgIdx]}-${imgIdx}`}
+                  src={images[imgIdx]}
                   alt={title}
-                  loading="lazy"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
                 />
               </AnimatePresence>
               {images.length > 1 && (

@@ -394,6 +394,17 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   width: 100%; aspect-ratio: 16/9; object-fit: cover;
   display: block;
 }
+.timeline-img-placeholder {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 220px; color: var(--text-3); font-size: .82rem; font-weight: 700;
+  letter-spacing: .02em; text-transform: uppercase;
+  background: linear-gradient(135deg, var(--bg-card-2), rgba(167,139,250,.08));
+}
+.timeline-drive-frame {
+  border: 0;
+  background: var(--bg-card-2);
+  pointer-events: none;
+}
 .timeline-img-counter {
   position: absolute; bottom: 8px; right: 8px;
   background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
