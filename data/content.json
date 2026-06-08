@@ -48,13 +48,15 @@
       "demo_url": "",
       "github_url": "",
       "images": [
-        "https://drive.google.com/file/d/19wqVr_Ufn6jG7dAeoAGpjqGmABb9gJSh/view?usp=drive_link",
         "https://drive.google.com/file/d/1FEa4nc6cOBtbg-p2byECRLPVu0WUC0VW/view?usp=drive_link",
         "https://drive.google.com/file/d/1acFrBgZkyeN4nk-l3-00WuN9_Fus0fZl/view?usp=drive_link"
       ],
       "featured": false,
       "hidden": false,
-      "project_value": "229000000000"
+      "project_value": "229000000000",
+      "cover_image_url": "https://drive.google.com/file/d/19wqVr_Ufn6jG7dAeoAGpjqGmABb9gJSh/view?usp=drive_link",
+      "preview_media_url": "",
+      "preview_media_type": "auto"
     },
     {
       "id": "proj3",
@@ -76,14 +78,16 @@
       "demo_url": "",
       "github_url": "",
       "images": [
-        "https://drive.google.com/file/d/181YbU6P2wP_yskasZXA15m_ePZpGbCGH/view?usp=drive_link",
         "https://drive.google.com/file/d/1X14y8uo-KDpIqklyORit5eRhrU1fOAiZ/view?usp=drive_link",
         "https://drive.google.com/file/d/1JRQQFfe0GIhm5mMUqcY8y-SnfBmKWvNa/view?usp=drive_link",
         "https://drive.google.com/file/d/1wCcl78kqzqAZyAIVB5CA3WxD16NMx36i/view?usp=drive_link"
       ],
       "featured": false,
       "hidden": false,
-      "project_value": "20000000"
+      "project_value": "20000000",
+      "cover_image_url": "https://drive.google.com/file/d/181YbU6P2wP_yskasZXA15m_ePZpGbCGH/view?usp=drive_link",
+      "preview_media_url": "",
+      "preview_media_type": "auto"
     },
     {
       "id": "proj2",
@@ -107,11 +111,13 @@
       "demo_url": "",
       "github_url": "",
       "images": [
-        "https://drive.google.com/file/d/1VJK59GWzueUsy7tzzSTMMsK3GntR8ysP/view?usp=drive_link",
         "https://drive.google.com/file/d/1vSXGcyXo_uba0SRcoUqSHCbWHnpyWxvh/view?usp=drive_link"
       ],
       "featured": false,
-      "hidden": false
+      "hidden": false,
+      "cover_image_url": "https://drive.google.com/file/d/1VJK59GWzueUsy7tzzSTMMsK3GntR8ysP/view?usp=drive_link",
+      "preview_media_url": "",
+      "preview_media_type": "auto"
     },
     {
       "id": "proj4",
@@ -134,13 +140,15 @@
       "demo_url": "",
       "github_url": "",
       "images": [
-        "https://drive.google.com/file/d/1BSSqOFY6TLUOKf2RlT5B-T2vcmj-n8Hr/view?usp=drive_link",
         "https://drive.google.com/file/d/18idtV_Fjj5ODwtVE7qUC92AoJbkc7L9T/view?usp=drive_link",
         "https://drive.google.com/file/d/1MVgpY7N3CtLafzWKj7H2hLZ6nzNvDGS5/view?usp=drive_link",
         "https://drive.google.com/file/d/1V7F9yDwv7POWzhsKHrGRnqMOkG3YoO4l/view?usp=drive_link"
       ],
       "featured": false,
-      "hidden": false
+      "hidden": false,
+      "cover_image_url": "https://drive.google.com/file/d/1BSSqOFY6TLUOKf2RlT5B-T2vcmj-n8Hr/view?usp=drive_link",
+      "preview_media_url": "",
+      "preview_media_type": "auto"
     },
     {
       "id": "proj5",
@@ -163,7 +171,10 @@
       "github_url": "",
       "hidden": true,
       "images": [],
-      "featured": false
+      "featured": false,
+      "cover_image_url": "",
+      "preview_media_url": "",
+      "preview_media_type": "auto"
     }
   ],
   "experience": [
@@ -171,17 +182,16 @@
       "id": "exp1",
       "order": 0,
       "created_at": 1700000010000,
-      "updated_at": 1780890685609,
+      "updated_at": 1700000010000,
       "title": "Structural Engineer – Arc Dome Structure",
       "title_id": "Insinyur Struktur – Struktur Arc Dome",
       "company": "LKFT Universitas Gadjah Mada | Pangkalan Susu",
       "year_start": "2025",
       "year_end": "2026",
       "icon": "▲",
-      "desc": "Designed and analyzed a 188 m & 192 m span arc dome steel structure. Evaluated global stability, conducted member verification (slenderness, deflection, capacity ratio), and coordinated with geotechnical and project management teams per SNI & AISC standards.",
+      "desc": "Designed and analyzed a 188 m & 192 m span arc dome steel structure worth IDR 229 billion. Evaluated global stability, conducted member verification (slenderness, deflection, capacity ratio), and coordinated with geotechnical and project management teams per SNI & AISC standards.",
       "desc_id": "Merancang dan menganalisis struktur baja arc dome bentang 188 m & 192 m senilai IDR 229 miliar. Mengevaluasi stabilitas global, melakukan verifikasi anggota (kelangsingan, lendutan, rasio kapasitas), dan berkoordinasi dengan tim geoteknik dan manajemen proyek sesuai standar SNI & AISC.",
-      "hidden": false,
-      "images": []
+      "hidden": false
     },
     {
       "id": "exp2",
