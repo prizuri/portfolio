@@ -4,8 +4,10 @@ import { useContent } from '../../contexts/ContentContext';
 
 export default function Education() {
   const { lang } = useLang();
-  const { education } = useContent();
+  const { education, getSectionConfig } = useContent();
   const sorted = [...education].filter(e => !e.hidden).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  const config = getSectionConfig('education');
+  const title = lang === 'id' ? config.title_id : config.title_en;
 
   if (!sorted.length) return null;
 
@@ -19,7 +21,7 @@ export default function Education() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className="section-title"><T en="Education" id="Pendidikan" /></h2>
+          <h2 className="section-title">{title || (lang === 'id' ? 'Pendidikan' : 'Education')}</h2>
         </motion.div>
 
         <div className="timeline">

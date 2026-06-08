@@ -1,31 +1,80 @@
+import { useState } from 'react';
 import { useContent } from '../../contexts/ContentContext';
 import { useToast } from '../../contexts/ToastContext';
-import { KEYS, readData } from '../../utils/storage';
+import { KEYS, readData, writeData, DEFAULT_SECTION_CONFIG } from '../../utils/storage';
 import { imageUrl } from '../../utils/url';
 
 export default function Dashboard() {
   const { projects, experience, skills, education, hobbies, publications,
-          about, sections, langSettings } = useContent();
+          about, sections, langSettings, refreshFromSource } = useContent();
   const toast = useToast();
+  const [publishing, setPublishing] = useState(false);
+  const [syncing, setSyncing] = useState(false);
 
-  function publish() {
-    const data = {
-      about:        readData(KEYS.about),
-      projects:     readData(KEYS.projects) || [],
-      experience:   readData(KEYS.experience) || [],
-      skills:       readData(KEYS.skills) || [],
-      education:    readData(KEYS.education) || [],
-      hobbies:      readData(KEYS.hobbies) || [],
-      publications: readData(KEYS.publications) || [],
-      sections:     readData(KEYS.sections) || [],
-      lang_settings:readData(KEYS.lang) || {},
+  function collectAllData() {
+    return {
+      about:         about || {},
+      projects:      projects || [],
+      experience:    experience || [],
+      skills:        skills || [],
+      education:     education || [],
+      hobbies:       hobbies || [],
+      publications:  publications || [],
+      sections:      sections || [],
+      lang_settings: langSettings || { id_enabled: true },
     };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  }
+
+  async function publish() {
+    setPublishing(true);
+    const data = collectAllData();
+    try {
+      // Menggunakan BASE_URL agar sesuai dengan config Vite
+      const apiPath = `${import.meta.env.BASE_URL}api/save-content`.replace(/\/+/g, '/');
+      console.log('Publishing to:', apiPath);
+
+      const res = await fetch(apiPath, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      
+      if (res.ok) {
+        writeData('ph_data_checksum', JSON.stringify(data));
+        toast('content.json berhasil disimpan ke disk!');
+      } else {
+        const err = await res.json().catch(() => ({ error: 'Unknown status ' + res.status }));
+        console.error('Publish failed server-side:', err);
+        toast(`Gagal: ${err.error || 'Server error'}`, 'error');
+      }
+    } catch (e) {
+      console.error('Publish network/client error:', e);
+      toast('Server tidak tersedia atau koneksi terputus.', 'error');
+    }
+    setPublishing(false);
+  }
+
+  async function forceSync() {
+    if (!confirm('Ini akan menimpa perubahan lokal Anda dengan data dari content.json di server. Lanjutkan?')) return;
+    setSyncing(true);
+    const success = await refreshFromSource();
+    if (success) {
+      toast('Data berhasil disinkronisasi dari server!');
+    } else {
+      toast('Gagal sinkronisasi data.', 'error');
+    }
+    setSyncing(false);
+  }
+
+  function download() {
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(collectAllData(), null, 2)], { type: 'application/json' }));
     a.download = 'content.json';
+    document.body.appendChild(a);
     a.click();
-    toast('content.json didownload. Upload ke public/data/ di GitHub repo.');
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    toast('Download content.json siap!');
   }
 
   function exportBackup() {
@@ -124,19 +173,27 @@ export default function Dashboard() {
       </div>
 
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
-        <button className="btn-save" onClick={publish}>🚀 Publish ke Website</button>
+        <button className="btn-save" onClick={publish} disabled={publishing} style={{ opacity: publishing ? '.6' : '1' }}>
+          {publishing ? 'Menyimpan...' : 'Publish ke File'}
+        </button>
+        <button className="btn-outline btn-sm" onClick={download} style={{ padding: '9px 20px' }}>
+          Download content.json
+        </button>
         <button className="btn-cancel" onClick={exportBackup}>📦 Export Backup</button>
         <label className="btn-cancel" style={{ cursor: 'pointer' }}>
           📥 Import Backup
           <input type="file" accept=".json" onChange={handleImport} style={{ display: 'none' }} />
         </label>
+        <button className="btn-del" onClick={forceSync} disabled={syncing} style={{ marginLeft: 'auto' }}>
+          {syncing ? 'Syncing...' : '🔄 Reset ke Data File'}
+        </button>
       </div>
 
       <div className="info-panel" style={{ marginTop: 16 }}>
         <h4>Cara Publish</h4>
         <ol style={{ color: 'var(--text-2)', fontSize: '.85rem', paddingLeft: 20, lineHeight: 2 }}>
-          <li>Klik <strong style={{ color: 'var(--text-1)' }}>Publish ke Website</strong> → file <code>content.json</code> terunduh</li>
-          <li>Upload file ke folder <code>public/data/</code> di GitHub repo</li>
+          <li><strong>Publish ke File</strong> (hanya saat <code>npm run dev</code>) → langsung simpan ke <code>public/data/content.json</code></li>
+          <li><strong>Download content.json</strong> (selalu bisa) → simpan manual ke <code>public/data/</code>, lalu push ke GitHub</li>
           <li>GitHub Actions otomatis build & deploy dalam ~1-2 menit</li>
         </ol>
       </div>

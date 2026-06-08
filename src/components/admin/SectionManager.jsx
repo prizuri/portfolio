@@ -43,40 +43,65 @@ export default function SectionManager() {
     toast('Layout diperbarui.');
   }
 
+  function setTitle(id, field, value) {
+    setSections(merged.map(s => s.id === id ? { ...s, [field]: value } : s));
+  }
+
   return (
     <div>
       <div className="page-header">
         <h2>Tata Section</h2>
       </div>
       <p style={{ color: 'var(--text-2)', fontSize: '.88rem', marginBottom: 20 }}>
-        Atur section mana yang tampil di website dan pilih layoutnya.
+        Atur section mana yang tampil di website, judulnya, dan pilih layoutnya.
       </p>
       <div className="section-toggle-list">
         {merged.map(sec => (
-          <div key={sec.id} className="section-toggle-item">
-            <div className="item-info">
-              <div className="item-title">{LABELS[sec.id]?.en || sec.id}</div>
-              <div className="item-sub">{LABELS[sec.id]?.id || ''}</div>
+          <div key={sec.id} className="section-toggle-item" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
+              <div className="item-info">
+                <div className="item-title" style={{ textTransform: 'uppercase', fontSize: '.75rem', color: 'var(--text-3)' }}>ID: {sec.id}</div>
+              </div>
+              {LAYOUTS[sec.id] && LAYOUTS[sec.id].length > 1 && (
+                <select
+                  className="layout-select"
+                  value={sec.layout || LAYOUTS[sec.id][0]}
+                  onChange={e => setLayout(sec.id, e.target.value)}
+                  style={{ marginLeft: 'auto' }}
+                >
+                  {LAYOUTS[sec.id].map(l => (
+                    <option key={l} value={l}>{LAYOUT_LABELS[l]}</option>
+                  ))}
+                </select>
+              )}
+              <label className="toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={sec.visible !== false}
+                  onChange={() => toggleVisible(sec.id)}
+                />
+                <span className="toggle-slider" />
+              </label>
             </div>
-            {LAYOUTS[sec.id] && LAYOUTS[sec.id].length > 1 && (
-              <select
-                className="layout-select"
-                value={sec.layout || LAYOUTS[sec.id][0]}
-                onChange={e => setLayout(sec.id, e.target.value)}
-              >
-                {LAYOUTS[sec.id].map(l => (
-                  <option key={l} value={l}>{LAYOUT_LABELS[l]}</option>
-                ))}
-              </select>
-            )}
-            <label className="toggle-switch">
-              <input
-                type="checkbox"
-                checked={sec.visible !== false}
-                onChange={() => toggleVisible(sec.id)}
-              />
-              <span className="toggle-slider" />
-            </label>
+            
+            <div className="form-grid-2">
+              <div className="field-group">
+                <label style={{ fontSize: '.7rem' }}>Judul (EN)</label>
+                <input 
+                  value={sec.title_en || LABELS[sec.id]?.en || ''} 
+                  onChange={e => setTitle(sec.id, 'title_en', e.target.value)}
+                  style={{ fontSize: '.85rem', padding: '6px 10px' }}
+                />
+              </div>
+              <div className="field-group">
+                <label style={{ fontSize: '.7rem' }}>Judul (ID)</label>
+                <input 
+                  value={sec.title_id || LABELS[sec.id]?.id || ''} 
+                  onChange={e => setTitle(sec.id, 'title_id', e.target.value)}
+                  style={{ fontSize: '.85rem', padding: '6px 10px' }}
+                />
+              </div>
+            </div>
           </div>
         ))}
       </div>

@@ -4,10 +4,12 @@ import { useContent } from '../../contexts/ContentContext';
 
 export default function About() {
   const { lang } = useLang();
-  const { about } = useContent();
+  const { about, getSectionConfig } = useContent();
 
   const bio = lang === 'id' ? about?.bio_id : about?.bio_en;
   const hasPhoto = !!about?.photo_url;
+  const config = getSectionConfig('about');
+  const title = lang === 'id' ? config.title_id : config.title_en;
 
   return (
     <section id="about" className="section">
@@ -19,7 +21,7 @@ export default function About() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className="section-title"><T en="About Me" id="Tentang Saya" /></h2>
+          <h2 className="section-title">{title || (lang === 'id' ? 'Tentang Saya' : 'About Me')}</h2>
         </motion.div>
 
         <div className={`about-layout${hasPhoto ? ' about-with-photo' : ''}`}>

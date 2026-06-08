@@ -1,13 +1,15 @@
 import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLang, T } from '../../contexts/LangContext';
 import { useContent } from '../../contexts/ContentContext';
 import ProjectCard from '../ui/ProjectCard';
 
 export default function Projects() {
   const { lang } = useLang();
-  const { projects } = useContent();
+  const { projects, getSectionConfig } = useContent();
   const [filter, setFilter] = useState('All');
+  const config = getSectionConfig('projects');
+  const title = lang === 'id' ? config.title_id : config.title_en;
 
   const sorted = useMemo(() =>
     [...projects].filter(p => !p.hidden).sort((a, b) => (a.order ?? 999) - (b.order ?? 999)),
@@ -33,7 +35,7 @@ export default function Projects() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className="section-title"><T en="Projects" id="Proyek" /></h2>
+          <h2 className="section-title">{title || (lang === 'id' ? 'Proyek' : 'Projects')}</h2>
           <p className="section-sub">
             <T en="Selected work and case studies" id="Karya pilihan dan studi kasus" />
           </p>
@@ -53,14 +55,21 @@ export default function Projects() {
           </div>
         )}
 
-        <div className="project-grid cols-3">
-          {featured && (
-            <ProjectCard project={featured} index={0} featured={rest.length === 0} />
-          )}
-          {rest.map((p, i) => (
-            <ProjectCard key={p.id} project={p} index={i + 1} />
-          ))}
-        </div>
+        <motion.div 
+          className="project-grid cols-3"
+          layout
+        >
+          <AnimatePresence>
+            {visible.map((p, i) => (
+              <ProjectCard 
+                key={p.id} 
+                project={p} 
+                index={i} 
+                featured={filter !== 'All' ? false : (i === 0 && rest.length === 0)} 
+              />
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

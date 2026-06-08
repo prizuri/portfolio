@@ -92,8 +92,10 @@ function TimelineItem({ exp, index, lang }) {
 
 export default function Experience() {
   const { lang } = useLang();
-  const { experience } = useContent();
+  const { experience, getSectionConfig } = useContent();
   const sorted = [...experience].filter(e => !e.hidden).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  const config = getSectionConfig('experience');
+  const title = lang === 'id' ? config.title_id : config.title_en;
 
   if (!sorted.length) return null;
 
@@ -107,7 +109,7 @@ export default function Experience() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className="section-title"><T en="Experience" id="Pengalaman" /></h2>
+          <h2 className="section-title">{title || (lang === 'id' ? 'Pengalaman' : 'Experience')}</h2>
         </motion.div>
 
         <div className="timeline">

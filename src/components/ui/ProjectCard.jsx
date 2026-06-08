@@ -26,14 +26,25 @@ export default function ProjectCard({ project: p, index = 0, featured = false })
     setLightbox(imgIdx);
   }
 
+  const cardRef = useRef(null);
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    cardRef.current.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+    cardRef.current.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+  };
+
   return (
     <>
       <motion.div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        layout
         className={`project-card${featured ? ' featured' : ''}`}
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.4, delay: index * 0.08 }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        transition={{ duration: 0.4 }}
       >
         {images.length > 0 && (
           <div className="project-img-wrap clickable" onClick={openLightbox}>

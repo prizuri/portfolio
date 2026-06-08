@@ -7,7 +7,9 @@ export default function Hobbies() {
   const { lang } = useLang();
   const { hobbies, getSectionConfig } = useContent();
   const sorted = [...hobbies].filter(h => !h.hidden).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
-  const layout = getSectionConfig('hobbies')?.layout || 'chip';
+  const config = getSectionConfig('hobbies');
+  const layout = config?.layout || 'chip';
+  const title = lang === 'id' ? config.title_id : config.title_en;
 
   if (!sorted.length) return null;
 
@@ -21,7 +23,7 @@ export default function Hobbies() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className="section-title"><T en="Hobbies & Interests" id="Hobi & Minat" /></h2>
+          <h2 className="section-title">{title || (lang === 'id' ? 'Hobi & Minat' : 'Hobbies & Interests')}</h2>
         </motion.div>
 
         {layout === 'project-card' ? (

@@ -1,3 +1,4 @@
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { useContent } from '../contexts/ContentContext';
 import Navbar from '../components/layout/Navbar';
 import Hero from '../components/sections/Hero';
@@ -12,9 +13,28 @@ import Contact from '../components/sections/Contact';
 
 export default function Portfolio() {
   const { isSectionVisible } = useContent();
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   return (
     <>
+      <motion.div
+        style={{
+          scaleX,
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '4px',
+          background: 'var(--accent)',
+          transformOrigin: '0%',
+          zIndex: 1001
+        }}
+      />
       <Navbar />
       <div style={{ paddingTop: 64 }}>
         <Hero />

@@ -1,16 +1,17 @@
 import { useState } from 'react';
 
 const NAV = [
-  { id: 'dashboard',    label: 'Dashboard',   icon: '▦' },
-  { id: 'about',        label: 'Tentang Saya',icon: '👤' },
-  { id: 'projects',     label: 'Proyek',       icon: '📁' },
-  { id: 'experience',   label: 'Pengalaman',   icon: '💼' },
-  { id: 'skills',       label: 'Keahlian',     icon: '⭐' },
-  { id: 'education',    label: 'Pendidikan',   icon: '🎓' },
-  { id: 'hobbies',      label: 'Hobi',         icon: '❤' },
-  { id: 'publications', label: 'Publikasi',    icon: '📄' },
-  { id: 'sections',     label: 'Tata Section', icon: '⚙' },
-  { id: 'settings',     label: 'Pengaturan',   icon: '🔧' },
+  { id: 'dashboard',    label: 'Dashboard',    icon: '▦' },
+  { id: 'site',         label: 'Situs & Hero', icon: '🌐' },
+  { id: 'about',        label: 'Tentang Saya', icon: '👤' },
+  { id: 'projects',     label: 'Proyek',        icon: '📁' },
+  { id: 'experience',   label: 'Pengalaman',    icon: '💼' },
+  { id: 'skills',       label: 'Keahlian',      icon: '⭐' },
+  { id: 'education',    label: 'Pendidikan',    icon: '🎓' },
+  { id: 'hobbies',      label: 'Hobi',          icon: '❤' },
+  { id: 'publications', label: 'Publikasi',     icon: '📄' },
+  { id: 'sections',     label: 'Tata Section',  icon: '⚙' },
+  { id: 'settings',     label: 'Pengaturan',    icon: '🔧' },
 ];
 
 export default function AdminLayout({ active, onNavigate, onLogout, children }) {

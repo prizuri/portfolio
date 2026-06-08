@@ -8,9 +8,29 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
 });
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 export default function Hero() {
   const { lang } = useLang();
-  const { projects, experience } = useContent();
+  const { projects, experience, about } = useContent();
 
   const stats = [
     { val: experience.length || '2+', label: lang === 'id' ? 'Tahun Pengalaman' : 'Years Experience' },
@@ -18,45 +38,50 @@ export default function Hero() {
     { val: 'S2', label: lang === 'id' ? 'Magister Teknik Sipil' : 'Master Civil Engineering' },
   ];
 
+  const status = lang === 'id' ? about?.status_id : about?.status_en;
+  const isOpen = status?.toLowerCase().includes('open') || status?.toLowerCase().includes('terbuka');
+
   return (
     <section id="hero" className="hero">
-      <div className="container">
-        <motion.div {...fadeUp(0)}>
-          <div className="hero-badge">
-            <T en="Open to New Opportunities" id="Terbuka untuk Peluang Baru" />
-          </div>
-        </motion.div>
+      <motion.div 
+        className="container"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {status && (
+          <motion.div variants={itemVariants}>
+            <div className={`hero-badge${!isOpen ? ' hero-badge-alt' : ''}`}>
+              {status}
+            </div>
+          </motion.div>
+        )}
 
-        <motion.h1 className="hero-title" {...fadeUp(0.08)}>
-          Prizuri{' '}
-          <span className="accent">Hartadi</span>
+        <motion.h1 className="hero-title" variants={itemVariants}>
+          {about?.full_name?.split(' ')[0] || 'Prizuri'}{' '}
+          <span className="accent">{about?.full_name?.split(' ').slice(1).join(' ') || 'Hartadi'}</span>
         </motion.h1>
 
-        <motion.p className="hero-role" {...fadeUp(0.16)}>
-          <T en="Structural Engineer & Developer" id="Insinyur Struktur & Developer" />
+        <motion.p className="hero-role" variants={itemVariants}>
+          {lang === 'id' ? about?.role_id : about?.role_en}
         </motion.p>
 
-        <motion.p className="hero-desc" {...fadeUp(0.22)}>
-          <T
-            en="Building reliable structures and digital solutions. Combining engineering precision with modern technology to deliver impactful results."
-            id="Membangun struktur yang andal dan solusi digital. Memadukan presisi rekayasa dengan teknologi modern untuk menghasilkan karya yang berdampak."
-          />
+        <motion.p className="hero-desc" variants={itemVariants}>
+          {lang === 'id' ? about?.hero_desc_id : about?.hero_desc_en}
         </motion.p>
 
-        <motion.div className="hero-cta" {...fadeUp(0.28)}>
+        <motion.div className="hero-cta" variants={itemVariants}>
           <button className="btn btn-primary" onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
-            <T en="View Projects" id="Lihat Proyek" />
+            {lang === 'id' ? about?.hero_cta1_id : about?.hero_cta1_en}
           </button>
           <button className="btn btn-outline" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
-            <T en="Get in Touch" id="Hubungi Saya" />
+            {lang === 'id' ? about?.hero_cta2_id : about?.hero_cta2_en}
           </button>
         </motion.div>
 
         <motion.div
           className="hero-stats"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.45 }}
+          variants={itemVariants}
         >
           {stats.map((s, i) => (
             <div key={i} className="hero-stat">
@@ -65,7 +90,7 @@ export default function Hero() {
             </div>
           ))}
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

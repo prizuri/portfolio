@@ -9,11 +9,13 @@ import SectionSkills from '../components/admin/SectionSkills';
 import SectionEducation from '../components/admin/SectionEducation';
 import SectionHobbies from '../components/admin/SectionHobbies';
 import SectionPublications from '../components/admin/SectionPublications';
+import SectionSite from '../components/admin/SectionSite';
 import SectionManager from '../components/admin/SectionManager';
 import SectionSettings from '../components/admin/SectionSettings';
 
 const SECTIONS = {
   dashboard:    Dashboard,
+  site:         SectionSite,
   about:        SectionAbout,
   projects:     SectionProjects,
   experience:   SectionExperience,

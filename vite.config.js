@@ -12,29 +12,33 @@ export default defineConfig({
     {
       name: 'save-content',
       configureServer(server) {
-        server.middlewares.use('/api/save-content', async (req, res) => {
-          if (req.method !== 'POST') {
-            res.statusCode = 405
-            res.end('Method Not Allowed')
-            return
+        server.middlewares.use((req, res, next) => {
+          const url = req.url || '';
+          if (url.includes('api/save-content') && req.method === 'POST') {
+            console.log(`[save-content] Incoming request: ${url}`);
+            let body = '';
+            req.on('data', chunk => { body += chunk; });
+            req.on('end', () => {
+              try {
+                const parsed = JSON.parse(body);
+                const data = JSON.stringify(parsed, null, 2);
+                const dir = resolve(__dirname, 'public', 'data');
+                if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+                writeFileSync(resolve(dir, 'content.json'), data, 'utf-8');
+                console.log(`[save-content] Successfully saved to ${resolve(dir, 'content.json')}`);
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ success: true }));
+              } catch (e) {
+                console.error(`[save-content] Error: ${e.message}`);
+                res.statusCode = 500;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ error: e.message }));
+              }
+            });
+          } else {
+            next();
           }
-          let body = ''
-          req.on('data', chunk => body += chunk)
-          req.on('end', () => {
-            try {
-              const data = JSON.stringify(JSON.parse(body), null, 2)
-              const dir = resolve(__dirname, 'public', 'data')
-              if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
-              writeFileSync(resolve(dir, 'content.json'), data, 'utf-8')
-              res.setHeader('Content-Type', 'application/json')
-              res.end(JSON.stringify({ success: true, path: resolve(dir, 'content.json') }))
-            } catch (e) {
-              res.statusCode = 500
-              res.setHeader('Content-Type', 'application/json')
-              res.end(JSON.stringify({ error: e.message }))
-            }
-          })
-        })
+        });
       },
     },
   ],

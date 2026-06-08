@@ -7,18 +7,9 @@ function scrollTo(id) {
   if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
-const LINKS = [
-  { section: 'about',      en: 'About',       id: 'Tentang' },
-  { section: 'projects',   en: 'Projects',    id: 'Proyek' },
-  { section: 'experience', en: 'Experience',  id: 'Pengalaman' },
-  { section: 'skills',     en: 'Skills',      id: 'Keahlian' },
-  { section: 'education',  en: 'Education',   id: 'Pendidikan' },
-  { section: 'contact',    en: 'Contact',     id: 'Kontak' },
-];
-
 export default function Navbar() {
   const { lang, toggle, idEnabled } = useLang();
-  const { isSectionVisible } = useContent();
+  const { isSectionVisible, getSectionConfig, about } = useContent();
   const [active, setActive] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -39,26 +30,31 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const visibleLinks = LINKS.filter(l => isSectionVisible(l.section));
+  const visibleSections = ['about', 'projects', 'experience', 'skills', 'education', 'hobbies', 'publications', 'contact']
+    .filter(id => isSectionVisible(id));
 
   return (
     <>
       <nav className="navbar">
         <div className="container">
           <button className="nav-logo" onClick={() => scrollTo('hero')} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-            PH<span className="accent">.</span>
+            {about?.logo_text || 'PH'}<span className="accent">.</span>
           </button>
           <div className="nav-links">
-            {visibleLinks.map(l => (
-              <button
-                key={l.section}
-                className={`nav-link${active === l.section ? ' active' : ''}`}
-                onClick={() => handleNav(l.section)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-              >
-                {lang === 'id' ? l.id : l.en}
-              </button>
-            ))}
+            {visibleSections.map(id => {
+              const conf = getSectionConfig(id);
+              const label = lang === 'id' ? conf.title_id : conf.title_en;
+              return (
+                <button
+                  key={id}
+                  className={`nav-link${active === id ? ' active' : ''}`}
+                  onClick={() => handleNav(id)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  {label}
+                </button>
+              );
+            })}
             {idEnabled && (
               <button className="lang-toggle" onClick={toggle}>
                 {lang === 'en' ? 'ID' : 'EN'}
@@ -77,16 +73,20 @@ export default function Navbar() {
       </nav>
       {menuOpen && (
         <div className="nav-mobile-menu" onClick={() => setMenuOpen(false)}>
-          {visibleLinks.map(l => (
-            <button
-              key={l.section}
-              className="nav-link"
-              onClick={() => handleNav(l.section)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
-            >
-              {lang === 'id' ? l.id : l.en}
-            </button>
-          ))}
+          {visibleSections.map(id => {
+            const conf = getSectionConfig(id);
+            const label = lang === 'id' ? conf.title_id : conf.title_en;
+            return (
+              <button
+                key={id}
+                className="nav-link"
+                onClick={() => handleNav(id)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+              >
+                {label}
+              </button>
+            );
+          })}
           {idEnabled && (
             <button className="lang-toggle" onClick={e => { e.stopPropagation(); toggle(); }}>
               {lang === 'en' ? 'Bahasa Indonesia' : 'English'}

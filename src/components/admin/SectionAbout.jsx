@@ -19,9 +19,21 @@ export default function SectionAbout() {
   const [bioEN, setBioEN] = useState(about?.bio_en || '');
   const [bioID, setBioID] = useState(about?.bio_id || '');
   const [photoUrl, setPhotoUrl] = useState(about?.photo_url || '');
+  const [email, setEmail] = useState(about?.email || 'prizurihartadi10@gmail.com');
+  const [linkedin, setLinkedin] = useState(about?.linkedin || 'linkedin.com/in/prizurih/');
+  const [statusEN, setStatusEN] = useState(about?.status_en || 'Open to New Opportunities');
+  const [statusID, setStatusID] = useState(about?.status_id || 'Terbuka untuk Peluang Baru');
 
   function save() {
-    setAbout({ bio_en: bioEN, bio_id: bioID, photo_url: photoUrl });
+    setAbout({ 
+      bio_en: bioEN, 
+      bio_id: bioID, 
+      photo_url: photoUrl, 
+      email, 
+      linkedin,
+      status_en: statusEN,
+      status_id: statusID
+    });
     toast('Tentang saya berhasil disimpan!');
   }
 
@@ -33,6 +45,17 @@ export default function SectionAbout() {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="form-grid-2">
+          <div className="field-group">
+            <label>Status Badge (English)</label>
+            <input value={statusEN} onChange={e => setStatusEN(e.target.value)} placeholder="Open to New Opportunities" />
+          </div>
+          <div className="field-group">
+            <label>Status Badge (Indonesia)</label>
+            <input value={statusID} onChange={e => setStatusID(e.target.value)} placeholder="Terbuka untuk Peluang Baru" />
+          </div>
+        </div>
+
         <div className="field-group">
           <label>URL Foto Profil</label>
           <input value={photoUrl} onChange={e => setPhotoUrl(e.target.value)} placeholder="https://prizuri.github.io/portfolio/img/photo.jpg" />
@@ -41,6 +64,17 @@ export default function SectionAbout() {
         {photoUrl && (
           <img src={photoUrl} alt="preview" style={{ width: 120, height: 160, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border)' }} />
         )}
+
+        <div className="form-grid-2">
+          <div className="field-group">
+            <label>Email</label>
+            <input value={email} onChange={e => setEmail(e.target.value)} placeholder="prizurihartadi10@gmail.com" />
+          </div>
+          <div className="field-group">
+            <label>LinkedIn (username saja)</label>
+            <input value={linkedin} onChange={e => setLinkedin(e.target.value)} placeholder="linkedin.com/in/prizurih/" />
+          </div>
+        </div>
 
         <div className="field-group">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

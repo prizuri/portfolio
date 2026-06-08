@@ -5,7 +5,9 @@ import { useContent } from '../../contexts/ContentContext';
 
 export default function Skills() {
   const { lang } = useLang();
-  const { skills } = useContent();
+  const { skills, getSectionConfig } = useContent();
+  const config = getSectionConfig('skills');
+  const title = lang === 'id' ? config.title_id : config.title_en;
 
   const grouped = useMemo(() => {
     const map = {};
@@ -29,7 +31,7 @@ export default function Skills() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className="section-title"><T en="Skills" id="Keahlian" /></h2>
+          <h2 className="section-title">{title || (lang === 'id' ? 'Keahlian' : 'Skills')}</h2>
         </motion.div>
 
         <div className="skills-grid" style={{ maxWidth: 760, margin: '0 auto' }}>

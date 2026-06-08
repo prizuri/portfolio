@@ -7,20 +7,24 @@ import { ensureUrl } from '../../utils/url';
 
 export default function Contact() {
   const { lang } = useLang();
-  const { about } = useContent();
+  const { about, getSectionConfig } = useContent();
   const toast = useToast();
   const [sending, setSending] = useState(false);
 
   const email    = about?.email    || 'prizurihartadi10@gmail.com';
   const linkedin = about?.linkedin || 'linkedin.com/in/prizurih/';
   const linkedinUrl = ensureUrl(linkedin);
+  const location = lang === 'id' ? about?.location_id : about?.location_en;
+  const formspreeId = about?.formspree_id || 'xvznzqdz';
+  const config = getSectionConfig('contact');
+  const title = lang === 'id' ? config.title_id : config.title_en;
 
   async function handleSubmit(e) {
     e.preventDefault();
     setSending(true);
     const data = new FormData(e.target);
     try {
-      const res = await fetch('https://formspree.io/f/xvznzqdz', {
+      const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
         method: 'POST', body: data, headers: { Accept: 'application/json' },
       });
       if (res.ok) {
@@ -45,9 +49,9 @@ export default function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className="section-title"><T en="Get In Touch" id="Hubungi Saya" /></h2>
+          <h2 className="section-title">{title || (lang === 'id' ? 'Hubungi Saya' : 'Get In Touch')}</h2>
           <p className="section-sub">
-            <T en="Have a project or opportunity? Let's talk." id="Punya proyek atau peluang? Mari berdiskusi." />
+            {lang === 'id' ? about?.contact_subtitle_id : about?.contact_subtitle_en}
           </p>
         </motion.div>
 
@@ -78,7 +82,7 @@ export default function Contact() {
               <div className="contact-icon">📍</div>
               <div>
                 <div className="contact-label"><T en="Location" id="Lokasi" /></div>
-                <div className="contact-value">Medan, Indonesia</div>
+                <div className="contact-value">{location || 'Indonesia'}</div>
               </div>
             </div>
           </div>

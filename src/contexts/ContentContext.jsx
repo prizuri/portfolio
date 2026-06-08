@@ -3,33 +3,6 @@ import { readData, writeData, KEYS, DEFAULT_SECTION_CONFIG } from '../utils/stor
 
 const ContentContext = createContext(null);
 
-function make(key, initial = null) {
-  return [readData(key) ?? initial, key];
-}
-
-const HASH_KEY = 'ph_content_hash';
-
-function simpleHash(obj) {
-  let s = JSON.stringify(obj);
-  let h = 0;
-  for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h |= 0; }
-  return h.toString(36);
-}
-
-function syncOnce(key, data, setter) {
-  if (readData(key) !== null) return;
-  writeData(key, data);
-  setter(data);
-}
-
-function syncIfChanged(key, data, setter, newHash) {
-  const oldHash = readData(HASH_KEY);
-  if (oldHash !== newHash) {
-    writeData(key, data);
-    setter(data);
-  }
-}
-
 export function ContentProvider({ children }) {
   const [about,        setAboutRaw]   = useState(() => readData(KEYS.about));
   const [projects,     setProjectsRaw]= useState(() => readData(KEYS.projects) || []);
@@ -56,35 +29,60 @@ export function ContentProvider({ children }) {
   const setSections    = v => save(KEYS.sections,     setSectionsRaw,v);
   const setLangSettings= v => save(KEYS.lang,         setLangRaw,    v);
 
+  const refreshFromSource = useCallback(async () => {
+    try {
+      const r = await fetch(import.meta.env.BASE_URL + `data/content.json?t=${Date.now()}`, { cache: 'no-cache' });
+      if (!r.ok) return;
+      const data = await r.json();
+      if (!data || typeof data !== 'object') return;
+
+      const current = JSON.stringify(data);
+      
+      if (data.about)        { writeData(KEYS.about,        data.about);        setAboutRaw(data.about); }
+      if (data.projects)     { writeData(KEYS.projects,     data.projects);     setProjectsRaw(data.projects); }
+      if (data.experience)   { writeData(KEYS.experience,   data.experience);   setExpRaw(data.experience); }
+      if (data.skills)       { writeData(KEYS.skills,       data.skills);       setSkillsRaw(data.skills); }
+      if (data.education)    { writeData(KEYS.education,    data.education);    setEduRaw(data.education); }
+      if (data.hobbies)      { writeData(KEYS.hobbies,      data.hobbies);      setHobbiesRaw(data.hobbies); }
+      if (data.publications) { writeData(KEYS.publications, data.publications); setPubsRaw(data.publications); }
+      if (data.sections)     { writeData(KEYS.sections,     data.sections);     setSectionsRaw(data.sections); }
+      if (data.lang_settings){ writeData(KEYS.lang,         data.lang_settings);setLangRaw(data.lang_settings); }
+
+      writeData('ph_data_checksum', current);
+      return true;
+    } catch (e) {
+      console.error('Failed to refresh data:', e);
+      return false;
+    }
+  }, []);
+
   useEffect(() => {
-    fetch(import.meta.env.BASE_URL + 'data/content.json', { cache: 'no-cache' })
+    fetch(import.meta.env.BASE_URL + `data/content.json?t=${Date.now()}`, { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : null)
       .then(data => {
-        if (!data || !Object.keys(data).length) return;
-        const newHash = simpleHash(data);
-        const oldHash = readData(HASH_KEY);
-        if (oldHash === null) {
-          if (data.about)        syncOnce(KEYS.about,        data.about,        setAboutRaw);
-          if (data.projects)     syncOnce(KEYS.projects,     data.projects,     setProjectsRaw);
-          if (data.experience)   syncOnce(KEYS.experience,   data.experience,   setExpRaw);
-          if (data.skills)       syncOnce(KEYS.skills,       data.skills,       setSkillsRaw);
-          if (data.education)    syncOnce(KEYS.education,    data.education,    setEduRaw);
-          if (data.hobbies)      syncOnce(KEYS.hobbies,      data.hobbies,      setHobbiesRaw);
-          if (data.publications) syncOnce(KEYS.publications, data.publications, setPubsRaw);
-          if (data.sections)     syncOnce(KEYS.sections,     data.sections,     setSectionsRaw);
-          if (data.lang_settings){ writeData(KEYS.lang,         data.lang_settings);setLangRaw(data.lang_settings); }
-        } else if (oldHash !== newHash) {
-          if (data.about)        { writeData(KEYS.about,        data.about);        setAboutRaw(data.about); }
-          if (data.projects)     { writeData(KEYS.projects,     data.projects);     setProjectsRaw(data.projects); }
-          if (data.experience)   { writeData(KEYS.experience,   data.experience);   setExpRaw(data.experience); }
-          if (data.skills)       { writeData(KEYS.skills,       data.skills);       setSkillsRaw(data.skills); }
-          if (data.education)    { writeData(KEYS.education,    data.education);    setEduRaw(data.education); }
-          if (data.hobbies)      { writeData(KEYS.hobbies,      data.hobbies);      setHobbiesRaw(data.hobbies); }
-          if (data.publications) { writeData(KEYS.publications, data.publications); setPubsRaw(data.publications); }
-          if (data.sections)     { writeData(KEYS.sections,     data.sections);     setSectionsRaw(data.sections); }
-          if (data.lang_settings){ writeData(KEYS.lang,         data.lang_settings);setLangRaw(data.lang_settings); }
-        }
-        writeData(HASH_KEY, newHash);
+        if (!data || typeof data !== 'object') return;
+
+        // cleanup old hash key
+        if (readData('ph_content_hash') !== null) localStorage.removeItem('ph_content_hash');
+
+        const stored = readData('ph_data_checksum');
+        const current = JSON.stringify(data);
+        
+        // If checksum matches, we keep the local data (which might have unsaved admin edits)
+        if (stored === current) return;
+
+        // Otherwise, update local storage with server truth
+        if (data.about)        { writeData(KEYS.about,        data.about);        setAboutRaw(data.about); }
+        if (data.projects)     { writeData(KEYS.projects,     data.projects);     setProjectsRaw(data.projects); }
+        if (data.experience)   { writeData(KEYS.experience,   data.experience);   setExpRaw(data.experience); }
+        if (data.skills)       { writeData(KEYS.skills,       data.skills);       setSkillsRaw(data.skills); }
+        if (data.education)    { writeData(KEYS.education,    data.education);    setEduRaw(data.education); }
+        if (data.hobbies)      { writeData(KEYS.hobbies,      data.hobbies);      setHobbiesRaw(data.hobbies); }
+        if (data.publications) { writeData(KEYS.publications, data.publications); setPubsRaw(data.publications); }
+        if (data.sections)     { writeData(KEYS.sections,     data.sections);     setSectionsRaw(data.sections); }
+        if (data.lang_settings){ writeData(KEYS.lang,         data.lang_settings);setLangRaw(data.lang_settings); }
+
+        writeData('ph_data_checksum', current);
       })
       .catch(() => {});
   }, []);
@@ -109,6 +107,7 @@ export function ContentProvider({ children }) {
       sections, setSections,
       langSettings, setLangSettings,
       getSectionConfig, isSectionVisible,
+      refreshFromSource,
     }}>
       {children}
     </ContentContext.Provider>

@@ -4,8 +4,10 @@ import { useContent } from '../../contexts/ContentContext';
 
 export default function Publications() {
   const { lang } = useLang();
-  const { publications } = useContent();
+  const { publications, getSectionConfig } = useContent();
   const sorted = [...publications].filter(p => !p.hidden).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  const config = getSectionConfig('publications');
+  const title = lang === 'id' ? config.title_id : config.title_en;
 
   if (!sorted.length) return null;
 
@@ -19,7 +21,7 @@ export default function Publications() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className="section-title"><T en="Publications" id="Karya / Publikasi" /></h2>
+          <h2 className="section-title">{title || (lang === 'id' ? 'Publikasi / Karya' : 'Publications')}</h2>
         </motion.div>
 
         <div className="pub-list">
