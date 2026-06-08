@@ -51,6 +51,14 @@ export default function Portfolio() {
             © {new Date().getFullYear()} Prizuri Hartadi. All rights reserved.
           </div>
         </footer>
+
+        {/* Back to Top Button */}
+        <button
+          className="back-to-top"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+          ↑
+        </button>
       </div>
     </>
   );

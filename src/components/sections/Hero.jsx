@@ -63,16 +63,18 @@ export default function Hero() {
     return v.toLocaleString(isID ? 'id-ID' : 'en-US');
   }
 
+  const visibleExpCount = experience.filter(e => !e.hidden).length;
+
   const stats = [
-    { 
-      val: totalValue, 
-      label: lang === 'id' ? 'Nilai Proyek Ditangani' : 'Total Project Value', 
+    {
+      val: totalValue,
+      label: lang === 'id' ? 'Nilai Proyek Ditangani' : 'Total Project Value',
       format: formatApprox,
-      prefix: 'IDR ' 
+      prefix: 'IDR '
     },
-    { 
-      val: experience.length, 
-      label: lang === 'id' ? 'Total Pengalaman' : 'Total Experiences' 
+    {
+      val: visibleExpCount,
+      label: lang === 'id' ? 'Total Pengalaman' : 'Total Experiences'
     },
     { 
       val: Number(about?.years_exp) || 1, 
@@ -121,6 +123,13 @@ export default function Hero() {
           </button>
           <button type="button" className="btn btn-outline" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
             {lang === 'id' ? about?.hero_cta2_id : about?.hero_cta2_en}
+          </button>
+          <button type="button" className="btn btn-outline" onClick={() => {
+            // Download CV - for now linking to LinkedIn as placeholder
+            // In production, this should link to an actual CV file
+            window.open('https://linkedin.com/in/prizurih/', '_blank', 'noopener');
+          }}>
+            {lang === 'id' ? 'Download CV' : 'Download CV'}
           </button>
         </motion.div>
 

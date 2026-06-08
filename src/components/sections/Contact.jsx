@@ -72,7 +72,11 @@ export default function Contact() {
               </div>
             </div>
             <div className="contact-item">
-              <div className="contact-icon">in</div>
+              <div className="contact-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065s.919-2.065 2.063-2.065 2.064.926 2.064 2.065-.919 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zm10.102-2.572c-.66 0-1.194-.527-1.194-1.176 0-.649-.534-1.176-1.194-1.176-.66 0-1.189.527-1.189 1.176 0 .649.529 1.176 1.189 1.176.658 0 1.193-.527 1.193-1.176 0-.65-.536-1.176-1.194-1.176z" fill="currentColor"/>
+                </svg>
+              </div>
               <div>
                 <div className="contact-label">LinkedIn</div>
                 <a className="contact-value contact-link" href={linkedinUrl} target="_blank" rel="noopener noreferrer">{linkedin}</a>
