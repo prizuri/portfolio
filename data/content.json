@@ -20,6 +20,8 @@
     "location_id": "Medan, Indonesia",
     "contact_subtitle_en": "Have a project or opportunity? Let's talk.",
     "contact_subtitle_id": "Punya proyek atau peluang? Mari berdiskusi.",
+    "years_exp": "1",
+    "status_color": "green",
     "formspree_id": "xvznzqdz",
     "logo_text": "PH"
   },
@@ -28,7 +30,7 @@
       "id": "proj1",
       "order": 0,
       "created_at": 1700000001000,
-      "updated_at": 1780827384510,
+      "updated_at": 1780881943464,
       "title": "Coal Shed Arc Dome Steel Structure",
       "title_id": "Struktur Baja Arc Dome Gudang Batubara",
       "category": "Design & Analysis",
@@ -51,13 +53,14 @@
         "https://drive.google.com/file/d/1acFrBgZkyeN4nk-l3-00WuN9_Fus0fZl/view?usp=drive_link"
       ],
       "featured": false,
-      "hidden": false
+      "hidden": false,
+      "project_value": "229000000000"
     },
     {
       "id": "proj3",
       "order": 1,
       "created_at": 1700000003000,
-      "updated_at": 1780827465618,
+      "updated_at": 1780881970274,
       "title": "SLF Assessment – 29-Story Building",
       "title_id": "Penilaian SLF – Gedung 29 Lantai",
       "category": "Assessment",
@@ -79,7 +82,8 @@
         "https://drive.google.com/file/d/1wCcl78kqzqAZyAIVB5CA3WxD16NMx36i/view?usp=drive_link"
       ],
       "featured": false,
-      "hidden": false
+      "hidden": false,
+      "project_value": "20000000"
     },
     {
       "id": "proj2",
@@ -167,16 +171,17 @@
       "id": "exp1",
       "order": 0,
       "created_at": 1700000010000,
-      "updated_at": 1700000010000,
+      "updated_at": 1780890685609,
       "title": "Structural Engineer – Arc Dome Structure",
       "title_id": "Insinyur Struktur – Struktur Arc Dome",
       "company": "LKFT Universitas Gadjah Mada | Pangkalan Susu",
       "year_start": "2025",
       "year_end": "2026",
       "icon": "▲",
-      "desc": "Designed and analyzed a 188 m & 192 m span arc dome steel structure worth IDR 229 billion. Evaluated global stability, conducted member verification (slenderness, deflection, capacity ratio), and coordinated with geotechnical and project management teams per SNI & AISC standards.",
+      "desc": "Designed and analyzed a 188 m & 192 m span arc dome steel structure. Evaluated global stability, conducted member verification (slenderness, deflection, capacity ratio), and coordinated with geotechnical and project management teams per SNI & AISC standards.",
       "desc_id": "Merancang dan menganalisis struktur baja arc dome bentang 188 m & 192 m senilai IDR 229 miliar. Mengevaluasi stabilitas global, melakukan verifikasi anggota (kelangsingan, lendutan, rasio kapasitas), dan berkoordinasi dengan tim geoteknik dan manajemen proyek sesuai standar SNI & AISC.",
-      "hidden": false
+      "hidden": false,
+      "images": []
     },
     {
       "id": "exp2",
@@ -458,37 +463,53 @@
   "sections": [
     {
       "id": "about",
-      "visible": true
+      "visible": true,
+      "title_en": "About Me",
+      "title_id": "Tentang Saya"
     },
     {
       "id": "projects",
-      "visible": true
+      "visible": true,
+      "title_en": "Projects",
+      "title_id": "Proyek"
     },
     {
       "id": "experience",
-      "visible": true
+      "visible": true,
+      "title_en": "Experience",
+      "title_id": "Pengalaman"
     },
     {
       "id": "skills",
-      "visible": true
+      "visible": true,
+      "title_en": "Skills",
+      "title_id": "Keahlian"
     },
     {
       "id": "education",
-      "visible": true
+      "visible": true,
+      "title_en": "Education",
+      "title_id": "Pendidikan"
     },
     {
       "id": "hobbies",
-      "visible": false,
-      "layout": "chip"
+      "visible": true,
+      "layout": "project-card",
+      "title_en": "Hobbies & Interests",
+      "title_id": "Hobi & Minat"
     },
     {
       "id": "publications",
       "visible": true,
-      "layout": "list"
+      "layout": "list",
+      "title_en": "Publications",
+      "title_id": "Karya / Publikasi"
     },
     {
       "id": "contact",
-      "visible": true
+      "visible": true,
+      "title_en": "Get In Touch",
+      "title_id": "Hubungi Saya"
     }
   ],
   "lang_settings": {
