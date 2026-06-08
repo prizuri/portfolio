@@ -23,6 +23,22 @@ export function googleDriveId(url) {
   return '';
 }
 
+export function googleDriveResourceKey(url) {
+  if (!url || typeof url !== 'string') return '';
+  try {
+    const parsed = new URL(url.trim());
+    return parsed.searchParams.get('resourcekey') || '';
+  } catch {
+    const match = url.match(/[?&]resourcekey=([^&#]+)/i);
+    return match?.[1] ? decodeURIComponent(match[1]) : '';
+  }
+}
+
+function driveResourceSuffix(url, separator = '&') {
+  const resourceKey = googleDriveResourceKey(url);
+  return resourceKey ? `${separator}resourcekey=${encodeURIComponent(resourceKey)}` : '';
+}
+
 export function isGoogleDriveFileUrl(url) {
   return Boolean(googleDriveId(url)) && /drive\.google\.com|googleusercontent\.com/i.test(String(url || ''));
 }
@@ -36,11 +52,17 @@ export function imageUrls(url) {
 
   const id = googleDriveId(value);
   if (id && /drive\.google\.com/i.test(value)) {
+    const rkAmp = driveResourceSuffix(value, '&');
+    const rkQuery = driveResourceSuffix(value, '?');
     return [
-      `https://drive.google.com/thumbnail?id=${id}&sz=w1600`,
+      `https://drive.google.com/thumbnail?id=${id}&sz=w2000${rkAmp}`,
+      `https://drive.google.com/thumbnail?id=${id}&sz=w1600${rkAmp}`,
+      `https://lh3.googleusercontent.com/d/${id}=w2000`,
       `https://lh3.googleusercontent.com/d/${id}=w1600`,
       `https://lh3.googleusercontent.com/d/${id}`,
-      `https://drive.google.com/uc?export=view&id=${id}`,
+      `https://drive.google.com/uc?export=view&id=${id}${rkAmp}`,
+      `https://drive.google.com/uc?export=download&id=${id}${rkAmp}`,
+      `https://drive.google.com/file/d/${id}/preview${rkQuery}`,
       value,
     ];
   }
@@ -56,7 +78,9 @@ export function driveDownloadUrl(url) {
   if (!url || typeof url !== 'string') return '';
   const value = url.trim();
   const id = googleDriveId(value);
-  if (id && /drive\.google\.com/i.test(value)) return `https://drive.google.com/uc?export=download&id=${id}`;
+  if (id && /drive\.google\.com/i.test(value)) {
+    return `https://drive.google.com/uc?export=download&id=${id}${driveResourceSuffix(value, '&')}`;
+  }
   return value;
 }
 
@@ -64,7 +88,9 @@ export function googleDriveEmbedUrl(url) {
   if (!url || typeof url !== 'string') return '';
   const value = url.trim();
   const id = googleDriveId(value);
-  if (id && /drive\.google\.com/i.test(value)) return `https://drive.google.com/file/d/${id}/preview`;
+  if (id && /drive\.google\.com/i.test(value)) {
+    return `https://drive.google.com/file/d/${id}/preview${driveResourceSuffix(value, '?')}`;
+  }
   return '';
 }
 

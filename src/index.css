@@ -956,3 +956,28 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   .item-card { flex-wrap: wrap; gap: 8px; }
   .item-actions { width: 100%; justify-content: flex-end; }
 }
+
+/* Google Drive / gallery fallback preview */
+.lightbox-fallback {
+  min-width: min(92vw, 720px);
+  min-height: min(60vh, 420px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 10px;
+  padding: 24px;
+  text-align: center;
+}
+.lightbox-fallback a {
+  color: #fff;
+  text-decoration: underline;
+  font-weight: 700;
+}
+.lightbox-drive-image-frame {
+  background: #111;
+}

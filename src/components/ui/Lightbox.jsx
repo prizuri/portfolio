@@ -21,13 +21,42 @@ function normalizeItems(images = [], items = null) {
 function SmartLightboxImage({ src, alt, className }) {
   const candidates = useMemo(() => imageUrls(src), [src]);
   const [idx, setIdx] = useState(0);
+  const [failed, setFailed] = useState(false);
+  const driveEmbed = isGoogleDriveFileUrl(src) ? googleDriveEmbedUrl(src) : '';
 
   useEffect(() => {
     setIdx(0);
+    setFailed(false);
   }, [src]);
 
   if (!candidates.length) {
     return <div className={`${className || ''} lightbox-fallback`}>Image not available</div>;
+  }
+
+  if (failed) {
+    if (driveEmbed) {
+      return (
+        <motion.iframe
+          key={`${src}-drive-fallback`}
+          className="lightbox-media lightbox-frame lightbox-drive-image-frame"
+          src={driveEmbed}
+          title={alt || 'Google Drive image preview'}
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.92 }}
+          transition={{ duration: 0.25 }}
+        />
+      );
+    }
+
+    return (
+      <div className="lightbox-media lightbox-fallback">
+        <strong>Image could not be loaded.</strong>
+        <a href={src} target="_blank" rel="noopener noreferrer">Open original file</a>
+      </div>
+    );
   }
 
   return (
@@ -41,7 +70,11 @@ function SmartLightboxImage({ src, alt, className }) {
       exit={{ opacity: 0, scale: 0.92 }}
       transition={{ duration: 0.25 }}
       onError={() => {
-        if (idx < candidates.length - 1) setIdx(idx + 1);
+        if (idx < candidates.length - 1) {
+          setIdx(idx + 1);
+        } else {
+          setFailed(true);
+        }
       }}
     />
   );

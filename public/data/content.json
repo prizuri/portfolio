@@ -94,7 +94,7 @@
       "id": "proj2",
       "order": 2,
       "created_at": 1700000002000,
-      "updated_at": 1780827424770,
+      "updated_at": 1780929580863,
       "title": "RISBA Beam-Column Connection Research",
       "title_id": "Penelitian Sambungan Balok-Kolom RISBA",
       "category": "Research",
@@ -112,13 +112,16 @@
       "demo_url": "",
       "github_url": "",
       "images": [
-        "https://drive.google.com/file/d/1vSXGcyXo_uba0SRcoUqSHCbWHnpyWxvh/view?usp=drive_link"
+        "https://drive.google.com/file/d/1vSXGcyXo_uba0SRcoUqSHCbWHnpyWxvh/view?usp=drive_link",
+        "https://drive.google.com/file/d/13omnp4mjtP8vWmVeIuuA0c9U3gTzffzG/view?usp=drive_link",
+        "https://drive.google.com/file/d/1LiLJvfIJD2v5nv6r2TID0ILioZIeuu6c/view?usp=drive_link"
       ],
       "featured": false,
       "hidden": false,
       "cover_image_url": "https://drive.google.com/file/d/1VJK59GWzueUsy7tzzSTMMsK3GntR8ysP/view?usp=drive_link",
       "preview_media_url": "",
-      "preview_media_type": "auto"
+      "preview_media_type": "auto",
+      "project_value": 0
     },
     {
       "id": "proj4",
