@@ -2,54 +2,105 @@ import { useState } from 'react';
 import { useContent } from '../../contexts/ContentContext';
 import { useToast } from '../../contexts/ToastContext';
 import { genId } from '../../utils/storage';
-import { ensureUrl } from '../../utils/url';
+import { ensureUrl, mediaKind } from '../../utils/url';
 import Modal from '../ui/Modal';
 
 const EMPTY = {
   title: '', title_id: '', category: 'Professional', status: '',
-  desc: '', desc_id: '', images: [], tags: '',
-  demo_url: '', github_url: '', order: 0, featured: false, hidden: false,
+  desc: '', desc_id: '', cover_image_url: '', preview_media_url: '', preview_media_type: 'auto',
+  images: [], tags: '', demo_url: '', github_url: '', order: 0, featured: false, hidden: false,
   project_value: 0,
 };
+
+function uniqueUrls(urls) {
+  const seen = new Set();
+  return urls
+    .map(url => (typeof url === 'string' ? url.trim() : ''))
+    .filter(Boolean)
+    .filter(url => {
+      if (seen.has(url)) return false;
+      seen.add(url);
+      return true;
+    });
+}
+
+function cleanMediaUrl(url) {
+  const value = typeof url === 'string' ? url.trim() : '';
+  return value ? ensureUrl(value) : '';
+}
+
+function normalizeProjectForForm(p = {}) {
+  const legacyImages = Array.isArray(p.images) ? p.images.filter(Boolean) : [];
+  const cover = p.cover_image_url || p.image_url || legacyImages[0] || '';
+  const gallery = p.cover_image_url
+    ? legacyImages
+    : legacyImages.filter(url => url !== cover);
+
+  return {
+    ...EMPTY,
+    ...p,
+    cover_image_url: cover,
+    preview_media_url: p.preview_media_url || '',
+    preview_media_type: p.preview_media_type || 'auto',
+    images: uniqueUrls(gallery),
+    tags: (p.tags || []).join(', '),
+  };
+}
 
 export default function SectionProjects() {
   const { projects, setProjects } = useContent();
   const toast = useToast();
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState(EMPTY);
-  const [imgInput, setImgInput] = useState('');
+  const [galleryInput, setGalleryInput] = useState('');
   const [confirm, setConfirm] = useState(null);
 
   const sorted = [...projects].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 
-  function openAdd() { setForm({ ...EMPTY, order: projects.length }); setModal('add'); }
+  function openAdd() {
+    setForm({ ...EMPTY, order: projects.length });
+    setGalleryInput('');
+    setModal('add');
+  }
+
   function openEdit(p) {
-    setForm({ ...EMPTY, ...p, images: p.images || (p.image_url ? [p.image_url] : []), tags: (p.tags || []).join(', ') });
+    setForm(normalizeProjectForForm(p));
+    setGalleryInput('');
     setModal('edit');
   }
 
-  function addImg() {
-    const url = imgInput.trim();
+  function addGalleryImage() {
+    const url = cleanMediaUrl(galleryInput);
     if (!url) return;
-    setForm(f => ({ ...f, images: [...(f.images || []), url] }));
-    setImgInput('');
+    setForm(f => ({ ...f, images: uniqueUrls([...(f.images || []), url]) }));
+    setGalleryInput('');
   }
 
-  function removeImg(i) {
-    setForm(f => ({ ...f, images: f.images.filter((_, idx) => idx !== i) }));
+  function removeGalleryImage(i) {
+    setForm(f => ({ ...f, images: (f.images || []).filter((_, idx) => idx !== i) }));
   }
 
   function save() {
     if (!form.title.trim()) { toast('Judul wajib diisi.', 'error'); return; }
+
+    const cover = cleanMediaUrl(form.cover_image_url);
+    const preview = cleanMediaUrl(form.preview_media_url);
+    const gallery = uniqueUrls((form.images || []).map(cleanMediaUrl).filter(Boolean));
+    const previewType = ['auto', 'image', 'video'].includes(form.preview_media_type) ? form.preview_media_type : 'auto';
+
     const item = {
       ...form,
-      image_url: (form.images?.[0]) || '',
-      images: form.images || [],
+      cover_image_url: cover,
+      image_url: cover, // backward compatible untuk kode/data lama
+      preview_media_url: preview,
+      preview_media_type: previewType,
+      images: gallery,
       tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
       demo_url: ensureUrl(form.demo_url),
       github_url: ensureUrl(form.github_url),
       updated_at: Date.now(),
     };
+
     if (modal === 'add') {
       setProjects([...projects, { id: genId(), created_at: Date.now(), ...item }]);
     } else {
@@ -75,6 +126,7 @@ export default function SectionProjects() {
   }
 
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
+  const currentPreviewKind = mediaKind(form.preview_media_url, form.preview_media_type || 'auto');
 
   return (
     <div>
@@ -87,22 +139,32 @@ export default function SectionProjects() {
         ? <div className="empty-state">Belum ada proyek. Klik + Tambah untuk mulai.</div>
         : (
           <div className="items-list">
-            {sorted.map((p, i) => (
-              <div key={p.id} className="item-card">
-                <div className="item-actions" style={{ flexShrink: 0, marginRight: 4 }}>
-                  <button className="btn-order" disabled={i === 0} onClick={() => move(p.id, -1)}>▲</button>
-                  <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(p.id, 1)}>▼</button>
+            {sorted.map((p, i) => {
+              const cover = p.cover_image_url || p.image_url;
+              const galleryCount = p.images?.length || 0;
+              const previewKind = mediaKind(p.preview_media_url, p.preview_media_type || 'auto');
+              return (
+                <div key={p.id} className="item-card">
+                  <div className="item-actions" style={{ flexShrink: 0, marginRight: 4 }}>
+                    <button className="btn-order" disabled={i === 0} onClick={() => move(p.id, -1)}>▲</button>
+                    <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(p.id, 1)}>▼</button>
+                  </div>
+                  <div className="item-info">
+                    <div className="item-title">{p.title} {p.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
+                    <div className="item-sub">
+                      {p.category} {p.status ? `· ${p.status}` : ''}
+                      {cover ? ' · cover' : ''}
+                      {p.preview_media_url ? ` · preview ${previewKind}` : ''}
+                      {galleryCount > 0 ? ` · ${galleryCount} galeri` : ''}
+                    </div>
+                  </div>
+                  <div className="item-actions">
+                    <button className="btn-edit" onClick={() => openEdit(p)}>Edit</button>
+                    <button className="btn-del" onClick={() => setConfirm(p.id)}>Hapus</button>
+                  </div>
                 </div>
-                <div className="item-info">
-                  <div className="item-title">{p.title} {p.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
-                  <div className="item-sub">{p.category} {p.status ? `· ${p.status}` : ''}{p.images?.length > 0 ? ` · ${p.images.length} gambar` : ''}</div>
-                </div>
-                <div className="item-actions">
-                  <button className="btn-edit" onClick={() => openEdit(p)}>Edit</button>
-                  <button className="btn-del" onClick={() => setConfirm(p.id)}>Hapus</button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )
       }
@@ -158,23 +220,51 @@ export default function SectionProjects() {
           <label>Deskripsi (ID)</label>
           <textarea rows={3} value={form.desc_id} onChange={set('desc_id')} />
         </div>
-        <div className="field-group">
-          <label>Gambar</label>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <input value={imgInput} onChange={e => setImgInput(e.target.value)} placeholder="https://..." style={{ flex: 1 }} />
-            <button className="btn-save" onClick={addImg} style={{ padding: '9px 14px', fontSize: '.8rem' }}>Tambah</button>
+
+        <div className="admin-media-box">
+          <div className="field-group">
+            <label>Cover Image / Gambar Utama</label>
+            <input value={form.cover_image_url} onChange={set('cover_image_url')} placeholder="https://.../screenshot.webp" />
+            <span className="hint">Dipakai sebagai gambar utama di card project. Sebaiknya screenshot statis, bukan GIF.</span>
           </div>
-          {(form.images?.length || 0) > 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 8 }}>
-              {form.images.map((url, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '.82rem' }}>
-                  <span style={{ color: 'var(--text-3)', fontFamily: 'monospace', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{url}</span>
-                  <button className="btn-del" onClick={() => removeImg(i)} style={{ padding: '3px 8px', fontSize: '.72rem' }}>Hapus</button>
-                </div>
-              ))}
+
+          <div className="form-grid-2">
+            <div className="field-group">
+              <label>Preview GIF / Video (opsional)</label>
+              <input value={form.preview_media_url} onChange={set('preview_media_url')} placeholder="https://.../demo.gif atau demo.mp4" />
+              <span className="hint">Muncul saat card di-hover. Untuk performa terbaik gunakan MP4/WebM pendek.</span>
             </div>
-          )}
+            <div className="field-group">
+              <label>Jenis Preview</label>
+              <select value={form.preview_media_type || 'auto'} onChange={set('preview_media_type')}>
+                <option value="auto">Auto detect</option>
+                <option value="image">GIF / Gambar</option>
+                <option value="video">Video MP4/WebM</option>
+              </select>
+              <span className="hint">Saat ini terbaca sebagai: {currentPreviewKind}</span>
+            </div>
+          </div>
+
+          <div className="field-group">
+            <label>Gallery Images / Screenshot Tambahan</label>
+            <div className="media-input-row">
+              <input value={galleryInput} onChange={e => setGalleryInput(e.target.value)} placeholder="https://..." />
+              <button className="btn-save" onClick={addGalleryImage} style={{ padding: '9px 14px', fontSize: '.8rem' }}>Tambah</button>
+            </div>
+            <span className="hint">Galeri akan tampil ketika gambar project diklik. Tambahkan screenshot fitur, bukan animasi terlalu berat.</span>
+            {(form.images?.length || 0) > 0 && (
+              <div className="media-url-list">
+                {form.images.map((url, i) => (
+                  <div key={`${url}-${i}`} className="media-url-item">
+                    <span>{url}</span>
+                    <button className="btn-del" onClick={() => removeGalleryImage(i)} style={{ padding: '3px 8px', fontSize: '.72rem' }}>Hapus</button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
+
         <div className="field-group">
           <label>Tags (pisah koma)</label>
           <input value={form.tags} onChange={set('tags')} placeholder="Python, SAP2000, React" />

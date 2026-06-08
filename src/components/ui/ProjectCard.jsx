@@ -1,32 +1,40 @@
-import { useState, useEffect, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLang } from '../../contexts/LangContext';
-import { imageUrl } from '../../utils/url';
+import { imageUrl, mediaKind, mediaUrl } from '../../utils/url';
 import Lightbox from './Lightbox';
+
+function uniqueUrls(urls) {
+  const seen = new Set();
+  return urls
+    .map(url => (typeof url === 'string' ? url.trim() : ''))
+    .filter(Boolean)
+    .filter(url => {
+      if (seen.has(url)) return false;
+      seen.add(url);
+      return true;
+    });
+}
 
 export default function ProjectCard({ project: p, index = 0, featured = false }) {
   const { lang } = useLang();
   const title = lang === 'id' && p.title_id ? p.title_id : p.title;
   const desc  = lang === 'id' && p.desc_id  ? p.desc_id  : p.desc;
-  const images = p.images?.filter(Boolean) || (p.image_url ? [p.image_url] : []);
-  const [imgIdx, setImgIdx] = useState(0);
   const [lightbox, setLightbox] = useState(null);
-  const timerRef = useRef(null);
+  const [hovered, setHovered] = useState(false);
+  const cardRef = useRef(null);
 
-  useEffect(() => {
-    if (images.length < 2) return;
-    timerRef.current = setInterval(() => {
-      setImgIdx(i => (i + 1) % images.length);
-    }, 4000);
-    return () => clearInterval(timerRef.current);
-  }, [images.length]);
+  const cover = p.cover_image_url || p.image_url || p.images?.[0] || '';
+  const galleryImages = useMemo(() => uniqueUrls([cover, ...(p.images || [])]), [cover, p.images]);
+  const previewUrl = p.preview_media_url || '';
+  const previewKind = mediaKind(previewUrl, p.preview_media_type || 'auto');
+  const hasPreview = Boolean(previewUrl);
 
   function openLightbox(e) {
     e.stopPropagation();
-    setLightbox(imgIdx);
+    if (galleryImages.length > 0) setLightbox(0);
   }
 
-  const cardRef = useRef(null);
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
@@ -39,30 +47,64 @@ export default function ProjectCard({ project: p, index = 0, featured = false })
       <motion.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
         layout
         className={`project-card${featured ? ' featured' : ''}`}
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.4, delay: Math.min(index * 0.03, 0.18) }}
       >
-        {images.length > 0 && (
+        {galleryImages.length > 0 && (
           <div className="project-img-wrap clickable" onClick={openLightbox}>
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={imgIdx}
-                className="project-img"
-                src={imageUrl(images[imgIdx])}
-                alt={title}
-                loading="lazy"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-            </AnimatePresence>
-            {images.length > 1 && (
-              <span className="timeline-img-counter">{imgIdx + 1}/{images.length}</span>
+            <img
+              className="project-img"
+              src={imageUrl(cover)}
+              alt={title}
+              loading="lazy"
+            />
+
+            {hasPreview && hovered && (
+              <motion.div
+                className="project-preview-layer show"
+                aria-hidden="true"
+                initial={{ opacity: 0, scale: 1.02 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                {previewKind === 'video' ? (
+                  <video
+                    className="project-img project-preview-media"
+                    src={mediaUrl(previewUrl, 'video')}
+                    muted
+                    loop
+                    playsInline
+                    autoPlay
+                    preload="metadata"
+                  />
+                ) : (
+                  <img
+                    className="project-img project-preview-media"
+                    src={mediaUrl(previewUrl, 'image')}
+                    alt=""
+                    loading="lazy"
+                  />
+                )}
+              </motion.div>
+            )}
+
+            {hasPreview && (
+              <span className="project-preview-badge">
+                {previewKind === 'video'
+                  ? (lang === 'id' ? 'Preview Video' : 'Video Preview')
+                  : (lang === 'id' ? 'Preview GIF/Gambar' : 'GIF/Image Preview')}
+              </span>
+            )}
+
+            {galleryImages.length > 1 && (
+              <span className="timeline-img-counter">1/{galleryImages.length}</span>
             )}
           </div>
         )}
@@ -96,11 +138,11 @@ export default function ProjectCard({ project: p, index = 0, featured = false })
       <AnimatePresence>
         {lightbox !== null && (
           <Lightbox
-            images={images}
+            images={galleryImages}
             index={lightbox}
             onClose={(next, cycle) => {
               if (cycle) {
-                const n = ((next % images.length) + images.length) % images.length;
+                const n = ((next % galleryImages.length) + galleryImages.length) % galleryImages.length;
                 setLightbox(n);
               } else {
                 setLightbox(null);
