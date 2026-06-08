@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - Page Not Found</title>
+    <meta name="description" content="Page not found - Prizuri Hartadi's Portfolio">
+    <meta http-equiv="refresh" content="0; url=/portfolio/">
+    <style>
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background: #0a0a14;
+        color: #ffffff;
+        line-height: 1.6;
+        text-align: center;
+        padding: 60px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      .container { max-width: 500px; }
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        background: linear-gradient(120deg, #ffffff 55%, #a78bfa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      p { font-size: 1.2rem; color: #d1d1f0; margin-bottom: 30px; }
+      a {
+        display: inline-block;
+        padding: 12px 28px;
+        background: #a78bfa;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+      }
+      a:hover { background: #c4b5fd; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>404</h1>
+      <p>Halaman yang Anda cari tidak ditemukan.</p>
+      <p>Redirecting to homepage...</p>
+      <a href="/portfolio/">Kembali ke Beranda / Return to Home</a>
+    </div>
+    <script>
+      window.location.replace('/portfolio/');
+    </script>
+  </body>
+</html>

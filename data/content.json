@@ -23,7 +23,8 @@
     "years_exp": "1",
     "status_color": "green",
     "formspree_id": "xvznzqdz",
-    "logo_text": "PH"
+    "logo_text": "PH",
+    "cv_url": ""
   },
   "projects": [
     {
@@ -175,6 +176,37 @@
       "cover_image_url": "",
       "preview_media_url": "",
       "preview_media_type": "auto"
+    },
+    {
+      "id": "mq57sp8c7n5azxe8j6g",
+      "created_at": 1780923378108,
+      "title": "Reinforced Concrete P–M Interaction Tool",
+      "title_id": "Program P–M Interaction Beton Bertulang",
+      "category": "Personal",
+      "status": "Completed",
+      "desc": "A Python-based Excel VBA tool for checking P–M interaction ratios of reinforced concrete column sections, including rectangular and circular sections.\n\nThe calculation process refers to the general concept of spColumn and design factors from ACI 318-19. The program uses two main approaches: Moment Capacity Method and Critical Capacity Method, supported by both analytical solver and fiber section solver.",
+      "desc_id": "Program Excel VBA berbasis Python untuk pemeriksaan rasio P–M Interaction pada elemen beton bertulang berbentuk persegi dan lingkaran.\n\nPerhitungan mengacu pada konsep spColumn dan faktor desain ACI 318-19. Program ini menggunakan dua pendekatan utama, yaitu Moment Capacity Method dan Critical Capacity Method, serta dua pendekatan solver: analytical solver dan fiber section solver.",
+      "cover_image_url": "https://drive.google.com/file/d/1AIfD_gdbB4h60cfSvH3KOZLlcrQlvRM5/view?usp=sharing",
+      "preview_media_url": "https://drive.google.com/file/d/1ABjP_63DzwCrKcyVmumEkyIV7QwFPmnq/view?usp=drive_link",
+      "preview_media_type": "auto",
+      "images": [
+        "https://drive.google.com/file/d/12mt0ut4acbJ0P6hI845BPbixFXHhf9l2/view?usp=drive_link",
+        "https://drive.google.com/file/d/1c8OCKN3QClfB9LC9ic7GtbHVskHeFycH/view?usp=drive_link"
+      ],
+      "tags": [
+        "Python",
+        "VBA Excel",
+        "ACI 318-19",
+        "P-M Interaction"
+      ],
+      "demo_url": "",
+      "github_url": "",
+      "order": 5,
+      "featured": false,
+      "hidden": false,
+      "project_value": 0,
+      "image_url": "https://drive.google.com/file/d/1AIfD_gdbB4h60cfSvH3KOZLlcrQlvRM5/view?usp=sharing",
+      "updated_at": 1780927265966
     }
   ],
   "experience": [
