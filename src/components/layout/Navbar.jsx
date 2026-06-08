@@ -7,6 +7,17 @@ function scrollTo(id) {
   if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
+const DEFAULT_LABELS = {
+  about:        { en: 'About Me',             id: 'Tentang Saya' },
+  projects:     { en: 'Projects',             id: 'Proyek' },
+  experience:   { en: 'Experience',           id: 'Pengalaman' },
+  skills:       { en: 'Skills',               id: 'Keahlian' },
+  education:    { en: 'Education',            id: 'Pendidikan' },
+  hobbies:      { en: 'Hobbies & Interests',  id: 'Hobi & Minat' },
+  publications: { en: 'Publications',         id: 'Publikasi / Karya' },
+  contact:      { en: 'Contact',              id: 'Kontak' },
+};
+
 export default function Navbar() {
   const { lang, toggle, idEnabled } = useLang();
   const { isSectionVisible, getSectionConfig, about } = useContent();
@@ -43,7 +54,9 @@ export default function Navbar() {
           <div className="nav-links">
             {visibleSections.map(id => {
               const conf = getSectionConfig(id);
-              const label = lang === 'id' ? conf.title_id : conf.title_en;
+              const label = lang === 'id' 
+                ? (conf.title_id || DEFAULT_LABELS[id]?.id) 
+                : (conf.title_en || DEFAULT_LABELS[id]?.en);
               return (
                 <button
                   key={id}
@@ -72,10 +85,20 @@ export default function Navbar() {
         </div>
       </nav>
       {menuOpen && (
-        <div className="nav-mobile-menu" onClick={() => setMenuOpen(false)}>
+        <div 
+          className="nav-mobile-menu" 
+          onClick={(e) => {
+            // Only close if the background is clicked, or if a nav-link is clicked
+            if (e.target.className === 'nav-mobile-menu' || e.target.classList.contains('nav-link')) {
+              setMenuOpen(false);
+            }
+          }}
+        >
           {visibleSections.map(id => {
             const conf = getSectionConfig(id);
-            const label = lang === 'id' ? conf.title_id : conf.title_en;
+            const label = lang === 'id' 
+              ? (conf.title_id || DEFAULT_LABELS[id]?.id) 
+              : (conf.title_en || DEFAULT_LABELS[id]?.en);
             return (
               <button
                 key={id}
@@ -88,7 +111,14 @@ export default function Navbar() {
             );
           })}
           {idEnabled && (
-            <button className="lang-toggle" onClick={e => { e.stopPropagation(); toggle(); }}>
+            <button 
+              className="lang-toggle" 
+              onClick={(e) => { 
+                e.stopPropagation(); 
+                toggle(); 
+              }}
+              style={{ marginTop: 'auto', alignSelf: 'flex-start' }}
+            >
               {lang === 'en' ? 'Bahasa Indonesia' : 'English'}
             </button>
           )}

@@ -123,14 +123,16 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   transition: all var(--t); cursor: pointer;
 }
 .lang-toggle:hover { border-color: var(--accent); color: var(--accent); }
-.nav-mobile-btn { display: none; color: var(--text-2); }
+.nav-mobile-btn { display: none; color: var(--text-2); cursor: pointer; align-items: center; justify-content: center; }
 .nav-mobile-menu {
   position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
   background: var(--bg); z-index: 99; padding: 24px;
   display: flex; flex-direction: column; gap: 8px;
   border-top: 1px solid var(--border);
+  overflow-y: auto;
 }
-.nav-mobile-menu .nav-link { font-size: 1.1rem; padding: 12px 16px; }
+.nav-mobile-menu .nav-link { font-size: 1.1rem; padding: 12px 16px; color: var(--text-1); border-bottom: 1px solid var(--border); border-radius: 0; }
+.nav-mobile-menu .nav-link:last-child { border-bottom: none; }
 
 /* ── HERO ───────────────────────────────────────── */
 .hero {
@@ -162,18 +164,46 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 }
 .hero-badge::before {
   content: ''; width: 7px; height: 7px; border-radius: 50%;
-  background: var(--success); animation: pulse 2s infinite;
+  display: none; flex-shrink: 0;
 }
-.hero-badge-alt {
-  color: var(--accent-l);
-  border-color: var(--accent-dim);
+.hero-badge-green {
+  color: #bbf7d0;
+  border-color: rgba(74,222,128,.34);
+  background: rgba(74,222,128,.09);
+  box-shadow: 0 0 0 1px rgba(74,222,128,.05), 0 0 24px rgba(74,222,128,.08);
 }
-.hero-badge-alt::before {
+.hero-badge-green::before {
+  display: block;
+  background: var(--success);
+  animation: pulse-green 1.8s ease-out infinite;
+}
+.hero-badge-blue::before {
+  display: block;
   background: var(--accent);
+  animation: pulse-blue 1.8s ease-out infinite;
 }
-@keyframes pulse {
-  0%,100% { opacity:1; transform:scale(1); box-shadow: 0 0 0 0 rgba(74,222,128,.4); }
-  50% { opacity:.8; transform:scale(1.1); box-shadow: 0 0 0 4px rgba(74,222,128,0); }
+.hero-badge-none::before {
+  display: none;
+}
+
+@keyframes pulse-green {
+  0% { opacity:1; transform:scale(1); box-shadow: 0 0 0 0 rgba(74,222,128,.48); }
+  70% { opacity:.9; transform:scale(1.12); box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+  100% { opacity:1; transform:scale(1); box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+}
+@keyframes pulse-blue {
+  0% { opacity:1; transform:scale(1); box-shadow: 0 0 0 0 rgba(167,139,250,.48); }
+  70% { opacity:.9; transform:scale(1.12); box-shadow: 0 0 0 8px rgba(167,139,250,0); }
+  100% { opacity:1; transform:scale(1); box-shadow: 0 0 0 0 rgba(167,139,250,0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
 }
 .hero-title {
   font-size: clamp(2.4rem, 5.5vw, 3.8rem); margin-bottom: 14px;
@@ -201,7 +231,12 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 .hero-stat:last-child { border-right: none; }
 .hero-stat-val {
   font-size: 1.5rem; font-weight: 800; color: var(--accent-l);
-  line-height: 1; margin-bottom: 4px; letter-spacing: -.02em;
+  line-height: 1.2; margin-bottom: 4px; letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.8rem;
 }
 .hero-stat-label { font-size: .72rem; color: var(--text-3); font-weight: 500; }
 
@@ -769,8 +804,9 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   .hero-title { font-size: clamp(1.8rem, 7vw, 2.4rem); }
   .hero-role { font-size: 1rem; }
   .hero-desc { font-size: .88rem; }
-  .hero-stat { flex: 1 0 100%; border-right: none; }
-  .hero-stat:nth-child(2) { border-bottom: 1px solid var(--border); }
+  .hero-stat { flex: 1 0 100%; border-right: none; border-bottom: 1px solid var(--border); }
+  .hero-stat:last-child { border-bottom: none; }
+  .hero-stat-val { font-size: 1.3rem; height: auto; padding: 4px 0; }
 
   .project-grid.cols-3 { grid-template-columns: 1fr; gap: 16px; }
   .filter-chip { font-size: .75rem; padding: 5px 14px; }

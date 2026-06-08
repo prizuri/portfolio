@@ -9,6 +9,7 @@ const EMPTY = {
   title: '', title_id: '', category: 'Professional', status: '',
   desc: '', desc_id: '', images: [], tags: '',
   demo_url: '', github_url: '', order: 0, featured: false, hidden: false,
+  project_value: 0,
 };
 
 export default function SectionProjects() {
@@ -140,6 +141,13 @@ export default function SectionProjects() {
           <div className="field-group">
             <label>Status</label>
             <input value={form.status} onChange={set('status')} placeholder="Completed / In Progress" />
+          </div>
+        </div>
+        <div className="form-grid-2">
+          <div className="field-group">
+            <label>Nilai Proyek (Angka saja, misal: 229000000000)</label>
+            <input type="number" value={form.project_value || 0} onChange={set('project_value')} placeholder="0" />
+            <span className="hint">Dalam IDR. Digunakan untuk statistik di Dashboard.</span>
           </div>
         </div>
         <div className="field-group">

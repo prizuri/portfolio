@@ -20,6 +20,8 @@ export default function SectionSite() {
   const [locID, setLocID] = useState(about?.location_id || '');
   const [subEN, setSubEN] = useState(about?.contact_subtitle_en || '');
   const [subID, setSubID] = useState(about?.contact_subtitle_id || '');
+  const [yearsExp, setYearsExp] = useState(about?.years_exp || '2');
+  const [statusColor, setStatusColor] = useState(about?.status_color || 'green');
   const [formspree, setFormspree] = useState(about?.formspree_id || '');
 
   function save() {
@@ -39,6 +41,8 @@ export default function SectionSite() {
       location_id: locID,
       contact_subtitle_en: subEN,
       contact_subtitle_id: subID,
+      years_exp: yearsExp,
+      status_color: statusColor,
       formspree_id: formspree
     });
     toast('Pengaturan situs disimpan!');
@@ -63,6 +67,18 @@ export default function SectionSite() {
               <label>Nama Lengkap</label>
               <input value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Prizuri Hartadi" />
             </div>
+          </div>
+          <div className="field-group" style={{ marginTop: 12 }}>
+            <label>Angka Tahun Pengalaman (tampil di Hero)</label>
+            <input value={yearsExp} onChange={e => setYearsExp(e.target.value)} placeholder="2" />
+          </div>
+          <div className="field-group" style={{ marginTop: 12 }}>
+            <label>Warna Lampu Status</label>
+            <select value={statusColor} onChange={e => setStatusColor(e.target.value)}>
+              <option value="green">Hijau (Aktif/Tersedia)</option>
+              <option value="blue">Biru (Muted/Bekerja)</option>
+              <option value="none">Tanpa Lampu</option>
+            </select>
           </div>
         </div>
 

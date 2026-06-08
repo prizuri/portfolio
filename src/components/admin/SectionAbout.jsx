@@ -26,6 +26,7 @@ export default function SectionAbout() {
 
   function save() {
     setAbout({ 
+      ...about,
       bio_en: bioEN, 
       bio_id: bioID, 
       photo_url: photoUrl, 

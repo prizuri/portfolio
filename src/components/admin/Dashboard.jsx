@@ -1,8 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useContent } from '../../contexts/ContentContext';
 import { useToast } from '../../contexts/ToastContext';
 import { KEYS, readData, writeData, DEFAULT_SECTION_CONFIG } from '../../utils/storage';
 import { imageUrl } from '../../utils/url';
+
+function Counter({ value, format = (v) => Math.round(v) }) {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, format);
+
+  useEffect(() => {
+    const animation = animate(count, value, { duration: 1.5, ease: 'easeOut' });
+    return () => animation.stop();
+  }, [value, count]);
+
+  return <motion.span>{rounded}</motion.span>;
+}
 
 export default function Dashboard() {
   const { projects, experience, skills, education, hobbies, publications,
@@ -29,26 +42,20 @@ export default function Dashboard() {
     setPublishing(true);
     const data = collectAllData();
     try {
-      // Menggunakan BASE_URL agar sesuai dengan config Vite
       const apiPath = `${import.meta.env.BASE_URL}api/save-content`.replace(/\/+/g, '/');
-      console.log('Publishing to:', apiPath);
-
       const res = await fetch(apiPath, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      
       if (res.ok) {
         writeData('ph_data_checksum', JSON.stringify(data));
         toast('content.json berhasil disimpan ke disk!');
       } else {
         const err = await res.json().catch(() => ({ error: 'Unknown status ' + res.status }));
-        console.error('Publish failed server-side:', err);
         toast(`Gagal: ${err.error || 'Server error'}`, 'error');
       }
     } catch (e) {
-      console.error('Publish network/client error:', e);
       toast('Server tidak tersedia atau koneksi terputus.', 'error');
     }
     setPublishing(false);
@@ -78,18 +85,7 @@ export default function Dashboard() {
   }
 
   function exportBackup() {
-    const data = {
-      about: readData(KEYS.about),
-      projects: readData(KEYS.projects) || [],
-      experience: readData(KEYS.experience) || [],
-      skills: readData(KEYS.skills) || [],
-      education: readData(KEYS.education) || [],
-      hobbies: readData(KEYS.hobbies) || [],
-      publications: readData(KEYS.publications) || [],
-      sections: readData(KEYS.sections) || [],
-      lang_settings: readData(KEYS.lang) || {},
-      exported_at: new Date().toISOString(),
-    };
+    const data = { ...collectAllData(), exported_at: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -129,6 +125,15 @@ export default function Dashboard() {
     return `${(total / 1024).toFixed(1)} KB / 5120 KB`;
   }
 
+  const totalProjectValue = projects.reduce((acc, p) => acc + (Number(p.project_value) || 0), 0);
+
+  function formatCurrency(v) {
+    if (v >= 1e12) return 'Rp' + (v / 1e12).toFixed(2) + ' T';
+    if (v >= 1e9) return 'Rp' + (v / 1e9).toFixed(2) + ' M';
+    if (v >= 1e6) return 'Rp' + (v / 1e6).toFixed(1) + ' Jt';
+    return 'Rp' + Math.round(v).toLocaleString('id-ID');
+  }
+
   const totalExpImages = experience.reduce((acc, x) => acc + (x.images?.length || 0), 0);
 
   return (
@@ -137,18 +142,22 @@ export default function Dashboard() {
         <h2>Dashboard</h2>
       </div>
 
-      <div className="stat-grid">
+      <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))' }}>
+        <div className="stat-card" style={{ gridColumn: 'span 2', background: 'var(--accent-dim2)', borderColor: 'var(--accent)' }}>
+          <div className="stat-val" style={{ fontSize: '2.2rem' }}>
+            <Counter value={totalProjectValue} format={formatCurrency} />
+          </div>
+          <div className="stat-label" style={{ color: 'var(--accent-l)', fontWeight: 600 }}>Total Nilai Project</div>
+        </div>
         {[
           ['Proyek',     projects.length],
           ['Pengalaman', experience.length],
           ['Keahlian',   skills.length],
           ['Pendidikan', education.length],
-          ['Hobi',       hobbies.length],
-          ['Publikasi',  publications.length],
-          ['Gambar Pengalaman', totalExpImages],
+          ['Gambar', totalExpImages],
         ].map(([label, val]) => (
           <div key={label} className="stat-card">
-            <div className="stat-val">{val}</div>
+            <div className="stat-val"><Counter value={val} /></div>
             <div className="stat-label">{label}</div>
           </div>
         ))}

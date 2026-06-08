@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion';
 import { useLang, T } from '../../contexts/LangContext';
 import { useContent } from '../../contexts/ContentContext';
+import { sanitizeHtml } from '../../utils/sanitizeHtml';
 
 export default function About() {
   const { lang } = useLang();
   const { about, getSectionConfig } = useContent();
 
   const bio = lang === 'id' ? about?.bio_id : about?.bio_en;
+  const safeBio = sanitizeHtml(bio);
   const hasPhoto = !!about?.photo_url;
   const config = getSectionConfig('about');
   const title = lang === 'id' ? config.title_id : config.title_en;
@@ -48,7 +50,7 @@ export default function About() {
             transition={{ duration: 0.45, delay: hasPhoto ? 0.1 : 0 }}
           >
             {bio
-              ? <div className="about-bio-content" dangerouslySetInnerHTML={{ __html: bio }} />
+              ? <div className="about-bio-content" dangerouslySetInnerHTML={{ __html: safeBio }} />
               : <p style={{ color: 'var(--text-3)' }}><T en="Bio coming soon." id="Bio segera hadir." /></p>
             }
           </motion.div>
