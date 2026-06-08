@@ -23,6 +23,7 @@ export default function SectionSite() {
   const [yearsExp, setYearsExp] = useState(about?.years_exp || '2');
   const [statusColor, setStatusColor] = useState(about?.status_color || 'green');
   const [formspree, setFormspree] = useState(about?.formspree_id || '');
+  const [cvUrl, setCvUrl] = useState(about?.cv_url || '');
 
   function save() {
     setAbout({
@@ -43,7 +44,8 @@ export default function SectionSite() {
       contact_subtitle_id: subID,
       years_exp: yearsExp,
       status_color: statusColor,
-      formspree_id: formspree
+      formspree_id: formspree,
+      cv_url: cvUrl
     });
     toast('Pengaturan situs disimpan!');
   }
@@ -79,6 +81,15 @@ export default function SectionSite() {
               <option value="blue">Biru (Muted/Bekerja)</option>
               <option value="none">Tanpa Lampu</option>
             </select>
+          </div>
+          <div className="field-group" style={{ marginTop: 12 }}>
+            <label>Link CV</label>
+            <input
+              value={cvUrl}
+              onChange={e => setCvUrl(e.target.value)}
+              placeholder="https://drive.google.com/..."
+            />
+            <span className="hint">Jika link CV kosong, tombol ketiga di Hero otomatis berubah menjadi Connect on LinkedIn memakai link LinkedIn dari menu Profil & Kontak.</span>
           </div>
         </div>
 

@@ -49,10 +49,10 @@ export default function SectionEducation() {
                   <button className="btn-order" disabled={i === 0} onClick={() => move(e.id, -1)}>▲</button>
                   <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(e.id, 1)}>▼</button>
                 </div>
-                <div className="item-info">
+                <button type="button" className="item-info item-info-clickable" onClick={() => { setForm({ ...EMPTY, ...e }); setModal('edit'); }} title="Klik untuk edit">
                   <div className="item-title">{e.degree_en} {e.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                   <div className="item-sub">{e.university} · {e.year_start}–{e.year_end}</div>
-                </div>
+                </button>
                 <div className="item-actions">
                   <button className="btn-edit" onClick={() => { setForm({ ...EMPTY, ...e }); setModal('edit'); }}>Edit</button>
                   <button className="btn-del" onClick={() => setConfirm(e.id)}>Hapus</button>

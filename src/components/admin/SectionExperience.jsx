@@ -64,10 +64,10 @@ export default function SectionExperience() {
                   <button className="btn-order" disabled={i === 0} onClick={() => move(x.id, -1)}>▲</button>
                   <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(x.id, 1)}>▼</button>
                 </div>
-                <div className="item-info">
+                <button type="button" className="item-info item-info-clickable" onClick={() => openEdit(x)} title="Klik untuk edit">
                   <div className="item-title">{x.title} {x.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                   <div className="item-sub">{x.company} · {x.year_start}–{x.year_end || 'Skrg'} {x.images?.length > 0 ? `· ${x.images.length} gambar` : ''}</div>
-                </div>
+                </button>
                 <div className="item-actions">
                   <button className="btn-edit" onClick={() => openEdit(x)}>Edit</button>
                   <button className="btn-del" onClick={() => setConfirm(x.id)}>Hapus</button>

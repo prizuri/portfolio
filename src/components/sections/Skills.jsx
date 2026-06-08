@@ -19,7 +19,7 @@ export default function Skills() {
     return Object.entries(map);
   }, [skills]);
 
-  if (!skills.length) return null;
+  if (!grouped.length) return null;
 
   return (
     <section id="skills" className="section">

@@ -64,10 +64,10 @@ export default function SectionHobbies() {
                   <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(h.id, 1)}>▼</button>
                 </div>
                 <span style={{ fontSize: '1.4rem' }}>{h.icon}</span>
-                <div className="item-info">
+                <button type="button" className="item-info item-info-clickable" onClick={() => { setForm({ ...EMPTY, ...h }); setModal('edit'); }} title="Klik untuk edit">
                   <div className="item-title">{h.name_en} {h.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                   {h.name_id && <div className="item-sub">{h.name_id}</div>}
-                </div>
+                </button>
                 <div className="item-actions">
                   <button className="btn-edit" onClick={() => { setForm({ ...EMPTY, ...h }); setModal('edit'); }}>Edit</button>
                   <button className="btn-del" onClick={() => setConfirm(h.id)}>Hapus</button>

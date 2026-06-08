@@ -3,6 +3,14 @@ import { readData, writeData, KEYS, DEFAULT_SECTION_CONFIG } from '../utils/stor
 
 const ContentContext = createContext(null);
 
+function normalizeSections(value) {
+  const input = Array.isArray(value) ? value : [];
+  return DEFAULT_SECTION_CONFIG.map(def => {
+    const saved = input.find(s => s?.id === def.id);
+    return saved ? { ...def, ...saved } : { ...def };
+  });
+}
+
 export function ContentProvider({ children }) {
   const [about,        setAboutRaw]   = useState(() => readData(KEYS.about));
   const [projects,     setProjectsRaw]= useState(() => readData(KEYS.projects) || []);
@@ -11,7 +19,7 @@ export function ContentProvider({ children }) {
   const [education,    setEduRaw]     = useState(() => readData(KEYS.education) || []);
   const [hobbies,      setHobbiesRaw] = useState(() => readData(KEYS.hobbies) || []);
   const [publications, setPubsRaw]    = useState(() => readData(KEYS.publications) || []);
-  const [sections,     setSectionsRaw]= useState(() => readData(KEYS.sections) || DEFAULT_SECTION_CONFIG);
+  const [sections,     setSectionsRaw]= useState(() => normalizeSections(readData(KEYS.sections)));
   const [langSettings, setLangRaw]    = useState(() => readData(KEYS.lang) || { id_enabled: true });
 
   const save = useCallback((key, setter, val) => {
@@ -26,7 +34,7 @@ export function ContentProvider({ children }) {
   const setEducation   = v => save(KEYS.education,    setEduRaw,     v);
   const setHobbies     = v => save(KEYS.hobbies,      setHobbiesRaw, v);
   const setPublications= v => save(KEYS.publications, setPubsRaw,    v);
-  const setSections    = v => save(KEYS.sections,     setSectionsRaw,v);
+  const setSections    = v => save(KEYS.sections,     setSectionsRaw, normalizeSections(v));
   const setLangSettings= v => save(KEYS.lang,         setLangRaw,    v);
 
   const refreshFromSource = useCallback(async () => {
@@ -37,15 +45,15 @@ export function ContentProvider({ children }) {
       if (!data || typeof data !== 'object') return;
 
       const current = JSON.stringify(data);
-      
-      if (data.about)        { writeData(KEYS.about,        data.about);        setAboutRaw(data.about); }
+
+      if (data.about || data.cv) { const nextAbout = { ...(data.about || {}), cv_url: data.about?.cv_url || data.cv?.cv_url || '' }; writeData(KEYS.about, nextAbout); setAboutRaw(nextAbout); }
       if (data.projects)     { writeData(KEYS.projects,     data.projects);     setProjectsRaw(data.projects); }
       if (data.experience)   { writeData(KEYS.experience,   data.experience);   setExpRaw(data.experience); }
       if (data.skills)       { writeData(KEYS.skills,       data.skills);       setSkillsRaw(data.skills); }
       if (data.education)    { writeData(KEYS.education,    data.education);    setEduRaw(data.education); }
       if (data.hobbies)      { writeData(KEYS.hobbies,      data.hobbies);      setHobbiesRaw(data.hobbies); }
       if (data.publications) { writeData(KEYS.publications, data.publications); setPubsRaw(data.publications); }
-      if (data.sections)     { writeData(KEYS.sections,     data.sections);     setSectionsRaw(data.sections); }
+      if (data.sections)     { const nextSections = normalizeSections(data.sections); writeData(KEYS.sections, nextSections); setSectionsRaw(nextSections); }
       if (data.lang_settings){ writeData(KEYS.lang,         data.lang_settings);setLangRaw(data.lang_settings); }
 
       writeData('ph_data_checksum', current);
@@ -67,19 +75,19 @@ export function ContentProvider({ children }) {
 
         const stored = readData('ph_data_checksum');
         const current = JSON.stringify(data);
-        
+
         // If checksum matches, we keep the local data (which might have unsaved admin edits)
         if (stored === current) return;
 
         // Otherwise, update local storage with server truth
-        if (data.about)        { writeData(KEYS.about,        data.about);        setAboutRaw(data.about); }
+        if (data.about || data.cv) { const nextAbout = { ...(data.about || {}), cv_url: data.about?.cv_url || data.cv?.cv_url || '' }; writeData(KEYS.about, nextAbout); setAboutRaw(nextAbout); }
         if (data.projects)     { writeData(KEYS.projects,     data.projects);     setProjectsRaw(data.projects); }
         if (data.experience)   { writeData(KEYS.experience,   data.experience);   setExpRaw(data.experience); }
         if (data.skills)       { writeData(KEYS.skills,       data.skills);       setSkillsRaw(data.skills); }
         if (data.education)    { writeData(KEYS.education,    data.education);    setEduRaw(data.education); }
         if (data.hobbies)      { writeData(KEYS.hobbies,      data.hobbies);      setHobbiesRaw(data.hobbies); }
         if (data.publications) { writeData(KEYS.publications, data.publications); setPubsRaw(data.publications); }
-        if (data.sections)     { writeData(KEYS.sections,     data.sections);     setSectionsRaw(data.sections); }
+          if (data.sections)     { const nextSections = normalizeSections(data.sections); writeData(KEYS.sections, nextSections); setSectionsRaw(nextSections); }
         if (data.lang_settings){ writeData(KEYS.lang,         data.lang_settings);setLangRaw(data.lang_settings); }
 
         writeData('ph_data_checksum', current);
@@ -88,7 +96,7 @@ export function ContentProvider({ children }) {
   }, []);
 
   function getSectionConfig(id) {
-    return sections.find(s => s.id === id) || { visible: true };
+    return sections.find(s => s.id === id) || DEFAULT_SECTION_CONFIG.find(s => s.id === id) || { visible: true };
   }
 
   function isSectionVisible(id) {

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AdminLogin from '../components/admin/AdminLogin';
 import AdminLayout from '../components/admin/AdminLayout';
 import Dashboard from '../components/admin/Dashboard';
@@ -27,21 +28,46 @@ const SECTIONS = {
   settings:     SectionSettings,
 };
 
+function getSectionFromPath(pathname) {
+  const parts = pathname.split('/').filter(Boolean);
+  const section = parts[1] || 'dashboard';
+  return SECTIONS[section] ? section : 'dashboard';
+}
+
 export default function Admin() {
   const [loggedIn, setLoggedIn] = useState(() => sessionStorage.getItem('ph_session') === '1');
-  const [active, setActive] = useState('dashboard');
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const active = useMemo(() => getSectionFromPath(location.pathname), [location.pathname]);
+  const Section = SECTIONS[active] || Dashboard;
+
+  useEffect(() => {
+    if (!loggedIn) return;
+    const parts = location.pathname.split('/').filter(Boolean);
+    const requested = parts[1];
+    if (requested && !SECTIONS[requested]) navigate('/f9xk7b', { replace: true });
+  }, [loggedIn, location.pathname, navigate]);
+
+  function handleLogin() {
+    sessionStorage.setItem('ph_session', '1');
+    setLoggedIn(true);
+  }
+
+  function handleNavigate(sectionId) {
+    navigate(sectionId === 'dashboard' ? '/f9xk7b' : `/f9xk7b/${sectionId}`);
+  }
 
   function logout() {
     sessionStorage.removeItem('ph_session');
     setLoggedIn(false);
+    navigate('/f9xk7b', { replace: true });
   }
 
-  if (!loggedIn) return <AdminLogin onLogin={() => setLoggedIn(true)} />;
-
-  const Section = SECTIONS[active] || Dashboard;
+  if (!loggedIn) return <AdminLogin onLogin={handleLogin} />;
 
   return (
-    <AdminLayout active={active} onNavigate={setActive} onLogout={logout}>
+    <AdminLayout active={active} onNavigate={handleNavigate} onLogout={logout}>
       <Section />
     </AdminLayout>
   );

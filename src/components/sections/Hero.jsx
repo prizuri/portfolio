@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useLang, T } from '../../contexts/LangContext';
 import { useContent } from '../../contexts/ContentContext';
+import { ensureUrl } from '../../utils/url';
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 32 },
@@ -43,7 +44,7 @@ function Counter({ value, format = (v) => Math.round(v) }) {
 
 export default function Hero() {
   const { lang } = useLang();
-  const { projects, experience, about } = useContent();
+  const { projects, experience, about, isSectionVisible } = useContent();
 
   const totalValue = projects.reduce((acc, p) => acc + (Number(p.project_value) || 0), 0);
 
@@ -84,9 +85,24 @@ export default function Hero() {
   ];
 
 
+  const cvUrl = String(about?.cv_url || '').trim();
+  const linkedinUrl = String(about?.linkedin || '').trim();
+  const profileActionUrl = cvUrl || linkedinUrl;
+  const profileActionLabel = cvUrl
+    ? 'Download CV'
+    : (lang === 'id' ? 'Connect on LinkedIn' : 'Connect on LinkedIn');
   const status = lang === 'id' ? about?.status_id : about?.status_en;
   const allowedStatusColors = ['green', 'blue', 'none'];
   const statusColor = allowedStatusColors.includes(about?.status_color) ? about.status_color : 'green';
+
+  function scrollToSection(primaryId, fallbackIds = []) {
+    const targetId = [primaryId, ...fallbackIds].find(id => isSectionVisible(id) && document.getElementById(id));
+    if (targetId) {
+      document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+  }
 
   return (
     <section id="hero" className="hero">
@@ -118,19 +134,17 @@ export default function Hero() {
         </motion.p>
 
         <motion.div className="hero-cta" variants={itemVariants}>
-          <button type="button" className="btn btn-primary" onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
-            {lang === 'id' ? about?.hero_cta1_id : about?.hero_cta1_en}
+          <button type="button" className="btn btn-primary" onClick={() => scrollToSection('projects', ['about', 'experience', 'skills'])}>
+            {(lang === 'id' ? about?.hero_cta1_id : about?.hero_cta1_en) || (lang === 'id' ? 'Lihat Proyek' : 'View Projects')}
           </button>
-          <button type="button" className="btn btn-outline" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
-            {lang === 'id' ? about?.hero_cta2_id : about?.hero_cta2_en}
+          <button type="button" className="btn btn-outline" onClick={() => scrollToSection('contact', ['about'])}>
+            {(lang === 'id' ? about?.hero_cta2_id : about?.hero_cta2_en) || (lang === 'id' ? 'Hubungi Saya' : 'Contact Me')}
           </button>
-          <button type="button" className="btn btn-outline" onClick={() => {
-            // Download CV - for now linking to LinkedIn as placeholder
-            // In production, this should link to an actual CV file
-            window.open('https://linkedin.com/in/prizurih/', '_blank', 'noopener');
-          }}>
-            {lang === 'id' ? 'Download CV' : 'Download CV'}
-          </button>
+          {profileActionUrl && (
+            <button type="button" className="btn btn-outline" onClick={() => window.open(ensureUrl(profileActionUrl), '_blank', 'noopener')}>
+              {profileActionLabel}
+            </button>
+          )}
         </motion.div>
 
         <motion.div

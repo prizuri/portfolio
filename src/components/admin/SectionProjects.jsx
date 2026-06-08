@@ -126,7 +126,7 @@ export default function SectionProjects() {
   }
 
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
-  const currentPreviewKind = mediaKind(form.preview_media_url, form.preview_media_type || 'auto');
+  const currentPreviewKind = mediaKind(form.preview_media_url, form.preview_media_type || 'auto', 'preview');
 
   return (
     <div>
@@ -142,14 +142,14 @@ export default function SectionProjects() {
             {sorted.map((p, i) => {
               const cover = p.cover_image_url || p.image_url;
               const galleryCount = p.images?.length || 0;
-              const previewKind = mediaKind(p.preview_media_url, p.preview_media_type || 'auto');
+              const previewKind = mediaKind(p.preview_media_url, p.preview_media_type || 'auto', 'preview');
               return (
                 <div key={p.id} className="item-card">
                   <div className="item-actions" style={{ flexShrink: 0, marginRight: 4 }}>
                     <button className="btn-order" disabled={i === 0} onClick={() => move(p.id, -1)}>▲</button>
                     <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(p.id, 1)}>▼</button>
                   </div>
-                  <div className="item-info">
+                  <button type="button" className="item-info item-info-clickable" onClick={() => openEdit(p)} title="Klik untuk edit">
                     <div className="item-title">{p.title} {p.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                     <div className="item-sub">
                       {p.category} {p.status ? `· ${p.status}` : ''}
@@ -157,7 +157,7 @@ export default function SectionProjects() {
                       {p.preview_media_url ? ` · preview ${previewKind}` : ''}
                       {galleryCount > 0 ? ` · ${galleryCount} galeri` : ''}
                     </div>
-                  </div>
+                  </button>
                   <div className="item-actions">
                     <button className="btn-edit" onClick={() => openEdit(p)}>Edit</button>
                     <button className="btn-del" onClick={() => setConfirm(p.id)}>Hapus</button>
@@ -241,7 +241,7 @@ export default function SectionProjects() {
                 <option value="image">GIF / Gambar</option>
                 <option value="video">Video MP4/WebM</option>
               </select>
-              <span className="hint">Saat ini terbaca sebagai: {currentPreviewKind}</span>
+              <span className="hint">Saat ini terbaca sebagai: {currentPreviewKind}. Jika memakai link Google Drive MP4, pilih Video MP4/WebM agar lebih aman.</span>
             </div>
           </div>
 

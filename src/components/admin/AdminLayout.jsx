@@ -57,7 +57,7 @@ export default function AdminLayout({ active, onNavigate, onLogout, children }) 
             </svg>
           </button>
           <span className="admin-topbar-title">{title}</span>
-          <a href="../" target="_blank" style={{ fontSize: '.78rem', color: 'var(--text-3)' }}>Lihat Website ↗</a>
+          <a href={import.meta.env.BASE_URL} target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--text-3)' }}>Lihat Website ↗</a>
         </div>
         <div className="admin-content">{children}</div>
       </main>

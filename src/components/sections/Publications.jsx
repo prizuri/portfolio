@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useLang, T } from '../../contexts/LangContext';
 import { useContent } from '../../contexts/ContentContext';
+import { ensureUrl } from '../../utils/url';
 
 export default function Publications() {
   const { lang } = useLang();
@@ -49,7 +50,7 @@ export default function Publications() {
                       <a className="btn btn-outline btn-sm" href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener noreferrer">DOI</a>
                     )}
                     {p.url && (
-                      <a className="btn btn-outline btn-sm" href={p.url} target="_blank" rel="noopener noreferrer">
+                      <a className="btn btn-outline btn-sm" href={ensureUrl(p.url)} target="_blank" rel="noopener noreferrer">
                         <T en="View" id="Lihat" />
                       </a>
                     )}

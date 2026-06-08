@@ -49,10 +49,10 @@ export default function SectionSkills() {
                   <button className="btn-order" disabled={i === 0} onClick={() => move(s.id, -1)}>▲</button>
                   <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(s.id, 1)}>▼</button>
                 </div>
-                <div className="item-info">
+                <button type="button" className="item-info item-info-clickable" onClick={() => { setForm({ ...EMPTY, ...s }); setModal('edit'); }} title="Klik untuk edit">
                   <div className="item-title">{s.name} {s.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                   <div className="item-sub">{s.category || 'General'}</div>
-                </div>
+                </button>
                 <div className="item-actions">
                   <button className="btn-edit" onClick={() => { setForm({ ...EMPTY, ...s }); setModal('edit'); }}>Edit</button>
                   <button className="btn-del" onClick={() => setConfirm(s.id)}>Hapus</button>

@@ -54,10 +54,10 @@ export default function SectionPublications() {
                   <button className="btn-order" disabled={i === 0} onClick={() => move(p.id, -1)}>▲</button>
                   <button className="btn-order" disabled={i === sorted.length - 1} onClick={() => move(p.id, 1)}>▼</button>
                 </div>
-                <div className="item-info">
+                <button type="button" className="item-info item-info-clickable" onClick={() => { setForm({ ...EMPTY, ...p }); setModal('edit'); }} title="Klik untuk edit">
                   <div className="item-title">{p.title} {p.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                   <div className="item-sub">{p.journal} {p.year ? `· ${p.year}` : ''}</div>
-                </div>
+                </button>
                 <div className="item-actions">
                   <button className="btn-edit" onClick={() => { setForm({ ...EMPTY, ...p }); setModal('edit'); }}>Edit</button>
                   <button className="btn-del" onClick={() => setConfirm(p.id)}>Hapus</button>

@@ -1,16 +1,20 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { readData } from '../utils/storage';
+import { useContent } from './ContentContext';
 
 const LangContext = createContext(null);
 
 export function LangProvider({ children }) {
-  const settings = readData('ph_lang_settings') || {};
-  const idEnabled = settings.id_enabled === true;
+  const { langSettings } = useContent();
+  const idEnabled = langSettings?.id_enabled === true;
   const [lang, setLang] = useState('en');
 
   useEffect(() => {
+    if (!idEnabled && lang !== 'en') {
+      setLang('en');
+      return;
+    }
     document.documentElement.lang = lang;
-  }, [lang]);
+  }, [lang, idEnabled]);
 
   function toggle() {
     if (!idEnabled) return;

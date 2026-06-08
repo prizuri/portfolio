@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useContent } from '../../contexts/ContentContext';
 import { useToast } from '../../contexts/ToastContext';
-import { KEYS, readData, writeData, DEFAULT_SECTION_CONFIG } from '../../utils/storage';
+import { KEYS, writeData } from '../../utils/storage';
 import { imageUrl } from '../../utils/url';
 
 function Counter({ value, format = (v) => Math.round(v) }) {
@@ -39,6 +39,10 @@ export default function Dashboard() {
   }
 
   async function publish() {
+    if (!import.meta.env.DEV) {
+      toast('Simpan ke file lokal hanya tersedia saat npm run dev. Gunakan Download content.json untuk deploy.', 'error');
+      return;
+    }
     setPublishing(true);
     const data = collectAllData();
     try {
@@ -50,13 +54,13 @@ export default function Dashboard() {
       });
       if (res.ok) {
         writeData('ph_data_checksum', JSON.stringify(data));
-        toast('content.json berhasil disimpan ke disk!');
+        toast('content.json berhasil disimpan ke public/data/content.json!');
       } else {
         const err = await res.json().catch(() => ({ error: 'Unknown status ' + res.status }));
         toast(`Gagal: ${err.error || 'Server error'}`, 'error');
       }
     } catch (e) {
-      toast('Server tidak tersedia atau koneksi terputus.', 'error');
+      toast('Server lokal tidak tersedia. Jalankan npm run dev, atau gunakan Download content.json.', 'error');
     }
     setPublishing(false);
   }
@@ -101,7 +105,11 @@ export default function Dashboard() {
     reader.onload = ev => {
       try {
         const data = JSON.parse(ev.target.result);
-        if (data.about)        localStorage.setItem(KEYS.about,        JSON.stringify(data.about));
+        const importedAbout = {
+          ...(data.about || {}),
+          cv_url: data.about?.cv_url || data.cv?.cv_url || ''
+        };
+        if (data.about || data.cv) localStorage.setItem(KEYS.about, JSON.stringify(importedAbout));
         if (data.projects)     localStorage.setItem(KEYS.projects,     JSON.stringify(data.projects));
         if (data.experience)   localStorage.setItem(KEYS.experience,   JSON.stringify(data.experience));
         if (data.skills)       localStorage.setItem(KEYS.skills,       JSON.stringify(data.skills));
@@ -183,7 +191,7 @@ export default function Dashboard() {
 
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
         <button className="btn-save" onClick={publish} disabled={publishing} style={{ opacity: publishing ? '.6' : '1' }}>
-          {publishing ? 'Menyimpan...' : 'Publish ke File'}
+          {publishing ? 'Menyimpan...' : 'Simpan ke File Lokal (Dev)'}
         </button>
         <button className="btn-outline btn-sm" onClick={download} style={{ padding: '9px 20px' }}>
           Download content.json
@@ -201,7 +209,7 @@ export default function Dashboard() {
       <div className="info-panel" style={{ marginTop: 16 }}>
         <h4>Cara Publish</h4>
         <ol style={{ color: 'var(--text-2)', fontSize: '.85rem', paddingLeft: 20, lineHeight: 2 }}>
-          <li><strong>Publish ke File</strong> (hanya saat <code>npm run dev</code>) → langsung simpan ke <code>public/data/content.json</code></li>
+          <li><strong>Simpan ke File Lokal (Dev)</strong> hanya aktif saat <code>npm run dev</code> → langsung simpan ke <code>public/data/content.json</code></li>
           <li><strong>Download content.json</strong> (selalu bisa) → simpan manual ke <code>public/data/</code>, lalu push ke GitHub</li>
           <li>GitHub Actions otomatis build & deploy dalam ~1-2 menit</li>
         </ol>
