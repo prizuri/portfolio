@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useContent } from '../../contexts/ContentContext';
 import { useToast } from '../../contexts/ToastContext';
 import { genId } from '../../utils/storage';
-import { ensureUrl, mediaKind } from '../../utils/url';
+import { ensureUrl, mediaKind, imageUrl } from '../../utils/url';
 import Modal from '../ui/Modal';
+import ImageUploadButton from './ImageUploadButton';
 
 const EMPTY = {
   title: '', title_id: '', category: 'Professional', status: '',
@@ -78,6 +79,16 @@ export default function SectionProjects() {
 
   function removeGalleryImage(i) {
     setForm(f => ({ ...f, images: (f.images || []).filter((_, idx) => idx !== i) }));
+  }
+
+  function moveGalleryImage(i, dir) {
+    setForm(f => {
+      const arr = [...(f.images || [])];
+      const j = i + dir;
+      if (j < 0 || j >= arr.length) return f;
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+      return { ...f, images: arr };
+    });
   }
 
   function save() {
@@ -224,7 +235,10 @@ export default function SectionProjects() {
         <div className="admin-media-box">
           <div className="field-group">
             <label>Cover Image / Gambar Utama</label>
-            <input value={form.cover_image_url} onChange={set('cover_image_url')} placeholder="https://.../screenshot.webp" />
+            <div className="media-input-row">
+              <input value={form.cover_image_url} onChange={set('cover_image_url')} placeholder="https://.../screenshot.webp" />
+              <ImageUploadButton onUploaded={url => setForm(f => ({ ...f, cover_image_url: url }))} />
+            </div>
             <span className="hint">Dipakai sebagai gambar utama di card project. Sebaiknya screenshot statis, bukan GIF.</span>
           </div>
 
@@ -250,13 +264,18 @@ export default function SectionProjects() {
             <div className="media-input-row">
               <input value={galleryInput} onChange={e => setGalleryInput(e.target.value)} placeholder="https://..." />
               <button className="btn-save" onClick={addGalleryImage} style={{ padding: '9px 14px', fontSize: '.8rem' }}>Tambah</button>
+              <ImageUploadButton onUploaded={url => setForm(f => ({ ...f, images: uniqueUrls([...(f.images || []), url]) }))} />
             </div>
             <span className="hint">Galeri akan tampil ketika gambar project diklik. Tambahkan screenshot fitur, bukan animasi terlalu berat.</span>
             {(form.images?.length || 0) > 0 && (
               <div className="media-url-list">
                 {form.images.map((url, i) => (
                   <div key={`${url}-${i}`} className="media-url-item">
-                    <span>{url}</span>
+                    <span style={{ color: 'var(--text-3)', fontWeight: 600, marginRight: 6 }}>{i + 1}</span>
+                    <img src={imageUrl(url)} alt="" style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: 4, border: '1px solid var(--border)', flexShrink: 0 }} />
+                    <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{url}</span>
+                    <button className="btn-order" disabled={i === 0} onClick={() => moveGalleryImage(i, -1)} title="Naik" style={{ padding: '3px 7px', fontSize: '.72rem' }}>▲</button>
+                    <button className="btn-order" disabled={i === form.images.length - 1} onClick={() => moveGalleryImage(i, 1)} title="Turun" style={{ padding: '3px 7px', fontSize: '.72rem' }}>▼</button>
                     <button className="btn-del" onClick={() => removeGalleryImage(i)} style={{ padding: '3px 8px', fontSize: '.72rem' }}>Hapus</button>
                   </div>
                 ))}

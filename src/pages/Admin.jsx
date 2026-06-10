@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { isSupabaseConfigured, getSession, signOut } from '../utils/supabase';
 import AdminLogin from '../components/admin/AdminLogin';
 import AdminLayout from '../components/admin/AdminLayout';
 import Dashboard from '../components/admin/Dashboard';
@@ -35,9 +36,17 @@ function getSectionFromPath(pathname) {
 }
 
 export default function Admin() {
-  const [loggedIn, setLoggedIn] = useState(() => sessionStorage.getItem('ph_session') === '1');
+  const [loggedIn, setLoggedIn] = useState(() =>
+    isSupabaseConfigured ? false : sessionStorage.getItem('ph_session') === '1'
+  );
   const location = useLocation();
   const navigate = useNavigate();
+
+  // With Supabase, trust the persisted auth session instead of sessionStorage.
+  useEffect(() => {
+    if (!isSupabaseConfigured) return;
+    getSession().then(s => setLoggedIn(!!s));
+  }, []);
 
   const active = useMemo(() => getSectionFromPath(location.pathname), [location.pathname]);
   const Section = SECTIONS[active] || Dashboard;
@@ -50,7 +59,7 @@ export default function Admin() {
   }, [loggedIn, location.pathname, navigate]);
 
   function handleLogin() {
-    sessionStorage.setItem('ph_session', '1');
+    if (!isSupabaseConfigured) sessionStorage.setItem('ph_session', '1');
     setLoggedIn(true);
   }
 
@@ -60,6 +69,7 @@ export default function Admin() {
 
   function logout() {
     sessionStorage.removeItem('ph_session');
+    if (isSupabaseConfigured) signOut();
     setLoggedIn(false);
     navigate('/f9xk7b', { replace: true });
   }

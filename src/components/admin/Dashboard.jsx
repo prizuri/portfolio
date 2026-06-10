@@ -4,6 +4,7 @@ import { useContent } from '../../contexts/ContentContext';
 import { useToast } from '../../contexts/ToastContext';
 import { KEYS, writeData } from '../../utils/storage';
 import { imageUrl } from '../../utils/url';
+import { isSupabaseConfigured, saveContent } from '../../utils/supabase';
 
 function Counter({ value, format = (v) => Math.round(v) }) {
   const count = useMotionValue(0);
@@ -23,6 +24,7 @@ export default function Dashboard() {
   const toast = useToast();
   const [publishing, setPublishing] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [savingCloud, setSavingCloud] = useState(false);
 
   function collectAllData() {
     return {
@@ -36,6 +38,19 @@ export default function Dashboard() {
       sections:      sections || [],
       lang_settings: langSettings || { id_enabled: true },
     };
+  }
+
+  async function publishCloud() {
+    setSavingCloud(true);
+    const data = collectAllData();
+    try {
+      await saveContent(data);
+      writeData('ph_data_checksum', JSON.stringify(data));
+      toast('Tersimpan ke Supabase! Perubahan langsung tampil di website.');
+    } catch (e) {
+      toast(`Gagal menyimpan ke Supabase: ${e.message}`, 'error');
+    }
+    setSavingCloud(false);
   }
 
   async function publish() {
@@ -190,6 +205,11 @@ export default function Dashboard() {
       </div>
 
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
+        {isSupabaseConfigured && (
+          <button className="btn-save" onClick={publishCloud} disabled={savingCloud} style={{ opacity: savingCloud ? '.6' : '1' }}>
+            {savingCloud ? 'Menyimpan...' : '☁ Simpan ke Supabase'}
+          </button>
+        )}
         <button className="btn-save" onClick={publish} disabled={publishing} style={{ opacity: publishing ? '.6' : '1' }}>
           {publishing ? 'Menyimpan...' : 'Simpan ke File Lokal (Dev)'}
         </button>
@@ -208,11 +228,19 @@ export default function Dashboard() {
 
       <div className="info-panel" style={{ marginTop: 16 }}>
         <h4>Cara Publish</h4>
-        <ol style={{ color: 'var(--text-2)', fontSize: '.85rem', paddingLeft: 20, lineHeight: 2 }}>
-          <li><strong>Simpan ke File Lokal (Dev)</strong> hanya aktif saat <code>npm run dev</code> → langsung simpan ke <code>public/data/content.json</code></li>
-          <li><strong>Download content.json</strong> (selalu bisa) → simpan manual ke <code>public/data/</code>, lalu push ke GitHub</li>
-          <li>GitHub Actions otomatis build & deploy dalam ~1-2 menit</li>
-        </ol>
+        {isSupabaseConfigured ? (
+          <ol style={{ color: 'var(--text-2)', fontSize: '.85rem', paddingLeft: 20, lineHeight: 2 }}>
+            <li><strong>☁ Simpan ke Supabase</strong> → perubahan langsung live di website, tanpa git push.</li>
+            <li>Upload gambar lewat tombol <strong>⬆ Upload</strong> di Pengalaman / Proyek — file tersimpan di Supabase Storage.</li>
+            <li>Tombol lain (File Lokal / Download) hanya cadangan; tidak perlu lagi untuk update biasa.</li>
+          </ol>
+        ) : (
+          <ol style={{ color: 'var(--text-2)', fontSize: '.85rem', paddingLeft: 20, lineHeight: 2 }}>
+            <li><strong>Simpan ke File Lokal (Dev)</strong> hanya aktif saat <code>npm run dev</code> → langsung simpan ke <code>public/data/content.json</code></li>
+            <li><strong>Download content.json</strong> (selalu bisa) → simpan manual ke <code>public/data/</code>, lalu push ke GitHub</li>
+            <li>GitHub Actions otomatis build & deploy dalam ~1-2 menit</li>
+          </ol>
+        )}
       </div>
     </div>
   );

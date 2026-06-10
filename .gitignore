@@ -16,3 +16,8 @@ desktop.ini
 # Node
 node_modules/
 dist/
+
+# Env / secrets (jangan commit kunci Supabase)
+.env
+.env.local
+.env.*.local

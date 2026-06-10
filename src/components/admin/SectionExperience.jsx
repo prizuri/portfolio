@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useContent } from '../../contexts/ContentContext';
 import { useToast } from '../../contexts/ToastContext';
 import { genId } from '../../utils/storage';
+import { imageUrl } from '../../utils/url';
 import Modal from '../ui/Modal';
+import ImageUploadButton from './ImageUploadButton';
 
 const EMPTY = { title: '', title_id: '', company: '', year_start: '', year_end: '', desc: '', desc_id: '', icon: '', order: 0, images: [], hidden: false };
 
@@ -29,6 +31,16 @@ export default function SectionExperience() {
 
   function removeImg(i) {
     setForm(f => ({ ...f, images: f.images.filter((_, idx) => idx !== i) }));
+  }
+
+  function moveImg(i, dir) {
+    setForm(f => {
+      const arr = [...(f.images || [])];
+      const j = i + dir;
+      if (j < 0 || j >= arr.length) return f;
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+      return { ...f, images: arr };
+    });
   }
 
   function save() {
@@ -94,12 +106,17 @@ export default function SectionExperience() {
           <div style={{ display: 'flex', gap: 8 }}>
             <input value={imgInput} onChange={e => setImgInput(e.target.value)} placeholder="https://..." style={{ flex: 1 }} />
             <button className="btn-save" onClick={addImg} style={{ padding: '9px 14px', fontSize: '.8rem' }}>Tambah</button>
+            <ImageUploadButton onUploaded={url => setForm(f => ({ ...f, images: [...(f.images || []), url] }))} />
           </div>
           {(form.images?.length || 0) > 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 8 }}>
               {form.images.map((url, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '.82rem' }}>
+                  <span style={{ color: 'var(--text-3)', fontWeight: 600, width: 18, textAlign: 'center', flexShrink: 0 }}>{i + 1}</span>
+                  <img src={imageUrl(url)} alt="" style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: 4, border: '1px solid var(--border)', flexShrink: 0 }} />
                   <span style={{ color: 'var(--text-3)', fontFamily: 'monospace', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{url}</span>
+                  <button className="btn-order" disabled={i === 0} onClick={() => moveImg(i, -1)} title="Naik" style={{ padding: '3px 7px', fontSize: '.72rem' }}>▲</button>
+                  <button className="btn-order" disabled={i === form.images.length - 1} onClick={() => moveImg(i, 1)} title="Turun" style={{ padding: '3px 7px', fontSize: '.72rem' }}>▼</button>
                   <button className="btn-del" onClick={() => removeImg(i)} style={{ padding: '3px 8px', fontSize: '.72rem' }}>Hapus</button>
                 </div>
               ))}
