@@ -5,7 +5,7 @@
 
 # File CV dan portfolio PDF (host di Google Drive saja)
 *.pdf
-
+*.rar
 # File sistem
 .DS_Store
 Thumbs.db
