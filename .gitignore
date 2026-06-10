@@ -1,6 +1,7 @@
 # File yang tidak perlu di-upload ke GitHub publik
 
 # Dokumentasi pribadi
+*.md
 DOKUMENTASI.md
 RECOVERY.md
 

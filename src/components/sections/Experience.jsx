@@ -51,25 +51,38 @@ function SmartTimelineImage({ src, alt }) {
     return null;
   }
 
+  const currentSrc = candidates[idx];
+
   return (
-    <motion.img
+    <motion.div
       key={`${src}-${idx}`}
-      className="timeline-img"
-      src={candidates[idx]}
-      alt={alt || ''}
-      loading="lazy"
+      className="timeline-img timeline-img-fit"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      onError={() => {
-        if (idx < candidates.length - 1) {
-          setIdx(idx + 1);
-        } else {
-          setFailed(true);
-        }
-      }}
-    />
+    >
+      <img
+        className="timeline-img-bg"
+        src={currentSrc}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+      />
+      <img
+        className="timeline-img-main"
+        src={currentSrc}
+        alt={alt || ''}
+        loading="lazy"
+        onError={() => {
+          if (idx < candidates.length - 1) {
+            setIdx(idx + 1);
+          } else {
+            setFailed(true);
+          }
+        }}
+      />
+    </motion.div>
   );
 }
 

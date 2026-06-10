@@ -156,32 +156,6 @@
       "project_value": 0
     },
     {
-      "id": "proj5",
-      "order": 4,
-      "created_at": 1700000005000,
-      "updated_at": 1780871557632,
-      "title": "Priz Wallet – Personal Finance App",
-      "title_id": "Priz Wallet – Aplikasi Keuangan Pribadi",
-      "category": "Personal",
-      "status": "Live",
-      "desc": "A personal finance web application built with modern web technologies for tracking income, expenses, and financial goals.",
-      "desc_id": "Aplikasi web keuangan pribadi yang dibangun dengan teknologi web modern untuk melacak pemasukan, pengeluaran, dan tujuan keuangan.",
-      "image_url": "",
-      "tags": [
-        "Web App",
-        "Finance",
-        "React"
-      ],
-      "demo_url": "https://priz-wallet.vercel.app",
-      "github_url": "",
-      "hidden": true,
-      "images": [],
-      "featured": false,
-      "cover_image_url": "",
-      "preview_media_url": "",
-      "preview_media_type": "auto"
-    },
-    {
       "id": "mq57sp8c7n5azxe8j6g",
       "created_at": 1780923378108,
       "title": "Reinforced Concrete P–M Interaction Tool",
@@ -205,12 +179,80 @@
       ],
       "demo_url": "",
       "github_url": "",
-      "order": 5,
+      "order": 4,
       "featured": false,
       "hidden": false,
       "project_value": 0,
       "image_url": "https://drive.google.com/file/d/1AIfD_gdbB4h60cfSvH3KOZLlcrQlvRM5/view?usp=sharing",
       "updated_at": 1780935835051
+    },
+    {
+      "id": "mq7kspjii5qiy14pkff",
+      "created_at": 1781066145870,
+      "title": "Steel Checking Calculator (Based on AISC)",
+      "title_id": "Kalkulator Pengecekan Baja",
+      "category": "Personal",
+      "status": "Developing",
+      "desc": "",
+      "desc_id": "",
+      "cover_image_url": "https://drive.google.com/file/d/1TZ-LwiWKEDTbsZvSH3sq32j-ZLeXQDwR/view?usp=drive_link",
+      "preview_media_url": "https://drive.google.com/file/d/15Q8P5u4bxi_fdRQB2ybeBBFdg0j2nb44/view?usp=drive_link",
+      "preview_media_type": "auto",
+      "images": [
+        "https://drive.google.com/file/d/1tzb66lpZ_NPhzwFKgXM19XCOBCt-OcDD/view?usp=drive_link",
+        "https://drive.google.com/file/d/1xnghwXiOslg9C-H_vvGF1PyRUjqOcW28/view?usp=drive_link",
+        "https://drive.google.com/file/d/1n045G74DKP6f4kJ2Fobtk9Fp5o_1nQ9n/view?usp=drive_link"
+      ],
+      "tags": [
+        "Steel Calculator",
+        "SAP2000/ETABS Import",
+        "Industrial",
+        "Crane"
+      ],
+      "demo_url": "",
+      "github_url": "",
+      "order": 5,
+      "featured": false,
+      "hidden": false,
+      "project_value": 0,
+      "image_url": "https://drive.google.com/file/d/1TZ-LwiWKEDTbsZvSH3sq32j-ZLeXQDwR/view?usp=drive_link",
+      "updated_at": 1781090339457
+    },
+    {
+      "id": "proj5",
+      "order": 6,
+      "created_at": 1700000005000,
+      "updated_at": 1781090324811,
+      "title": "Priz Wallet – Personal Finance App",
+      "title_id": "Priz Wallet – Aplikasi Keuangan Pribadi",
+      "category": "Personal",
+      "status": "Live",
+      "desc": "A personal finance web application built with modern web technologies for tracking income, expenses, and financial goals.",
+      "desc_id": "Aplikasi web keuangan pribadi yang dibangun dengan teknologi web modern untuk melacak pemasukan, pengeluaran, dan tujuan keuangan.",
+      "image_url": "https://drive.google.com/file/d/1I7s_93Fndp9xxoUqGeOtV-UtAt2_RoiD/view?usp=drive_link",
+      "tags": [
+        "Web App",
+        "Finance",
+        "Spreadsheet",
+        "Telegram Bot",
+        "React"
+      ],
+      "demo_url": "",
+      "github_url": "",
+      "hidden": false,
+      "images": [
+        "https://drive.google.com/file/d/1JDJZTsllMurerCmiGVkfwJMJu1lYHfht/view?usp=drive_link",
+        "https://drive.google.com/file/d/1lki4IRkMVw_DAjFEAaQqyVn97q40gvz-/view?usp=drive_link",
+        "https://drive.google.com/file/d/1-3GnOFVjHGiCv3lidrfHn80zDgck0YzZ/view?usp=drive_link",
+        "https://drive.google.com/file/d/1N8NajFicF4VBqLBAWjwoNP4gy2Ks4EZW/view?usp=drive_link",
+        "https://drive.google.com/file/d/1yVPuq-O6L3mfmK5auBFTzGgnhw48AGjO/view?usp=drive_link",
+        "https://drive.google.com/file/d/18gdqe6Gyz2Tir7pku_Tw-mjVEfEjSOt4/view?usp=drive_link"
+      ],
+      "featured": false,
+      "cover_image_url": "https://drive.google.com/file/d/1I7s_93Fndp9xxoUqGeOtV-UtAt2_RoiD/view?usp=drive_link",
+      "preview_media_url": "https://drive.google.com/file/d/17Sf-eq8S4q2BpWHA69P6rd2iNGeqY4R8/view?usp=drive_link",
+      "preview_media_type": "auto",
+      "project_value": 0
     }
   ],
   "experience": [

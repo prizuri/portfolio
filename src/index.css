@@ -391,7 +391,38 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 }
 .timeline-img-wrap.clickable { cursor: pointer; }
 .timeline-img {
-  width: 100%; aspect-ratio: 16/9; object-fit: cover;
+  width: 100%; aspect-ratio: 16/9;
+  display: block;
+}
+.timeline-img-fit {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-card-2);
+}
+.timeline-img-fit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 42%, rgba(0,0,0,.16));
+  pointer-events: none;
+  z-index: 2;
+}
+.timeline-img-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(18px);
+  transform: scale(1.12);
+  opacity: .45;
+}
+.timeline-img-main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   display: block;
 }
 .timeline-img-placeholder {
@@ -861,7 +892,11 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   min-height: min(52vw, 560px);
   border: 0;
 }
-.lightbox-img { display: block; }
+.lightbox-img {
+  display: block;
+  object-fit: contain;
+  background: rgba(17,17,34,.7);
+}
 .lightbox-label {
   position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
   background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
