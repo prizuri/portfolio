@@ -3,11 +3,12 @@ import { useContent } from '../../contexts/ContentContext';
 import { useToast } from '../../contexts/ToastContext';
 import { genId } from '../../utils/storage';
 import { ensureUrl, mediaKind, imageUrl } from '../../utils/url';
+import { getProjectCategories } from '../../utils/categories';
 import Modal from '../ui/Modal';
 import ImageUploadButton from './ImageUploadButton';
 
 const EMPTY = {
-  title: '', title_id: '', category: 'Professional', status: '',
+  title: '', title_id: '', categories: ['Professional'], status: '',
   desc: '', desc_id: '', cover_image_url: '', preview_media_url: '', preview_media_type: 'auto',
   images: [], tags: '', demo_url: '', github_url: '', order: 0, featured: false, hidden: false,
   project_value: 0,
@@ -40,6 +41,7 @@ function normalizeProjectForForm(p = {}) {
   return {
     ...EMPTY,
     ...p,
+    categories: getProjectCategories(p),
     cover_image_url: cover,
     preview_media_url: p.preview_media_url || '',
     preview_media_type: p.preview_media_type || 'auto',
@@ -62,7 +64,7 @@ export default function SectionProjects() {
   // Gabungkan kategori tersimpan dengan kategori yang masih dipakai proyek lama.
   const categoryOptions = [...new Set([
     ...(categories || []),
-    ...projects.map(p => p.category).filter(Boolean),
+    ...projects.flatMap(getProjectCategories),
   ])];
 
   function addCategory() {
@@ -80,6 +82,16 @@ export default function SectionProjects() {
   function removeCategory(name) {
     setCategories((categories || []).filter(c => c !== name));
     toast('Kategori dihapus.');
+  }
+
+  function toggleCategory(name) {
+    setForm(f => {
+      const current = f.categories || [];
+      const next = current.includes(name)
+        ? current.filter(c => c !== name)
+        : [...current, name];
+      return { ...f, categories: next };
+    });
   }
 
   function openAdd() {
@@ -210,7 +222,7 @@ export default function SectionProjects() {
                   <button type="button" className="item-info item-info-clickable" onClick={() => openEdit(p)} title="Klik untuk edit">
                     <div className="item-title">{p.title} {p.hidden ? <span className="badge-hidden">Hidden</span> : ''}</div>
                     <div className="item-sub">
-                      {p.category} {p.status ? `· ${p.status}` : ''}
+                      {getProjectCategories(p).join(', ')} {p.status ? `· ${p.status}` : ''}
                       {cover ? ' · cover' : ''}
                       {p.preview_media_url ? ` · preview ${previewKind}` : ''}
                       {galleryCount > 0 ? ` · ${galleryCount} galeri` : ''}
@@ -251,10 +263,19 @@ export default function SectionProjects() {
         </div>
         <div className="form-grid-2">
           <div className="field-group">
-            <label>Kategori</label>
-            <select value={form.category} onChange={set('category')}>
-              {categoryOptions.map(c => <option key={c}>{c}</option>)}
-            </select>
+            <label>Kategori (bisa pilih lebih dari satu)</label>
+            <div className="projects-filter" style={{ justifyContent: 'flex-start', marginBottom: 0 }}>
+              {categoryOptions.map(c => (
+                <button
+                  key={c}
+                  type="button"
+                  className={`filter-chip${(form.categories || []).includes(c) ? ' active' : ''}`}
+                  onClick={() => toggleCategory(c)}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
           </div>
           <div className="field-group">
             <label>Status</label>

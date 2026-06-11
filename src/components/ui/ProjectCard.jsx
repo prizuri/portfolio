@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLang } from '../../contexts/LangContext';
 import { imageUrl, imageUrls, isDirectVideoUrl, isGoogleDriveFileUrl, mediaKind, mediaUrl } from '../../utils/url';
+import { getProjectCategories } from '../../utils/categories';
 import Lightbox from './Lightbox';
 
 function uniqueUrls(urls) {
@@ -241,8 +242,8 @@ export default function ProjectCard({ project: p, index = 0, featured = false })
         )}
         <div className="project-body">
           <div className="project-meta">
-            {p.category && <span className="project-cat">{p.category}</span>}
-            {p.status    && <span className="project-status">{p.status}</span>}
+            {getProjectCategories(p).map(c => <span key={c} className="project-cat">{c}</span>)}
+            {p.status && <span className="project-status">{p.status}</span>}
           </div>
           <h3 className="project-title">{title}</h3>
           {desc && <p className="project-desc">{desc}</p>}

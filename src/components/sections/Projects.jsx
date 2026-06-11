@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLang, T } from '../../contexts/LangContext';
 import { useContent } from '../../contexts/ContentContext';
+import { getProjectCategories } from '../../utils/categories';
 import ProjectCard from '../ui/ProjectCard';
 
 export default function Projects() {
@@ -16,11 +17,11 @@ export default function Projects() {
   [projects]);
 
   const categories = useMemo(() => {
-    const cats = [...new Set(sorted.map(p => p.category).filter(Boolean))];
+    const cats = [...new Set(sorted.flatMap(getProjectCategories))];
     return ['All', ...cats];
   }, [sorted]);
 
-  const visible = filter === 'All' ? sorted : sorted.filter(p => p.category === filter);
+  const visible = filter === 'All' ? sorted : sorted.filter(p => getProjectCategories(p).includes(filter));
   const [featured, ...rest] = visible;
 
   if (!sorted.length) return null;
