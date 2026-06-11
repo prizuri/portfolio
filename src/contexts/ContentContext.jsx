@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { readData, writeData, KEYS, DEFAULT_SECTION_CONFIG } from '../utils/storage';
+import { readData, writeData, KEYS, DEFAULT_SECTION_CONFIG, DEFAULT_CATEGORIES } from '../utils/storage';
 import { isSupabaseConfigured, fetchContent } from '../utils/supabase';
 
 const ContentContext = createContext(null);
@@ -21,6 +21,7 @@ export function ContentProvider({ children }) {
   const [hobbies,      setHobbiesRaw] = useState(() => readData(KEYS.hobbies) || []);
   const [publications, setPubsRaw]    = useState(() => readData(KEYS.publications) || []);
   const [sections,     setSectionsRaw]= useState(() => normalizeSections(readData(KEYS.sections)));
+  const [categories,   setCategoriesRaw] = useState(() => readData(KEYS.categories) || DEFAULT_CATEGORIES);
   const [langSettings, setLangRaw]    = useState(() => readData(KEYS.lang) || { id_enabled: true });
 
   const save = useCallback((key, setter, val) => {
@@ -36,6 +37,7 @@ export function ContentProvider({ children }) {
   const setHobbies     = v => save(KEYS.hobbies,      setHobbiesRaw, v);
   const setPublications= v => save(KEYS.publications, setPubsRaw,    v);
   const setSections    = v => save(KEYS.sections,     setSectionsRaw, normalizeSections(v));
+  const setCategories  = v => save(KEYS.categories,   setCategoriesRaw, v);
   const setLangSettings= v => save(KEYS.lang,         setLangRaw,    v);
 
   // Write a full content object into localStorage + state.
@@ -48,6 +50,7 @@ export function ContentProvider({ children }) {
     if (data.hobbies)      { writeData(KEYS.hobbies,      data.hobbies);      setHobbiesRaw(data.hobbies); }
     if (data.publications) { writeData(KEYS.publications, data.publications); setPubsRaw(data.publications); }
     if (data.sections)     { const nextSections = normalizeSections(data.sections); writeData(KEYS.sections, nextSections); setSectionsRaw(nextSections); }
+    if (data.categories)   { writeData(KEYS.categories,   data.categories);   setCategoriesRaw(data.categories); }
     if (data.lang_settings){ writeData(KEYS.lang,         data.lang_settings);setLangRaw(data.lang_settings); }
     writeData('ph_data_checksum', JSON.stringify(data));
   }, []);
@@ -112,6 +115,7 @@ export function ContentProvider({ children }) {
       hobbies, setHobbies,
       publications, setPublications,
       sections, setSections,
+      categories, setCategories,
       langSettings, setLangSettings,
       getSectionConfig, isSectionVisible,
       refreshFromSource,

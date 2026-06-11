@@ -7,9 +7,12 @@ export const KEYS = {
   hobbies:   'ph_hobbies',
   publications: 'ph_publications',
   sections:  'ph_section_config',
+  categories:'ph_categories',
   lang:      'ph_lang_settings',
   session:   'ph_session',
 };
+
+export const DEFAULT_CATEGORIES = ['Professional', 'Academic', 'Personal'];
 
 export function readData(key) {
   try { return JSON.parse(localStorage.getItem(key)); } catch { return null; }

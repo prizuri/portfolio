@@ -49,14 +49,38 @@ function normalizeProjectForForm(p = {}) {
 }
 
 export default function SectionProjects() {
-  const { projects, setProjects } = useContent();
+  const { projects, setProjects, categories, setCategories } = useContent();
   const toast = useToast();
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState(EMPTY);
   const [galleryInput, setGalleryInput] = useState('');
+  const [newCategory, setNewCategory] = useState('');
   const [confirm, setConfirm] = useState(null);
 
   const sorted = [...projects].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+
+  // Gabungkan kategori tersimpan dengan kategori yang masih dipakai proyek lama.
+  const categoryOptions = [...new Set([
+    ...(categories || []),
+    ...projects.map(p => p.category).filter(Boolean),
+  ])];
+
+  function addCategory() {
+    const name = newCategory.trim();
+    if (!name) return;
+    if (categoryOptions.some(c => c.toLowerCase() === name.toLowerCase())) {
+      toast('Kategori sudah ada.', 'error');
+      return;
+    }
+    setCategories([...(categories || []), name]);
+    setNewCategory('');
+    toast('Kategori ditambahkan!');
+  }
+
+  function removeCategory(name) {
+    setCategories((categories || []).filter(c => c !== name));
+    toast('Kategori dihapus.');
+  }
 
   function openAdd() {
     setForm({ ...EMPTY, order: projects.length });
@@ -146,6 +170,29 @@ export default function SectionProjects() {
         <button className="btn-save" onClick={openAdd}>+ Tambah</button>
       </div>
 
+      <div className="info-panel">
+        <h4>Kelola Kategori</h4>
+        <div className="media-input-row">
+          <input
+            value={newCategory}
+            onChange={e => setNewCategory(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addCategory(); } }}
+            placeholder="Nama kategori baru"
+          />
+          <button className="btn-save" onClick={addCategory} style={{ padding: '9px 14px', fontSize: '.8rem' }}>+ Tambah</button>
+        </div>
+        {categoryOptions.length > 0 && (
+          <div className="media-url-list" style={{ marginTop: 12 }}>
+            {categoryOptions.map(c => (
+              <div key={c} className="media-url-item">
+                <span style={{ flex: 1 }}>{c}</span>
+                <button className="btn-del" onClick={() => removeCategory(c)} style={{ padding: '3px 8px', fontSize: '.72rem' }}>Hapus</button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       {!sorted.length
         ? <div className="empty-state">Belum ada proyek. Klik + Tambah untuk mulai.</div>
         : (
@@ -206,9 +253,7 @@ export default function SectionProjects() {
           <div className="field-group">
             <label>Kategori</label>
             <select value={form.category} onChange={set('category')}>
-              <option>Professional</option>
-              <option>Academic</option>
-              <option>Personal</option>
+              {categoryOptions.map(c => <option key={c}>{c}</option>)}
             </select>
           </div>
           <div className="field-group">

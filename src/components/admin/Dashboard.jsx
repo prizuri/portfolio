@@ -20,7 +20,7 @@ function Counter({ value, format = (v) => Math.round(v) }) {
 
 export default function Dashboard() {
   const { projects, experience, skills, education, hobbies, publications,
-          about, sections, langSettings, refreshFromSource } = useContent();
+          about, sections, categories, langSettings, refreshFromSource } = useContent();
   const toast = useToast();
   const [publishing, setPublishing] = useState(false);
   const [syncing, setSyncing] = useState(false);
@@ -36,6 +36,7 @@ export default function Dashboard() {
       hobbies:       hobbies || [],
       publications:  publications || [],
       sections:      sections || [],
+      categories:    categories || [],
       lang_settings: langSettings || { id_enabled: true },
     };
   }
@@ -132,6 +133,7 @@ export default function Dashboard() {
         if (data.hobbies)      localStorage.setItem(KEYS.hobbies,      JSON.stringify(data.hobbies));
         if (data.publications) localStorage.setItem(KEYS.publications, JSON.stringify(data.publications));
         if (data.sections)     localStorage.setItem(KEYS.sections,     JSON.stringify(data.sections));
+        if (data.categories)   localStorage.setItem(KEYS.categories,   JSON.stringify(data.categories));
         if (data.lang_settings)localStorage.setItem(KEYS.lang,         JSON.stringify(data.lang_settings));
         toast('Backup diimpor. Refresh halaman untuk melihat perubahan.');
       } catch { toast('File tidak valid.', 'error'); }
