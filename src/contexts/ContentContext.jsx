@@ -88,9 +88,12 @@ export function ContentProvider({ children }) {
     loadFromSource()
       .then(data => {
         if (!data) return;
+        // Supabase is the source of truth: always sync, so visitors never
+        // get stuck on a stale localStorage copy.
+        if (isSupabaseConfigured) { applyData(data); return; }
         const stored  = readData('ph_data_checksum');
         const current = JSON.stringify(data);
-        // If unchanged, keep local data (may hold unsaved admin edits).
+        // content.json fallback (dev): keep local data if unchanged (may hold unsaved admin edits).
         if (stored === current) return;
         applyData(data);
       })
