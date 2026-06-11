@@ -37,7 +37,7 @@ export default function Projects() {
         >
           <h2 className="section-title">{title || (lang === 'id' ? 'Proyek' : 'Projects')}</h2>
           <p className="section-sub">
-            <T en="Selected work and case studies" id="Karya pilihan dan studi kasus" />
+            <T en="Selected professional, research, and personal projects" id="Karya pilihan dan studi kasus" />
           </p>
         </motion.div>
 
